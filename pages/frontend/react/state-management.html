@@ -19,41 +19,28 @@
 <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
     <!-- 導航欄 -->
     <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
-        <div class="navbar-start">
-            <div class="dropdown">
-                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                    </svg>
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="../../../index.html" class="lang-zh">首頁</a><a href="../../../index.html" class="lang-en hidden">Home</a></li>
-                    <li><a href="../../frontend/index.html" class="lang-zh">前端技術</a><a href="../../frontend/index.html" class="lang-en hidden">Frontend</a></li>
-                    <li><a href="../../backend/index.html" class="lang-zh">後端技術</a><a href="../../backend/index.html" class="lang-en hidden">Backend</a></li>
-                    <li><a href="../../ui/index.html">UI</a></li>
-                    <li><a href="../../figma/index.html">Figma</a></li>
-                    <li><a href="../../tools/index.html" class="lang-zh">工具</a><a href="../../tools/index.html" class="lang-en hidden">Tools</a></li>
-                    <li><a href="../../ai/index.html">AI</a></li>
-                </ul>
+        <div class="flex justify-center w-full">
+            <div class="flex gap-2">
+                <a href="../../frontend/index.html" class="btn btn-sm">
+                    <span class="lang-zh">前端技術</span>
+                    <span class="lang-en hidden">Frontend</span>
+                </a>
+                <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+                    <span class="lang-zh">後端技術</span>
+                    <span class="lang-en hidden">Backend</span>
+                </a>
+                <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+                <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+                <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+                    <span class="lang-zh">工具</span>
+                    <span class="lang-en hidden">Tools</span>
+                </a>
+                <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
             </div>
-            <a href="../../../index.html" class="btn btn-ghost text-xl">
-                <span class="lang-zh">開發筆記</span>
-                <span class="lang-en hidden">Dev Notes</span>
-            </a>
-        </div>
-        <div class="navbar-center hidden lg:flex">
-            <ul class="menu menu-horizontal px-1">
-                <li><a href="../../frontend/index.html" class="lang-zh">前端技術</a><a href="../../frontend/index.html" class="lang-en hidden">Frontend</a></li>
-                <li><a href="../../backend/index.html" class="lang-zh">後端技術</a><a href="../../backend/index.html" class="lang-en hidden">Backend</a></li>
-                <li><a href="../../ui/index.html">UI</a></li>
-                <li><a href="../../figma/index.html">Figma</a></li>
-                <li><a href="../../tools/index.html" class="lang-zh">工具</a><a href="../../tools/index.html" class="lang-en hidden">Tools</a></li>
-                <li><a href="../../ai/index.html">AI</a></li>
-            </ul>
         </div>
         <div class="navbar-end">
             <!-- 語言切換 -->
-            <button id="langToggle" class="btn btn-ghost btn-circle">
+            <button id="langToggle" class="btn btn-ghost">
                 <span id="langDisplay">中/EN</span>
             </button>
             <!-- 主題切換 -->
@@ -66,6 +53,7 @@
                 </svg>
             </button>
         </div>
+    </nav>
     </nav>
 
     <!-- 麵包屑導航 -->

@@ -1,326 +1,193 @@
 <!DOCTYPE html>
 <html lang="zh-TW" data-theme="light">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React 筆記 | React Notes</title>
     <!-- Tailwind CSS 和 DaisyUI CDN -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 自訂 Tailwind 配置 -->
     <script>
-      tailwind.config = {
-        daisyui: {
-          themes: ["light", "dark"],
-        },
-      };
+        tailwind.config = {
+            daisyui: {
+                themes: ["light", "dark"],
+            },
+        }
     </script>
-  </head>
-  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+</head>
+<body class="bg-base-100 text-base-content min-h-screen flex flex-col">
     <!-- 導航欄 -->
     <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
-      <div class="navbar-start">
-        <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </div>
-          <ul
-            tabindex="0"
-            class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <a href="../../../index.html" class="lang-zh">首頁</a>
-              <a href="../../../index.html" class="lang-en hidden">Home</a>
-            </li>
-            <li>
-              <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
-              <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
-            </li>
-            <li>
-              <a href="../../backend/index.html" class="lang-zh">後端技術</a>
-              <a href="../../backend/index.html" class="lang-en hidden">Backend</a>
-            </li>
-            <li><a href="../../ui/index.html">UI</a></li>
-            <li><a href="../../figma/index.html">Figma</a></li>
-            <li>
-              <a href="../../tools/index.html" class="lang-zh">工具</a>
-              <a href="../../tools/index.html" class="lang-en hidden">Tools</a>
-            </li>
-            <li><a href="../../ai/index.html">AI</a></li>
-          </ul>
+        <div class="flex justify-center w-full">
+            <div class="flex gap-2">
+                <a href="../../frontend/index.html" class="btn btn-sm">
+                    <span class="lang-zh">前端技術</span>
+                    <span class="lang-en hidden">Frontend</span>
+                </a>
+                <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+                    <span class="lang-zh">後端技術</span>
+                    <span class="lang-en hidden">Backend</span>
+                </a>
+                <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+                <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+                <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+                    <span class="lang-zh">工具</span>
+                    <span class="lang-en hidden">Tools</span>
+                </a>
+                <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+            </div>
         </div>
-        <a href="../../../index.html" class="btn btn-ghost text-xl">
-          <span class="lang-zh">開發筆記</span>
-          <span class="lang-en hidden">Dev Notes</span>
-        </a>
-      </div>
-      <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1">
-          <li>
-            <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
-            <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
-          </li>
-          <li>
-            <a href="../../backend/index.html" class="lang-zh">後端技術</a>
-            <a href="../../backend/index.html" class="lang-en hidden">Backend</a>
-          </li>
-          <li><a href="../../ui/index.html">UI</a></li>
-          <li><a href="../../figma/index.html">Figma</a></li>
-          <li>
-            <a href="../../tools/index.html" class="lang-zh">工具</a>
-            <a href="../../tools/index.html" class="lang-en hidden">Tools</a>
-          </li>
-          <li><a href="../../ai/index.html">AI</a></li>
-        </ul>
-      </div>
-      <div class="navbar-end">
-        <!-- 語言切換 -->
-        <button id="langToggle" class="btn btn-ghost btn-circle">
-          <span id="langDisplay">中/EN</span>
-        </button>
-        <!-- 主題切換 -->
-        <button id="themeToggle" class="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 theme-light"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 theme-dark hidden"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-            />
-          </svg>
-        </button>
-      </div>
+        <div class="navbar-end">
+            <!-- 語言切換 -->
+            <button id="langToggle" class="btn btn-ghost">
+                <span id="langDisplay">中/EN</span>
+            </button>
+            <!-- 主題切換 -->
+            <button id="themeToggle" class="btn btn-ghost btn-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 theme-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 theme-dark hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
+    </nav>
     </nav>
 
     <!-- 麵包屑導航 -->
     <div class="text-sm breadcrumbs bg-base-200 p-4">
-      <ul>
-        <li>
-          <a href="../../../index.html" class="lang-zh">首頁</a>
-          <a href="../../../index.html" class="lang-en hidden">Home</a>
-        </li>
-        <li>
-          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
-          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
-        </li>
-        <li>React</li>
-      </ul>
+        <ul>
+            <li><a href="../../../index.html" class="lang-zh">首頁</a><a href="../../../index.html" class="lang-en hidden">Home</a></li>
+            <li><a href="../../frontend/index.html" class="lang-zh">前端技術</a><a href="../../frontend/index.html" class="lang-en hidden">Frontend</a></li>
+            <li>React</li>
+        </ul>
     </div>
 
     <!-- 主要內容 -->
     <main class="container mx-auto px-4 py-8 flex-grow">
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- 側邊欄 -->
-        <div class="lg:col-span-1">
-          <div class="sticky top-20">
-            <div class="card bg-base-200">
-              <div class="card-body">
-                <h2 class="text-xl font-bold mb-4">
-                  <span class="lang-zh">React 筆記目錄</span>
-                  <span class="lang-en hidden">React Contents</span>
-                </h2>
-                <ul class="menu bg-base-200 rounded-box">
-                  <li>
-                    <a href="hooks-best-practices.html" class="lang-zh">Hooks 最佳實踐</a>
-                    <a href="hooks-best-practices.html" class="lang-en hidden">
-                      Hooks Best Practices
-                    </a>
-                  </li>
-                  <li>
-                    <a href="context-api.html" class="lang-zh">Context API 使用指南</a>
-                    <a href="context-api.html" class="lang-en hidden">Context API Guide</a>
-                  </li>
-                  <li>
-                    <a href="performance.html" class="lang-zh">效能優化技巧</a>
-                    <a href="performance.html" class="lang-en hidden">Performance Optimization</a>
-                  </li>
-                  <li>
-                    <a href="testing.html" class="lang-zh">測試 React 應用</a>
-                    <a href="testing.html" class="lang-en hidden">Testing React Apps</a>
-                  </li>
-                  <li>
-                    <a href="server-components.html" class="lang-zh">React 服務器組件</a>
-                    <a href="server-components.html" class="lang-en hidden">
-                      React Server Components
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 主要內容區 -->
-        <div class="lg:col-span-3">
-          <h1 class="text-4xl font-bold mb-6">React</h1>
-
-          <div class="alert bg-base-200 mb-6">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              class="stroke-info shrink-0 w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-            <div>
-              <span class="lang-zh">
-                React 是一個用於構建用戶界面的 JavaScript 庫，由 Facebook 開發並維護。
-              </span>
-              <span class="lang-en hidden">
-                React is a JavaScript library for building user interfaces, developed and maintained
-                by Facebook.
-              </span>
-            </div>
-          </div>
-
-          <!-- React 簡介 -->
-          <section class="mb-10">
-            <h2 class="text-2xl font-semibold mb-4">
-              <span class="lang-zh">React 簡介</span>
-              <span class="lang-en hidden">Introduction to React</span>
-            </h2>
-
-            <div class="prose max-w-none">
-              <p class="lang-zh">
-                React 是一個用於構建用戶界面的 JavaScript
-                庫，特別適合開發單頁應用程序。它允許開發者創建可重用的 UI
-                組件，並通過變更數據高效地更新和渲染適當的組件。
-              </p>
-              <p class="lang-en hidden">
-                React is a JavaScript library for building user interfaces, particularly suited for
-                single-page applications. It allows developers to create reusable UI components and
-                efficiently update and render the appropriate components when data changes.
-              </p>
-
-              <h3 class="lang-zh">核心概念</h3>
-              <h3 class="lang-en hidden">Core Concepts</h3>
-
-              <ul>
-                <li class="lang-zh">組件 (Components) - React 應用由組件構建而成</li>
-                <li class="lang-en hidden">
-                  Components - React applications are built from components
-                </li>
-
-                <li class="lang-zh">
-                  JSX - JavaScript 的語法擴展，允許在 JavaScript 中編寫類似 HTML 的代碼
-                </li>
-                <li class="lang-en hidden">
-                  JSX - JavaScript syntax extension that allows writing HTML-like code in JavaScript
-                </li>
-
-                <li class="lang-zh">Props - 用於將數據從父組件傳遞到子組件</li>
-                <li class="lang-en hidden">
-                  Props - Used to pass data from parent to child components
-                </li>
-
-                <li class="lang-zh">狀態 (State) - 組件的可變數據</li>
-                <li class="lang-en hidden">State - Mutable data within components</li>
-
-                <li class="lang-zh">生命週期 (Lifecycle) - 組件的創建到銷毀的過程</li>
-                <li class="lang-en hidden">
-                  Lifecycle - The process from creation to destruction of components
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <!-- 最新筆記 -->
-          <section class="mb-10">
-            <h2 class="text-2xl font-semibold mb-4">
-              <span class="lang-zh">最新 React 筆記</span>
-              <span class="lang-en hidden">Latest React Notes</span>
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- 筆記卡片 -->
-              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
-                <div class="card-body">
-                  <h3 class="card-title">React Hooks 最佳實踐</h3>
-                  <p class="text-sm opacity-70">2025-05-15</p>
-                  <p class="lang-zh">探討 React Hooks 的使用技巧和最佳實踐方式</p>
-                  <p class="lang-en hidden">
-                    Exploring React Hooks usage techniques and best practices
-                  </p>
-                  <div class="card-actions justify-end">
-                    <a href="hooks-best-practices.html" class="btn btn-sm btn-primary">
-                      <span class="lang-zh">閱讀更多</span>
-                      <span class="lang-en hidden">Read More</span>
-                    </a>
-                  </div>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- 側邊欄 -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-20">
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="text-xl font-bold mb-4">
+                                <span class="lang-zh">React 筆記目錄</span>
+                                <span class="lang-en hidden">React Contents</span>
+                            </h2>
+                            <ul class="menu bg-base-200 rounded-box">
+                                <li><a href="hooks-best-practices.html" class="lang-zh">Hooks 最佳實踐</a><a href="hooks-best-practices.html" class="lang-en hidden">Hooks Best Practices</a></li>
+                                <li><a href="context-api.html" class="lang-zh">Context API 使用指南</a><a href="context-api.html" class="lang-en hidden">Context API Guide</a></li>
+                                <li><a href="performance.html" class="lang-zh">效能優化技巧</a><a href="performance.html" class="lang-en hidden">Performance Optimization</a></li>
+                                <li><a href="testing.html" class="lang-zh">測試 React 應用</a><a href="testing.html" class="lang-en hidden">Testing React Apps</a></li>
+                                <li><a href="server-components.html" class="lang-zh">React 服務器組件</a><a href="server-components.html" class="lang-en hidden">React Server Components</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-              </div>
-
-              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
-                <div class="card-body">
-                  <h3 class="card-title">React Server Components</h3>
-                  <p class="text-sm opacity-70">2025-05-05</p>
-                  <p class="lang-zh">了解 React Server Components 的工作原理和使用場景</p>
-                  <p class="lang-en hidden">
-                    Understanding how React Server Components work and when to use them
-                  </p>
-                  <div class="card-actions justify-end">
-                    <a href="server-components.html" class="btn btn-sm btn-primary">
-                      <span class="lang-zh">閱讀更多</span>
-                      <span class="lang-en hidden">Read More</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
             </div>
-          </section>
 
-          <!-- 代碼示例 -->
-          <section>
-            <h2 class="text-2xl font-semibold mb-4">
-              <span class="lang-zh">簡單的 React 組件示例</span>
-              <span class="lang-en hidden">Simple React Component Example</span>
-            </h2>
-
-            <div class="mockup-code mb-4">
-              <pre><code>import React, { useState } from 'react';
+            <!-- 主要內容區 -->
+            <div class="lg:col-span-3">
+                <h1 class="text-4xl font-bold mb-6">React</h1>
+                
+                <div class="alert bg-base-200 mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <span class="lang-zh">React 是一個用於構建用戶界面的 JavaScript 庫，由 Facebook 開發並維護。</span>
+                        <span class="lang-en hidden">React is a JavaScript library for building user interfaces, developed and maintained by Facebook.</span>
+                    </div>
+                </div>
+                
+                <!-- React 簡介 -->
+                <section class="mb-10">
+                    <h2 class="text-2xl font-semibold mb-4">
+                        <span class="lang-zh">React 簡介</span>
+                        <span class="lang-en hidden">Introduction to React</span>
+                    </h2>
+                    
+                    <div class="prose max-w-none">
+                        <p class="lang-zh">
+                            React 是一個用於構建用戶界面的 JavaScript 庫，特別適合開發單頁應用程序。它允許開發者創建可重用的 UI 組件，並通過變更數據高效地更新和渲染適當的組件。
+                        </p>
+                        <p class="lang-en hidden">
+                            React is a JavaScript library for building user interfaces, particularly suited for single-page applications. It allows developers to create reusable UI components and efficiently update and render the appropriate components when data changes.
+                        </p>
+                        
+                        <h3 class="lang-zh">核心概念</h3>
+                        <h3 class="lang-en hidden">Core Concepts</h3>
+                        
+                        <ul>
+                            <li class="lang-zh">組件 (Components) - React 應用由組件構建而成</li>
+                            <li class="lang-en hidden">Components - React applications are built from components</li>
+                            
+                            <li class="lang-zh">JSX - JavaScript 的語法擴展，允許在 JavaScript 中編寫類似 HTML 的代碼</li>
+                            <li class="lang-en hidden">JSX - JavaScript syntax extension that allows writing HTML-like code in JavaScript</li>
+                            
+                            <li class="lang-zh">Props - 用於將數據從父組件傳遞到子組件</li>
+                            <li class="lang-en hidden">Props - Used to pass data from parent to child components</li>
+                            
+                            <li class="lang-zh">狀態 (State) - 組件的可變數據</li>
+                            <li class="lang-en hidden">State - Mutable data within components</li>
+                            
+                            <li class="lang-zh">生命週期 (Lifecycle) - 組件的創建到銷毀的過程</li>
+                            <li class="lang-en hidden">Lifecycle - The process from creation to destruction of components</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- 最新筆記 -->
+                <section class="mb-10">
+                    <h2 class="text-2xl font-semibold mb-4">
+                        <span class="lang-zh">最新 React 筆記</span>
+                        <span class="lang-en hidden">Latest React Notes</span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 筆記卡片 -->
+                        <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                            <div class="card-body">
+                                <h3 class="card-title">React Hooks 最佳實踐</h3>
+                                <p class="text-sm opacity-70">2025-05-15</p>
+                                <p class="lang-zh">探討 React Hooks 的使用技巧和最佳實踐方式</p>
+                                <p class="lang-en hidden">Exploring React Hooks usage techniques and best practices</p>
+                                <div class="card-actions justify-end">
+                                    <a href="hooks-best-practices.html" class="btn btn-sm btn-primary">
+                                        <span class="lang-zh">閱讀更多</span>
+                                        <span class="lang-en hidden">Read More</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                            <div class="card-body">
+                                <h3 class="card-title">React Server Components</h3>
+                                <p class="text-sm opacity-70">2025-05-05</p>
+                                <p class="lang-zh">了解 React Server Components 的工作原理和使用場景</p>
+                                <p class="lang-en hidden">Understanding how React Server Components work and when to use them</p>
+                                <div class="card-actions justify-end">
+                                    <a href="server-components.html" class="btn btn-sm btn-primary">
+                                        <span class="lang-zh">閱讀更多</span>
+                                        <span class="lang-en hidden">Read More</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 代碼示例 -->
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">
+                        <span class="lang-zh">簡單的 React 組件示例</span>
+                        <span class="lang-en hidden">Simple React Component Example</span>
+                    </h2>
+                    
+                    <div class="mockup-code mb-4">
+                        <pre><code>import React, { useState } from 'react';
 
 function Counter() {
   const [count, setCount] = useState(0);
@@ -336,115 +203,110 @@ function Counter() {
 }
 
 export default Counter;</code></pre>
+                    </div>
+                    
+                    <p class="lang-zh">上面的代碼展示了一個簡單的 React 函數組件，使用 useState Hook 來管理計數狀態。</p>
+                    <p class="lang-en hidden">The code above demonstrates a simple React functional component that uses the useState Hook to manage a count state.</p>
+                </section>
             </div>
-
-            <p class="lang-zh">
-              上面的代碼展示了一個簡單的 React 函數組件，使用 useState Hook 來管理計數狀態。
-            </p>
-            <p class="lang-en hidden">
-              The code above demonstrates a simple React functional component that uses the useState
-              Hook to manage a count state.
-            </p>
-          </section>
         </div>
-      </div>
     </main>
 
     <!-- 頁腳 -->
     <footer class="footer footer-center p-4 bg-base-200 text-base-content">
-      <div>
-        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
-        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
-      </div>
+        <div>
+            <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+            <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+        </div>
     </footer>
 
     <!-- JavaScript 切換功能 -->
     <script>
-      // 主題切換
-      const themeToggle = document.getElementById("themeToggle");
-      const htmlElement = document.documentElement;
-      const themeLightIcon = document.querySelector(".theme-light");
-      const themeDarkIcon = document.querySelector(".theme-dark");
+        // 主題切換
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const themeLightIcon = document.querySelector('.theme-light');
+        const themeDarkIcon = document.querySelector('.theme-dark');
 
-      themeToggle.addEventListener("click", () => {
-        const currentTheme = htmlElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "light" ? "dark" : "light";
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeLightIcon.classList.add('hidden');
+                themeDarkIcon.classList.remove('hidden');
+            } else {
+                themeLightIcon.classList.remove('hidden');
+                themeDarkIcon.classList.add('hidden');
+            }
+            
+            // 儲存主題偏好到本地存儲
+            localStorage.setItem('theme', newTheme);
+        });
 
-        htmlElement.setAttribute("data-theme", newTheme);
+        // 語言切換
+        const langToggle = document.getElementById('langToggle');
+        const langDisplay = document.getElementById('langDisplay');
+        const zhElements = document.querySelectorAll('.lang-zh');
+        const enElements = document.querySelectorAll('.lang-en');
 
-        if (newTheme === "dark") {
-          themeLightIcon.classList.add("hidden");
-          themeDarkIcon.classList.remove("hidden");
-        } else {
-          themeLightIcon.classList.remove("hidden");
-          themeDarkIcon.classList.add("hidden");
+        // 定義當前語言（默認中文）
+        let currentLang = localStorage.getItem('language') || 'zh';
+        
+        // 設置初始語言顯示
+        updateLanguageDisplay();
+        
+        langToggle.addEventListener('click', () => {
+            // 切換語言
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            
+            // 更新元素顯示
+            updateLanguageState();
+            
+            // 儲存語言偏好到本地存儲
+            localStorage.setItem('language', currentLang);
+        });
+        
+        // 更新語言狀態的函數
+        function updateLanguageState() {
+            if (currentLang === 'zh') {
+                zhElements.forEach(el => el.classList.remove('hidden'));
+                enElements.forEach(el => el.classList.add('hidden'));
+                langDisplay.textContent = '中/EN';
+            } else {
+                zhElements.forEach(el => el.classList.add('hidden'));
+                enElements.forEach(el => el.classList.remove('hidden'));
+                langDisplay.textContent = 'EN/中';
+            }
+        }
+        
+        // 更新語言顯示
+        function updateLanguageDisplay() {
+            langDisplay.textContent = currentLang === 'zh' ? '中/EN' : 'EN/中';
+            updateLanguageState();
         }
 
-        // 儲存主題偏好到本地存儲
-        localStorage.setItem("theme", newTheme);
-      });
-
-      // 語言切換
-      const langToggle = document.getElementById("langToggle");
-      const langDisplay = document.getElementById("langDisplay");
-      const zhElements = document.querySelectorAll(".lang-zh");
-      const enElements = document.querySelectorAll(".lang-en");
-
-      // 定義當前語言（默認中文）
-      let currentLang = localStorage.getItem("language") || "zh";
-
-      // 設置初始語言顯示
-      updateLanguageDisplay();
-
-      langToggle.addEventListener("click", () => {
-        // 切換語言
-        currentLang = currentLang === "zh" ? "en" : "zh";
-
-        // 更新元素顯示
-        updateLanguageState();
-
-        // 儲存語言偏好到本地存儲
-        localStorage.setItem("language", currentLang);
-      });
-
-      // 更新語言狀態的函數
-      function updateLanguageState() {
-        if (currentLang === "zh") {
-          zhElements.forEach((el) => el.classList.remove("hidden"));
-          enElements.forEach((el) => el.classList.add("hidden"));
-          langDisplay.textContent = "中/EN";
-        } else {
-          zhElements.forEach((el) => el.classList.add("hidden"));
-          enElements.forEach((el) => el.classList.remove("hidden"));
-          langDisplay.textContent = "EN/中";
-        }
-      }
-
-      // 更新語言顯示
-      function updateLanguageDisplay() {
-        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
-        updateLanguageState();
-      }
-
-      // 頁面加載時讀取使用者偏好
-      document.addEventListener("DOMContentLoaded", () => {
-        // 載入主題偏好
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme) {
-          htmlElement.setAttribute("data-theme", savedTheme);
-          if (savedTheme === "dark") {
-            themeLightIcon.classList.add("hidden");
-            themeDarkIcon.classList.remove("hidden");
-          }
-        }
-
-        // 載入語言偏好
-        const savedLanguage = localStorage.getItem("language");
-        if (savedLanguage) {
-          currentLang = savedLanguage;
-          updateLanguageState();
-        }
-      });
+        // 頁面加載時讀取使用者偏好
+        document.addEventListener('DOMContentLoaded', () => {
+            // 載入主題偏好
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeLightIcon.classList.add('hidden');
+                    themeDarkIcon.classList.remove('hidden');
+                }
+            }
+            
+            // 載入語言偏好
+            const savedLanguage = localStorage.getItem('language');
+            if (savedLanguage) {
+                currentLang = savedLanguage;
+                updateLanguageState();
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
