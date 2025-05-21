@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Web 元件堆疊層級 | React Web Component Stacking</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../../index.html" class="lang-zh">首頁</a>
+          <a href="../../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li><a href="index.html">React</a></li>
+        <li class="lang-zh">React Web 元件堆疊層級</li>
+        <li class="lang-en hidden">React Web Component Stacking</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">React 筆記目錄</span>
+                  <span class="lang-en hidden">React Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html">React 概覽</a></li>
+                  <li>
+                    <a href="hooks-best-practices.html" class="lang-zh">Hooks 最佳實踐</a>
+                    <a href="hooks-best-practices.html" class="lang-en hidden">
+                      Hooks Best Practices
+                    </a>
+                  </li>
+                  <li>
+                    <a href="state-management.html" class="lang-zh">狀態管理</a>
+                    <a href="state-management.html" class="lang-en hidden">State Management</a>
+                  </li>
+                  <li>
+                    <a href="react-web.html" class="active lang-zh">React Web 元件堆疊</a>
+                    <a href="react-web.html" class="active lang-en hidden">
+                      React Web Component Stacking
+                    </a>
+                  </li>
+                  <li>
+                    <a href="react-native.html" class="lang-zh">React Native</a>
+                    <a href="react-native.html" class="lang-en hidden">React Native</a>
+                  </li>
+                  <li>
+                    <a href="performance.html" class="lang-zh">效能優化技巧</a>
+                    <a href="performance.html" class="lang-en hidden">Performance Optimization</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <article class="prose max-w-none">
+            <header class="mb-8 not-prose">
+              <h1 class="text-4xl font-bold mb-2">
+                <span class="lang-zh">React Web 元件堆疊層級完整指南</span>
+                <span class="lang-en hidden">Complete Guide to React Web Component Stacking</span>
+              </h1>
+              <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                <time datetime="2025-05-20">2025-05-20</time>
+                <span>|</span>
+                <span class="badge badge-outline">React</span>
+                <span class="badge badge-outline">CSS</span>
+                <span class="badge badge-outline">z-index</span>
+              </div>
+            </header>
+
+            <!-- 文章目錄 -->
+            <div class="card bg-base-200 mb-8">
+              <div class="card-body">
+                <h2 class="card-title text-xl mb-2">
+                  <span class="lang-zh">目錄</span>
+                  <span class="lang-en hidden">Contents</span>
+                </h2>
+                <ul class="lang-zh">
+                  <li><a href="#introduction">介紹</a></li>
+                  <li><a href="#basic-stacking">基本堆疊層級</a></li>
+                  <li><a href="#stacking-context">堆疊上下文與層級機制</a></li>
+                  <li><a href="#special-implementation">特殊堆疊實現方案</a></li>
+                  <li><a href="#css-management">CSS 堆疊管理</a></li>
+                  <li><a href="#js-management">JavaScript 動態堆疊管理</a></li>
+                  <li><a href="#framework-solutions">框架特定堆疊方案</a></li>
+                  <li><a href="#browser-differences">瀏覽器與平台特定差異</a></li>
+                  <li><a href="#practical-techniques">實用組合技巧</a></li>
+                  <li><a href="#best-practices">堆疊管理最佳實踐</a></li>
+                </ul>
+                <ul class="lang-en hidden">
+                  <li><a href="#introduction">Introduction</a></li>
+                  <li><a href="#basic-stacking">Basic Stacking Levels</a></li>
+                  <li><a href="#stacking-context">Stacking Context and Hierarchy</a></li>
+                  <li><a href="#special-implementation">Special Stacking Implementations</a></li>
+                  <li><a href="#css-management">CSS Stack Management</a></li>
+                  <li><a href="#js-management">JavaScript Dynamic Stack Management</a></li>
+                  <li><a href="#framework-solutions">Framework-Specific Solutions</a></li>
+                  <li><a href="#browser-differences">Browser and Platform Differences</a></li>
+                  <li><a href="#practical-techniques">Practical Techniques</a></li>
+                  <li><a href="#best-practices">Stacking Management Best Practices</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 介紹部分 -->
+            <section id="introduction">
+              <h2 class="lang-zh">介紹</h2>
+              <h2 class="lang-en hidden">Introduction</h2>
+              <p class="lang-zh">
+                在 React Web 應用中，元件的堆疊順序對於創建複雜的用戶界面至關重要。本指南將詳細介紹
+                React Web 元件的堆疊層級，從基本概念到高級實現技巧，幫助您有效管理元件的視覺層次。
+              </p>
+              <p class="lang-en hidden">
+                In React Web applications, the stacking order of components is crucial for creating
+                complex user interfaces. This guide will provide a detailed introduction to React
+                Web component stacking levels, from basic concepts to advanced implementation
+                techniques, helping you effectively manage the visual hierarchy of components.
+              </p>
+            </section>
+
+            <!-- 基本堆疊層級 -->
+            <section id="basic-stacking">
+              <h2 class="lang-zh">基本堆疊層級（從底到頂）</h2>
+              <h2 class="lang-en hidden">Basic Stacking Levels (From Bottom to Top)</h2>
+
+              <ol>
+                <li>
+                  <strong class="lang-zh">靜態定位元件</strong>
+                  <strong class="lang-en hidden">Static Positioned Components</strong>
+                  (
+                  <code>position: static</code>
+                  , 默認值)
+                </li>
+                <li>
+                  <strong class="lang-zh">相對定位元件</strong>
+                  <strong class="lang-en hidden">Relative Positioned Components</strong>
+                  (
+                  <code>position: relative</code>
+                  )
+                </li>
+                <li>
+                  <strong class="lang-zh">絕對定位元件</strong>
+                  <strong class="lang-en hidden">Absolute Positioned Components</strong>
+                  (
+                  <code>position: absolute</code>
+                  +
+                  <code>z-index</code>
+                  )
+                </li>
+                <li>
+                  <strong class="lang-zh">固定定位元件</strong>
+                  <strong class="lang-en hidden">Fixed Positioned Components</strong>
+                  (
+                  <code>position: fixed</code>
+                  +
+                  <code>z-index</code>
+                  )
+                </li>
+                <li>
+                  <strong class="lang-zh">粘性定位元件</strong>
+                  <strong class="lang-en hidden">Sticky Positioned Components</strong>
+                  (
+                  <code>position: sticky</code>
+                  +
+                  <code>z-index</code>
+                  )
+                </li>
+                <li>
+                  <strong class="lang-zh">Portal 元件</strong>
+                  <strong class="lang-en hidden">Portal Components</strong>
+                  (
+                  <code>ReactDOM.createPortal()</code>
+                  )
+                </li>
+                <li>
+                  <strong class="lang-zh">Modal 元件</strong>
+                  <strong class="lang-en hidden">Modal Components</strong>
+                  (如 MUI Modal、React-Modal 等庫)
+                </li>
+                <li>
+                  <strong class="lang-zh">Tooltip/Popover</strong>
+                  <strong class="lang-en hidden">Tooltip/Popover</strong>
+                  (通常基於 Portal 實現)
+                </li>
+                <li>
+                  <strong class="lang-zh">Toast/Notification</strong>
+                  <strong class="lang-en hidden">Toast/Notification</strong>
+                  (如 React-Toastify，通常在最頂層)
+                </li>
+                <li>
+                  <strong class="lang-zh">Dialog/Alert</strong>
+                  <strong class="lang-en hidden">Dialog/Alert</strong>
+                  (如 sweetalert2、React-confirm-alert)
+                </li>
+                <li>
+                  <strong class="lang-zh">懸浮按鈕</strong>
+                  <strong class="lang-en hidden">Floating Buttons</strong>
+                  (如 Material UI FAB、固定在視窗角落的按鈕)
+                </li>
+                <li>
+                  <strong class="lang-zh">全屏覆蓋層</strong>
+                  <strong class="lang-en hidden">Fullscreen Overlays</strong>
+                  (加載指示器、引導層等)
+                </li>
+              </ol>
+
+              <div class="alert alert-info bg-base-200 my-6">
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    class="stroke-current shrink-0 w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  <span class="lang-zh">理解這些層級關係有助於解決元件重疊時的顯示問題。</span>
+                  <span class="lang-en hidden">
+                    Understanding these stacking relationships helps solve display issues when
+                    components overlap.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 堆疊上下文與層級機制 -->
+            <section id="stacking-context">
+              <h2 class="lang-zh">堆疊上下文與層級機制</h2>
+              <h2 class="lang-en hidden">Stacking Context and Hierarchy</h2>
+
+              <h3 class="lang-zh">創建堆疊上下文的 CSS 屬性</h3>
+              <h3 class="lang-en hidden">CSS Properties That Create Stacking Context</h3>
+
+              <p class="lang-zh">以下 CSS 屬性會創建新的堆疊上下文，影響子元素的層級關係：</p>
+              <p class="lang-en hidden">
+                The following CSS properties create new stacking contexts, affecting the
+                hierarchical relationship of child elements:
+              </p>
+
+              <ol>
+                <li>
+                  <code>root</code>
+                  元素 (HTML)
+                </li>
+                <li>
+                  <code>position</code>
+                  不為
+                  <code>static</code>
+                  且
+                  <code>z-index</code>
+                  不為
+                  <code>auto</code>
+                </li>
+                <li>
+                  <code>opacity</code>
+                  值小於 1
+                </li>
+                <li>
+                  <code>transform</code>
+                  值不為
+                  <code>none</code>
+                </li>
+                <li>
+                  <code>filter</code>
+                  值不為
+                  <code>none</code>
+                </li>
+                <li>
+                  <code>perspective</code>
+                  值不為
+                  <code>none</code>
+                </li>
+                <li>
+                  <code>isolation</code>
+                  值為
+                  <code>isolate</code>
+                </li>
+                <li>
+                  <code>will-change</code>
+                  指定了任何屬性
+                </li>
+                <li>
+                  <code>contain</code>
+                  值為
+                  <code>layout</code>
+                  、
+                  <code>paint</code>
+                  或其組合
+                </li>
+                <li>
+                  <code>webkit-overflow-scrolling</code>
+                  值為
+                  <code>touch</code>
+                </li>
+                <li>
+                  <code>backdrop-filter</code>
+                  值不為
+                  <code>none</code>
+                </li>
+              </ol>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    了解這些屬性很重要，因為它們會隔離子元素的 z-index
+                    效果，使其只在該堆疊上下文內有效。
+                  </span>
+                  <span class="lang-en hidden">
+                    Understanding these properties is important because they isolate the z-index
+                    effects of child elements, making them effective only within that stacking
+                    context.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 特殊堆疊實現方案 -->
+            <section id="special-implementation">
+              <h2 class="lang-zh">特殊堆疊實現方案</h2>
+              <h2 class="lang-en hidden">Special Stacking Implementations</h2>
+
+              <h3 class="lang-zh">高級 Portal 方案</h3>
+              <h3 class="lang-en hidden">Advanced Portal Solutions</h3>
+
+              <ol>
+                <li>
+                  <strong class="lang-zh">React Portal</strong>
+                  <strong class="lang-en hidden">React Portal</strong>
+                  ：基本的跨組件渲染
+                  <div class="mockup-code">
+                    <pre><code>ReactDOM.createPortal(children, container)</code></pre>
+                  </div>
+                </li>
+                <li>
+                  <strong class="lang-zh">React Portal with Context</strong>
+                  <strong class="lang-en hidden">React Portal with Context</strong>
+                  ：保留上下文的跨組件渲染
+                  <div class="mockup-code">
+                    <pre><code>const ContextPortal = ({ children }) => {
+  const context = useContext(MyContext);
+  return ReactDOM.createPortal(
+    &lt;MyContext.Provider value={context}&gt;
+      {children}
+    &lt;/MyContext.Provider&gt;,
+    document.body
+  );
+};</code></pre>
+                  </div>
+                </li>
+                <li>
+                  <strong class="lang-zh">Dynamic Portal Target</strong>
+                  <strong class="lang-en hidden">Dynamic Portal Target</strong>
+                  ：動態目標的 Portal
+                  <div class="mockup-code">
+                    <pre><code>const DynamicPortal = ({ children, targetId }) => {
+  const target = document.getElementById(targetId) || document.body;
+  return ReactDOM.createPortal(children, target);
+};</code></pre>
+                  </div>
+                </li>
+              </ol>
+
+              <h3 class="lang-zh">流行的堆疊管理庫</h3>
+              <h3 class="lang-en hidden">Popular Stack Management Libraries</h3>
+
+              <ol>
+                <li>
+                  <strong>react-portal</strong>
+                  ：增強的 Portal 實現
+                </li>
+                <li>
+                  <strong>react-toastify</strong>
+                  ：強大的通知系統
+                </li>
+                <li>
+                  <strong>react-modal</strong>
+                  ：可訪問的模態對話框
+                </li>
+                <li>
+                  <strong>react-overlays</strong>
+                  ：Bootstrap 覆蓋層組件
+                </li>
+                <li>
+                  <strong>react-popper</strong>
+                  ：基於 Popper.js 的定位庫
+                </li>
+                <li>
+                  <strong>headlessui</strong>
+                  ：無樣式 UI 組件，帶有內置的堆疊管理
+                </li>
+                <li>
+                  <strong>radix-ui</strong>
+                  ：提供高級堆疊和 focus 管理
+                </li>
+                <li>
+                  <strong>framer-motion</strong>
+                  ：帶有層級管理的動畫庫
+                </li>
+              </ol>
+            </section>
+
+            <!-- CSS 堆疊管理 -->
+            <section id="css-management">
+              <h2 class="lang-zh">CSS 堆疊管理</h2>
+              <h2 class="lang-en hidden">CSS Stack Management</h2>
+
+              <h3 class="lang-zh">CSS 變量實現的動態 z-index</h3>
+              <h3 class="lang-en hidden">Dynamic z-index with CSS Variables</h3>
+
+              <div class="mockup-code">
+                <pre><code>:root {
+  --z-overlay: 1000;
+  --z-modal: 2000;
+  --z-popover: 3000;
+  --z-tooltip: 4000;
+  --z-toast: 5000;
+}
+
+.modal { z-index: var(--z-modal); }</code></pre>
+              </div>
+
+              <h3 class="lang-zh">CSS 命名空間管理的 z-index</h3>
+              <h3 class="lang-en hidden">z-index Management with CSS Namespaces</h3>
+
+              <div class="mockup-code">
+                <pre><code>$zindex: (
+  dropdown: 1000,
+  sticky: 1020,
+  fixed: 1030,
+  modal-backdrop: 1040,
+  modal: 1050,
+  popover: 1060,
+  tooltip: 1070,
+);
+
+.modal {
+  z-index: map-get($zindex, modal);
+}</code></pre>
+              </div>
+            </section>
+
+            <!-- JavaScript 動態堆疊管理 -->
+            <section id="js-management">
+              <h2 class="lang-zh">JavaScript 動態堆疊管理</h2>
+              <h2 class="lang-en hidden">JavaScript Dynamic Stack Management</h2>
+
+              <h3 class="lang-zh">自動遞增 z-index 管理器</h3>
+              <h3 class="lang-en hidden">Auto-incrementing z-index Manager</h3>
+
+              <div class="mockup-code">
+                <pre><code>const ZIndexManager = {
+  current: 1000,
+  next() {
+    return ++this.current;
+  }
+};
+
+function Modal() {
+  const [zIndex] = useState(() => ZIndexManager.next());
+  return &lt;div style={{ zIndex }}&gt;{/* content */}&lt;/div&gt;;
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">Layer Manager System</h3>
+              <h3 class="lang-en hidden">Layer Manager System</h3>
+
+              <div class="mockup-code">
+                <pre><code>const LayerContext = createContext();
+
+function LayerProvider({ children }) {
+  const [layers, setLayers] = useState([]);
+  // 管理層級的添加與刪除...
+  return (
+    &lt;LayerContext.Provider value={{ registerLayer, unregisterLayer }}&gt;
+      {children}
+    &lt;/LayerContext.Provider&gt;
+  );
+}</code></pre>
+              </div>
+            </section>
+
+            <!-- 框架特定堆疊方案 -->
+            <section id="framework-solutions">
+              <h2 class="lang-zh">框架特定堆疊方案</h2>
+              <h2 class="lang-en hidden">Framework-Specific Solutions</h2>
+
+              <h3 class="lang-zh">Material-UI (MUI)</h3>
+              <h3 class="lang-en hidden">Material-UI (MUI)</h3>
+
+              <div class="mockup-code">
+                <pre><code>// MUI 使用預定義的 z-index 值
+const zIndex = {
+  mobileStepper: 1000,
+  fab: 1050,
+  speedDial: 1050,
+  appBar: 1100,
+  drawer: 1200,
+  modal: 1300,
+  snackbar: 1400,
+  tooltip: 1500,
+};</code></pre>
+              </div>
+
+              <h3 class="lang-zh">Chakra UI</h3>
+              <h3 class="lang-en hidden">Chakra UI</h3>
+
+              <div class="mockup-code">
+                <pre><code>// Chakra 使用 Portal + 預定義的 z-index
+&lt;Portal zIndex={toast}&gt;
+  &lt;Alert status="success"&gt;Success message&lt;/Alert&gt;
+&lt;/Portal&gt;</code></pre>
+              </div>
+
+              <h3 class="lang-zh">Ant Design</h3>
+              <h3 class="lang-en hidden">Ant Design</h3>
+
+              <div class="mockup-code">
+                <pre><code>// Ant Design 允許配置全局 z-index 基礎值
+ConfigProvider.config({
+  rootPrefixCls: 'ant',
+  getPrefixCls: (suffixCls, customizePrefixCls) => {
+    return customizePrefixCls || `ant-${suffixCls}`;
+  },
+  getPopupContainer: () => document.body,
+  getTargetContainer: () => document.body,
+  getBaseZIndex: () => 1000,
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 瀏覽器與平台特定差異 -->
+            <section id="browser-differences">
+              <h2 class="lang-zh">瀏覽器與平台特定差異</h2>
+              <h2 class="lang-en hidden">Browser and Platform Differences</h2>
+
+              <h3 class="lang-zh">瀏覽器差異</h3>
+              <h3 class="lang-en hidden">Browser Differences</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>iOS Safari 固定元素行為</strong>
+                  ：iOS Safari 中的
+                  <code>position: fixed</code>
+                  有特殊行為，影響堆疊
+                </li>
+                <li class="lang-en hidden">
+                  <strong>iOS Safari Fixed Element Behavior</strong>
+                  :
+                  <code>position: fixed</code>
+                  in iOS Safari has special behavior that affects stacking
+                </li>
+
+                <li class="lang-zh">
+                  <strong>IE 舊版瀏覽器堆疊限制</strong>
+                  ：IE 舊版有最大 z-index 值限制
+                </li>
+                <li class="lang-en hidden">
+                  <strong>IE Legacy Browser Stacking Limitations</strong>
+                  : Legacy IE versions have maximum z-index value limitations
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Firefox 與 WebKit 渲染差異</strong>
+                  ：在某些複雜堆疊情況下有微小差異
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Firefox and WebKit Rendering Differences</strong>
+                  : There are subtle differences in some complex stacking situations
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">響應式與觸控設備</h3>
+              <h3 class="lang-en hidden">Responsive and Touch Devices</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>移動設備上的鍵盤</strong>
+                  ：虛擬鍵盤通常是最頂層
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Mobile Device Keyboards</strong>
+                  : Virtual keyboards are typically the topmost layer
+                </li>
+
+                <li class="lang-zh">
+                  <strong>System UI 元素</strong>
+                  ：瀏覽器地址欄、選單等在最頂層
+                </li>
+                <li class="lang-en hidden">
+                  <strong>System UI Elements</strong>
+                  : Browser address bars, menus, etc. are at the top level
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Web 原生對話框</strong>
+                  ：
+                  <code>alert()</code>
+                  ,
+                  <code>confirm()</code>
+                  ,
+                  <code>prompt()</code>
+                  在最頂層
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Web Native Dialogs</strong>
+                  :
+                  <code>alert()</code>
+                  ,
+                  <code>confirm()</code>
+                  ,
+                  <code>prompt()</code>
+                  are at the top level
+                </li>
+              </ul>
+            </section>
+
+            <!-- 實用組合技巧 -->
+            <section id="practical-techniques">
+              <h2 class="lang-zh">實用組合技巧</h2>
+              <h2 class="lang-en hidden">Practical Techniques</h2>
+
+              <h3 class="lang-zh">多層級模態系統</h3>
+              <h3 class="lang-en hidden">Multi-level Modal System</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 實現不同優先級的模態系統
+const ModalSystem = {
+  // 普通層級 - 標準模態
+  showNormal: (content) => {
+    return (
+      &lt;div className="modal" style={{ zIndex: 1000 }}&gt;
+        {content}
+      &lt;/div&gt;
+    );
+  },
+
+  // 中等優先級 - 警告模態
+  showImportant: (content) => {
+    return (
+      &lt;div className="modal important" style={{ zIndex: 2000 }}&gt;
+        {content}
+      &lt;/div&gt;
+    );
+  },
+
+  // 最高優先級 - 緊急模態
+  showCritical: (content) => {
+    return ReactDOM.createPortal(
+      &lt;div className="modal critical" style={{ zIndex: 9999 }}&gt;
+        {content}
+      &lt;/div&gt;,
+      document.body
+    );
+  }
+};</code></pre>
+              </div>
+
+              <h3 class="lang-zh">堆疊順序測試工具</h3>
+              <h3 class="lang-en hidden">Stacking Order Test Tool</h3>
+
+              <div class="mockup-code">
+                <pre><code>const ZIndexTester = () => {
+  return (
+    &lt;div className="test-container"&gt;
+      {/* 基本元素 */}
+      &lt;div className="layer" style={{
+        backgroundColor: 'red',
+        position: 'relative',
+        top: 20, left: 20
+      }}&gt;
+        相對定位 (無 z-index)
+      &lt;/div&gt;
+
+      {/* 帶 z-index 的元素 */}
+      &lt;div className="layer" style={{
+        backgroundColor: 'blue',
+        position: 'absolute',
+        zIndex: 1,
+        top: 40, left: 40
+      }}&gt;
+        絕對定位 (z-index: 1)
+      &lt;/div&gt;
+
+      {/* 固定定位 */}
+      &lt;div className="layer" style={{
+        backgroundColor: 'green',
+        position: 'fixed',
+        zIndex: 10,
+        top: 60, left: 60
+      }}&gt;
+        固定定位 (z-index: 10)
+      &lt;/div&gt;
+
+      {/* Portal */}
+      {ReactDOM.createPortal(
+        &lt;div className="layer" style={{
+          backgroundColor: 'purple',
+          position: 'fixed',
+          zIndex: 100,
+          top: 80, left: 80
+        }}&gt;
+          Portal (z-index: 100)
+        &lt;/div&gt;,
+        document.body
+      )}
+    &lt;/div&gt;
+  );
+};</code></pre>
+              </div>
+            </section>
+
+            <!-- 堆疊管理最佳實踐 -->
+            <section id="best-practices">
+              <h2 class="lang-zh">堆疊管理最佳實踐</h2>
+              <h2 class="lang-en hidden">Stacking Management Best Practices</h2>
+
+              <ol>
+                <li class="lang-zh">
+                  <strong>使用 CSS 變量定義 z-index</strong>
+                  ：集中管理所有 z-index 值
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use CSS Variables for z-index</strong>
+                  : Centrally manage all z-index values
+                </li>
+
+                <li class="lang-zh">
+                  <strong>嚴格控制堆疊上下文</strong>
+                  ：了解哪些 CSS 屬性會創建新的堆疊上下文
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Strictly Control Stacking Context</strong>
+                  : Understand which CSS properties create new stacking contexts
+                </li>
+
+                <li class="lang-zh">
+                  <strong>謹慎使用高 z-index 值</strong>
+                  ：避免使用過大的值，如 9999，可能導致無法預期的結果
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use High z-index Values with Caution</strong>
+                  : Avoid using excessively large values like 9999, which can lead to unexpected
+                  results
+                </li>
+
+                <li class="lang-zh">
+                  <strong>依賴 Portal 而非極高 z-index</strong>
+                  ：使用 Portal 將元素移至 DOM 樹的頂層
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Rely on Portals Rather Than Extremely High z-index</strong>
+                  : Use Portals to move elements to the top of the DOM tree
+                </li>
+
+                <li class="lang-zh">
+                  <strong>遵循框架和設計系統的慣例</strong>
+                  ：如果使用 MUI 或 Ant Design 等，遵循其 z-index 慣例
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Follow Framework and Design System Conventions</strong>
+                  : If using MUI or Ant Design, etc., follow their z-index conventions
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用開發工具檢查</strong>
+                  ：瀏覽器開發工具可檢視元素實際堆疊順序與上下文
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use Development Tools to Check</strong>
+                  : Browser development tools can view the actual stacking order and context of
+                  elements
+                </li>
+
+                <li class="lang-zh">
+                  <strong>實現層級管理器</strong>
+                  ：在複雜應用中，創建專門的層級管理系統
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Implement a Layer Manager</strong>
+                  : In complex applications, create a dedicated layer management system
+                </li>
+
+                <li class="lang-zh">
+                  <strong>避免不必要的新堆疊上下文</strong>
+                  ：僅在必要時使用會創建新堆疊上下文的屬性
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Avoid Unnecessary New Stacking Contexts</strong>
+                  : Only use properties that create new stacking contexts when necessary
+                </li>
+
+                <li class="lang-zh">
+                  <strong>測試邊緣情況</strong>
+                  ：測試多個覆蓋層同時打開的情況
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Test Edge Cases</strong>
+                  : Test scenarios where multiple overlays are open simultaneously
+                </li>
+              </ol>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    相較於 React Native，React Web
+                    的堆疊管理更加靈活且有更成熟的標準，但也因此需要更仔細地規劃和管理。
+                  </span>
+                  <span class="lang-en hidden">
+                    Compared to React Native, React Web stack management is more flexible and has
+                    more mature standards, but it also requires more careful planning and
+                    management.
+                  </span>
+                </div>
+              </div>
+
+              <p class="lang-zh">
+                理解和掌握這些堆疊管理技巧，將幫助您創建更加直觀、可靠的用戶界面，無論是簡單的單頁應用還是複雜的企業級系統。
+              </p>
+              <p class="lang-en hidden">
+                Understanding and mastering these stack management techniques will help you create
+                more intuitive and reliable user interfaces, whether for simple single-page
+                applications or complex enterprise systems.
+              </p>
+            </section>
+          </article>
+
+          <!-- 相關文章 -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">
+              <span class="lang-zh">相關文章</span>
+              <span class="lang-en hidden">Related Articles</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="react-native.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">React Native 開發指南</span>
+                    <span class="lang-en hidden">React Native Development Guide</span>
+                  </h4>
+                  <p class="lang-zh">探索 React Native 的特性與最佳實踐</p>
+                  <p class="lang-en hidden">Explore React Native features and best practices</p>
+                </div>
+              </a>
+              <a
+                href="performance.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">React 效能優化</span>
+                    <span class="lang-en hidden">React Performance Optimization</span>
+                  </h4>
+                  <p class="lang-zh">全面提升 React 應用的運行效率</p>
+                  <p class="lang-en hidden">
+                    Comprehensively improve the operational efficiency of React applications
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>

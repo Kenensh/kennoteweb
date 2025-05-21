@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Native 開發指南 | React Native Development Guide</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../../index.html" class="lang-zh">首頁</a>
+          <a href="../../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li><a href="index.html">React</a></li>
+        <li class="lang-zh">React Native</li>
+        <li class="lang-en hidden">React Native</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">React 筆記目錄</span>
+                  <span class="lang-en hidden">React Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html">React 概覽</a></li>
+                  <li>
+                    <a href="hooks-best-practices.html" class="lang-zh">Hooks 最佳實踐</a>
+                    <a href="hooks-best-practices.html" class="lang-en hidden">
+                      Hooks Best Practices
+                    </a>
+                  </li>
+                  <li>
+                    <a href="state-management.html" class="lang-zh">狀態管理</a>
+                    <a href="state-management.html" class="lang-en hidden">State Management</a>
+                  </li>
+                  <li>
+                    <a href="react-web.html" class="lang-zh">React Web 元件堆疊</a>
+                    <a href="react-web.html" class="lang-en hidden">React Web Component Stacking</a>
+                  </li>
+                  <li>
+                    <a href="react-native.html" class="active lang-zh">React Native</a>
+                    <a href="react-native.html" class="active lang-en hidden">React Native</a>
+                  </li>
+                  <li>
+                    <a href="performance.html" class="lang-zh">效能優化技巧</a>
+                    <a href="performance.html" class="lang-en hidden">Performance Optimization</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <article class="prose max-w-none">
+            <header class="mb-8 not-prose">
+              <h1 class="text-4xl font-bold mb-2">
+                <span class="lang-zh">React Native 開發指南</span>
+                <span class="lang-en hidden">React Native Development Guide</span>
+              </h1>
+              <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                <time datetime="2025-05-20">2025-05-20</time>
+                <span>|</span>
+                <span class="badge badge-outline">React</span>
+                <span class="badge badge-outline">Mobile</span>
+                <span class="badge badge-outline">Cross-platform</span>
+              </div>
+            </header>
+
+            <!-- 文章目錄 -->
+            <div class="card bg-base-200 mb-8">
+              <div class="card-body">
+                <h2 class="card-title text-xl mb-2">
+                  <span class="lang-zh">目錄</span>
+                  <span class="lang-en hidden">Contents</span>
+                </h2>
+                <ul class="lang-zh">
+                  <li><a href="#introduction">介紹</a></li>
+                  <li><a href="#environment-setup">環境設置</a></li>
+                  <li><a href="#basic-components">基本組件</a></li>
+                  <li><a href="#styling">樣式與佈局</a></li>
+                  <li><a href="#navigation">導航</a></li>
+                  <li><a href="#state-management">狀態管理</a></li>
+                  <li><a href="#native-modules">原生模塊集成</a></li>
+                  <li><a href="#performance">性能優化</a></li>
+                  <li><a href="#debugging">調試技巧</a></li>
+                  <li><a href="#deployment">發布與部署</a></li>
+                </ul>
+                <ul class="lang-en hidden">
+                  <li><a href="#introduction">Introduction</a></li>
+                  <li><a href="#environment-setup">Environment Setup</a></li>
+                  <li><a href="#basic-components">Basic Components</a></li>
+                  <li><a href="#styling">Styling and Layout</a></li>
+                  <li><a href="#navigation">Navigation</a></li>
+                  <li><a href="#state-management">State Management</a></li>
+                  <li><a href="#native-modules">Native Module Integration</a></li>
+                  <li><a href="#performance">Performance Optimization</a></li>
+                  <li><a href="#debugging">Debugging Techniques</a></li>
+                  <li><a href="#deployment">Publishing and Deployment</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 介紹部分 -->
+            <section id="introduction">
+              <h2 class="lang-zh">介紹</h2>
+              <h2 class="lang-en hidden">Introduction</h2>
+              <p class="lang-zh">
+                React Native 是一個由 Facebook 開發的開源框架，它允許開發者使用 JavaScript 和 React
+                來構建原生移動應用。 與傳統的混合應用不同，React Native 應用使用與原生應用相同的 UI
+                組件，從而提供更好的性能和用戶體驗。
+              </p>
+              <p class="lang-en hidden">
+                React Native is an open-source framework developed by Facebook that allows
+                developers to use JavaScript and React to build native mobile applications. Unlike
+                traditional hybrid apps, React Native apps use the same UI components as native
+                apps, providing better performance and user experience.
+              </p>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    React Native 的口號是「一次學習，到處編寫」，強調跨平台開發的能力。
+                  </span>
+                  <span class="lang-en hidden">
+                    React Native's tagline is "Learn once, write anywhere," emphasizing its
+                    cross-platform development capabilities.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 環境設置 -->
+            <section id="environment-setup">
+              <h2 class="lang-zh">環境設置</h2>
+              <h2 class="lang-en hidden">Environment Setup</h2>
+
+              <p class="lang-zh">
+                開始使用 React Native 開發前，您需要設置開發環境。有兩種主要的方法可以創建 React
+                Native 應用：
+              </p>
+              <p class="lang-en hidden">
+                Before starting development with React Native, you need to set up your development
+                environment. There are two main ways to create React Native applications:
+              </p>
+
+              <h3 class="lang-zh">使用 Expo CLI</h3>
+              <h3 class="lang-en hidden">Using Expo CLI</h3>
+
+              <p class="lang-zh">Expo 是一個圍繞 React Native 構建的工具集，它簡化了開發過程：</p>
+              <p class="lang-en hidden">
+                Expo is a set of tools built around React Native that simplifies the development
+                process:
+              </p>
+
+              <div class="mockup-code">
+                <pre><code># 安裝 Expo CLI
+npm install -g expo-cli
+
+# 創建新項目
+expo init MyProject
+
+# 啟動開發服務器
+cd MyProject
+expo start</code></pre>
+              </div>
+
+              <h3 class="lang-zh">使用 React Native CLI</h3>
+              <h3 class="lang-en hidden">Using React Native CLI</h3>
+
+              <p class="lang-zh">對於需要更多定制化和原生模塊的項目，可以使用 React Native CLI：</p>
+              <p class="lang-en hidden">
+                For projects that require more customization and native modules, you can use the
+                React Native CLI:
+              </p>
+
+              <div class="mockup-code">
+                <pre><code># 安裝 React Native CLI
+npm install -g react-native-cli
+
+# 創建新項目
+npx react-native init MyProject
+
+# 啟動開發服務器
+cd MyProject
+npx react-native start
+
+# 在 Android 上運行
+npx react-native run-android
+
+# 在 iOS 上運行
+npx react-native run-ios</code></pre>
+              </div>
+            </section>
+
+            <!-- 基本組件 -->
+            <section id="basic-components">
+              <h2 class="lang-zh">基本組件</h2>
+              <h2 class="lang-en hidden">Basic Components</h2>
+
+              <p class="lang-zh">
+                React Native 提供了一系列基本組件，它們對應於各平台上的原生 UI 元素：
+              </p>
+              <p class="lang-en hidden">
+                React Native provides a series of basic components that correspond to native UI
+                elements on each platform:
+              </p>
+
+              <ul>
+                <li>
+                  <code>View</code>
+                  - 容器組件，相當於網頁中的 div
+                </li>
+                <li>
+                  <code>Text</code>
+                  - 顯示文本
+                </li>
+                <li>
+                  <code>Image</code>
+                  - 顯示圖片
+                </li>
+                <li>
+                  <code>ScrollView</code>
+                  - 可滾動的容器
+                </li>
+                <li>
+                  <code>FlatList</code>
+                  - 高效顯示長列表數據
+                </li>
+                <li>
+                  <code>TextInput</code>
+                  - 文本輸入框
+                </li>
+                <li>
+                  <code>Button</code>
+                  - 按鈕
+                </li>
+                <li>
+                  <code>TouchableOpacity</code>
+                  - 可點擊的組件，有按下效果
+                </li>
+                <li>
+                  <code>Switch</code>
+                  - 開關組件
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">基本應用示例</h3>
+              <h3 class="lang-en hidden">Basic Application Example</h3>
+
+              <div class="mockup-code">
+                <pre><code>import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+
+const App = () => {
+  const [name, setName] = useState('');
+  const [greeting, setGreeting] = useState('');
+
+  const handleGreet = () => {
+    setGreeting(`Hello, ${name}!`);
+  };
+
+  return (
+    &lt;View style={styles.container}&gt;
+      &lt;Text style={styles.title}&gt;Welcome&lt;/Text&gt;
+      &lt;TextInput
+        style={styles.input}
+        placeholder="Enter your name"
+        value={name}
+        onChangeText={setName}
+      /&gt;
+      &lt;Button title="Greet" onPress={handleGreet} /&gt;
+      {greeting ? &lt;Text style={styles.greeting}&gt;{greeting}&lt;/Text&gt; : null}
+    &lt;/View&gt;
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  greeting: {
+    marginTop: 20,
+    fontSize: 18,
+  },
+});
+
+export default App;</code></pre>
+              </div>
+            </section>
+
+            <!-- 樣式與佈局 -->
+            <section id="styling">
+              <h2 class="lang-zh">樣式與佈局</h2>
+              <h2 class="lang-en hidden">Styling and Layout</h2>
+
+              <p class="lang-zh">
+                React Native 中的樣式採用類似 CSS 的語法，但使用 JavaScript 對象。佈局則主要基於
+                Flexbox：
+              </p>
+              <p class="lang-en hidden">
+                Styling in React Native uses a syntax similar to CSS but with JavaScript objects.
+                Layouts are primarily based on Flexbox:
+              </p>
+
+              <h3 class="lang-zh">StyleSheet API</h3>
+              <h3 class="lang-en hidden">StyleSheet API</h3>
+
+              <div class="mockup-code">
+                <pre><code>import { StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: 'bold',
+  },
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">Flexbox 佈局</h3>
+              <h3 class="lang-en hidden">Flexbox Layout</h3>
+
+              <p class="lang-zh">React Native 使用 Flexbox 進行佈局，主要屬性包括：</p>
+              <p class="lang-en hidden">
+                React Native uses Flexbox for layout, with key properties including:
+              </p>
+
+              <ul>
+                <li>
+                  <code>flex</code>
+                  - 定義元素如何填充可用空間
+                </li>
+                <li>
+                  <code>flexDirection</code>
+                  - 主軸方向（'row', 'column'）
+                </li>
+                <li>
+                  <code>justifyContent</code>
+                  - 主軸對齊方式
+                </li>
+                <li>
+                  <code>alignItems</code>
+                  - 交叉軸對齊方式
+                </li>
+                <li>
+                  <code>flexWrap</code>
+                  - 是否允許換行
+                </li>
+              </ul>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    React Native 中的 Flexbox 與網頁有些微差異，如默認的 flexDirection 是 'column'
+                    而非 'row'。
+                  </span>
+                  <span class="lang-en hidden">
+                    Flexbox in React Native has some subtle differences from the web, such as the
+                    default flexDirection being 'column' instead of 'row'.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 導航 -->
+            <section id="navigation">
+              <h2 class="lang-zh">導航</h2>
+              <h2 class="lang-en hidden">Navigation</h2>
+
+              <p class="lang-zh">React Native 應用中的導航通常使用 React Navigation 庫實現：</p>
+              <p class="lang-en hidden">
+                Navigation in React Native applications is typically implemented using the React
+                Navigation library:
+              </p>
+
+              <div class="mockup-code">
+                <pre><code># 安裝 React Navigation
+npm install @react-navigation/native
+
+# 安裝依賴
+npm install react-native-screens react-native-safe-area-context
+
+# 安裝導航類型（例如堆棧導航）
+npm install @react-navigation/stack</code></pre>
+              </div>
+
+              <h3 class="lang-zh">基本導航設置</h3>
+              <h3 class="lang-en hidden">Basic Navigation Setup</h3>
+
+              <div class="mockup-code">
+                <pre><code>import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './screens/HomeScreen';
+import DetailsScreen from './screens/DetailsScreen';
+
+const Stack = createStackNavigator();
+
+function App() {
+  return (
+    &lt;NavigationContainer&gt;
+      &lt;Stack.Navigator initialRouteName="Home"&gt;
+        &lt;Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Overview' }}
+        /&gt;
+        &lt;Stack.Screen name="Details" component={DetailsScreen} /&gt;
+      &lt;/Stack.Navigator&gt;
+    &lt;/NavigationContainer&gt;
+  );
+}
+
+export default App;</code></pre>
+              </div>
+
+              <h3 class="lang-zh">導航類型</h3>
+              <h3 class="lang-en hidden">Navigation Types</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>堆棧導航 (Stack)</strong>
+                  - 頁面疊加式導航
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Stack Navigation</strong>
+                  - Pages stack on top of each other
+                </li>
+
+                <li class="lang-zh">
+                  <strong>標籤導航 (Tab)</strong>
+                  - 底部或頂部選項卡導航
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Tab Navigation</strong>
+                  - Bottom or top tabs navigation
+                </li>
+
+                <li class="lang-zh">
+                  <strong>抽屜導航 (Drawer)</strong>
+                  - 側邊欄菜單導航
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Drawer Navigation</strong>
+                  - Side menu navigation
+                </li>
+              </ul>
+            </section>
+
+            <!-- 狀態管理 -->
+            <section id="state-management">
+              <h2 class="lang-zh">狀態管理</h2>
+              <h2 class="lang-en hidden">State Management</h2>
+
+              <p class="lang-zh">
+                React Native 應用中的狀態管理方法與 React Web 應用類似，但有一些平台特定的考慮：
+              </p>
+              <p class="lang-en hidden">
+                State management in React Native applications is similar to React Web applications,
+                but with some platform-specific considerations:
+              </p>
+
+              <h3 class="lang-zh">常用狀態管理方案</h3>
+              <h3 class="lang-en hidden">Common State Management Solutions</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>本地狀態</strong>
+                  - 使用 useState 和 useReducer 鉤子
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Local State</strong>
+                  - Using useState and useReducer hooks
+                </li>
+
+                <li class="lang-zh">
+                  <strong>上下文 API</strong>
+                  - 使用 React Context 共享狀態
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Context API</strong>
+                  - Using React Context to share state
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Redux</strong>
+                  - 強大的集中式狀態管理
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Redux</strong>
+                  - Powerful centralized state management
+                </li>
+
+                <li class="lang-zh">
+                  <strong>MobX</strong>
+                  - 基於可觀察對象的狀態管理
+                </li>
+                <li class="lang-en hidden">
+                  <strong>MobX</strong>
+                  - Observable-based state management
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Zustand</strong>
+                  - 輕量級狀態管理庫
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Zustand</strong>
+                  - Lightweight state management library
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">持久化存儲</h3>
+              <h3 class="lang-en hidden">Persistent Storage</h3>
+
+              <p class="lang-zh">
+                對於需要保存在設備上的數據，可以使用 AsyncStorage 或更現代的替代方案：
+              </p>
+              <p class="lang-en hidden">
+                For data that needs to be saved on the device, you can use AsyncStorage or more
+                modern alternatives:
+              </p>
+
+              <div class="mockup-code">
+                <pre><code>import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// 存儲數據
+const storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.error('Error saving data', e);
+  }
+};
+
+// 讀取數據
+const getData = async (key) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    return value != null ? JSON.parse(value) : null;
+  } catch (e) {
+    console.error('Error reading data', e);
+    return null;
+  }
+};</code></pre>
+              </div>
+            </section>
+
+            <!-- 原生模塊集成 -->
+            <section id="native-modules">
+              <h2 class="lang-zh">原生模塊集成</h2>
+              <h2 class="lang-en hidden">Native Module Integration</h2>
+
+              <p class="lang-zh">
+                React Native 允許您創建原生模塊，以便在 JavaScript 代碼中訪問平台特定的 API：
+              </p>
+              <p class="lang-en hidden">
+                React Native allows you to create native modules to access platform-specific APIs
+                from your JavaScript code:
+              </p>
+
+              <h3 class="lang-zh">使用現有的原生模塊</h3>
+              <h3 class="lang-en hidden">Using Existing Native Modules</h3>
+
+              <div class="mockup-code">
+                <pre><code># 安裝相機模塊
+npm install react-native-camera
+
+# 安裝後需要鏈接 (RN 0.60+ 自動鏈接)
+npx react-native link react-native-camera
+
+# 在應用中使用
+import { RNCamera } from 'react-native-camera';</code></pre>
+              </div>
+
+              <h3 class="lang-zh">創建自定義原生模塊</h3>
+              <h3 class="lang-en hidden">Creating Custom Native Modules</h3>
+
+              <p class="lang-zh">對於更高級的需求，您可以創建自己的原生模塊：</p>
+              <p class="lang-en hidden">
+                For more advanced needs, you can create your own native modules:
+              </p>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    創建原生模塊需要對 Android (Java/Kotlin) 和/或 iOS (Objective-C/Swift)
+                    開發有一定了解。
+                  </span>
+                  <span class="lang-en hidden">
+                    Creating native modules requires some understanding of Android (Java/Kotlin)
+                    and/or iOS (Objective-C/Swift) development.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 性能優化 -->
+            <section id="performance">
+              <h2 class="lang-zh">性能優化</h2>
+              <h2 class="lang-en hidden">Performance Optimization</h2>
+
+              <p class="lang-zh">優化 React Native 應用的性能對於提供良好的用戶體驗至關重要：</p>
+              <p class="lang-en hidden">
+                Optimizing the performance of React Native applications is crucial for providing a
+                good user experience:
+              </p>
+
+              <h3 class="lang-zh">常見優化技巧</h3>
+              <h3 class="lang-en hidden">Common Optimization Techniques</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>使用 FlatList 代替 ScrollView</strong>
+                  處理長列表
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use FlatList instead of ScrollView</strong>
+                  for long lists
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用 memo 和 useCallback</strong>
+                  減少不必要的渲染
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use memo and useCallback</strong>
+                  to reduce unnecessary rendering
+                </li>
+
+                <li class="lang-zh">
+                  <strong>避免匿名函數</strong>
+                  作為 props 傳遞
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Avoid anonymous functions</strong>
+                  as props
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用圖片緩存</strong>
+                  提高圖片加載性能
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use image caching</strong>
+                  to improve image loading performance
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用 Hermes 引擎</strong>
+                  提高 JavaScript 執行速度
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use the Hermes engine</strong>
+                  to improve JavaScript execution speed
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">性能監控</h3>
+              <h3 class="lang-en hidden">Performance Monitoring</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>使用 React Native 開發者菜單</strong>
+                  檢查性能指標
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use the React Native Developer Menu</strong>
+                  to check performance metrics
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用 Flipper</strong>
+                  進行高級調試和性能分析
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use Flipper</strong>
+                  for advanced debugging and performance analysis
+                </li>
+              </ul>
+            </section>
+
+            <!-- 調試技巧 -->
+            <section id="debugging">
+              <h2 class="lang-zh">調試技巧</h2>
+              <h2 class="lang-en hidden">Debugging Techniques</h2>
+
+              <p class="lang-zh">有效的調試對於開發高質量的 React Native 應用至關重要：</p>
+              <p class="lang-en hidden">
+                Effective debugging is essential for developing high-quality React Native
+                applications:
+              </p>
+
+              <h3 class="lang-zh">常用調試工具</h3>
+              <h3 class="lang-en hidden">Common Debugging Tools</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>React Native 開發者菜單</strong>
+                  - 搖動設備或按 Cmd+D (iOS) / Cmd+M (Android)
+                </li>
+                <li class="lang-en hidden">
+                  <strong>React Native Developer Menu</strong>
+                  - Shake the device or press Cmd+D (iOS) / Cmd+M (Android)
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Chrome 開發者工具</strong>
+                  - 遠程 JavaScript 調試
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Chrome Developer Tools</strong>
+                  - Remote JavaScript debugging
+                </li>
+
+                <li class="lang-zh">
+                  <strong>React Native Debugger</strong>
+                  - 獨立調試工具
+                </li>
+                <li class="lang-en hidden">
+                  <strong>React Native Debugger</strong>
+                  - Standalone debugging tool
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Flipper</strong>
+                  - Facebook 的移動應用調試平台
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Flipper</strong>
+                  - Facebook's mobile app debugging platform
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">常用調試技巧</h3>
+              <h3 class="lang-en hidden">Common Debugging Techniques</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>使用 console.log</strong>
+                  打印調試信息
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use console.log</strong>
+                  to print debug information
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用斷點</strong>
+                  在 Chrome DevTools 中檢查代碼執行
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use breakpoints</strong>
+                  in Chrome DevTools to inspect code execution
+                </li>
+
+                <li class="lang-zh">
+                  <strong>使用 React DevTools</strong>
+                  檢查組件結構和 props
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Use React DevTools</strong>
+                  to inspect component structure and props
+                </li>
+              </ul>
+            </section>
+
+            <!-- 發布與部署 -->
+            <section id="deployment">
+              <h2 class="lang-zh">發布與部署</h2>
+              <h2 class="lang-en hidden">Publishing and Deployment</h2>
+
+              <p class="lang-zh">將 React Native 應用發布到應用商店需要幾個步驟：</p>
+              <p class="lang-en hidden">
+                Publishing React Native applications to app stores requires several steps:
+              </p>
+
+              <h3 class="lang-zh">準備工作</h3>
+              <h3 class="lang-en hidden">Preparation</h3>
+
+              <ul>
+                <li class="lang-zh"><strong>配置應用圖標和啟動屏幕</strong></li>
+                <li class="lang-en hidden">
+                  <strong>Configure app icons and splash screens</strong>
+                </li>
+
+                <li class="lang-zh"><strong>設置應用版本號和構建號</strong></li>
+                <li class="lang-en hidden">
+                  <strong>Set app version number and build number</strong>
+                </li>
+
+                <li class="lang-zh"><strong>準備隱私政策和應用描述</strong></li>
+                <li class="lang-en hidden">
+                  <strong>Prepare privacy policy and app description</strong>
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">生成發布版本</h3>
+              <h3 class="lang-en hidden">Generate Release Version</h3>
+
+              <div class="mockup-code">
+                <pre><code># Android 發布構建
+cd android
+./gradlew assembleRelease
+
+# iOS 發布構建 (使用 Xcode)
+# 在 Xcode 中選擇 "Product" > "Archive"</code></pre>
+              </div>
+
+              <h3 class="lang-zh">發布到應用商店</h3>
+              <h3 class="lang-en hidden">Publish to App Stores</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>Google Play Store</strong>
+                  - 通過 Google Play Console 上傳 APK 或 AAB
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Google Play Store</strong>
+                  - Upload APK or AAB through Google Play Console
+                </li>
+
+                <li class="lang-zh">
+                  <strong>Apple App Store</strong>
+                  - 通過 App Store Connect 和 Xcode 提交
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Apple App Store</strong>
+                  - Submit through App Store Connect and Xcode
+                </li>
+              </ul>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">使用 Expo 的 EAS Build 服務可以簡化構建和發布過程。</span>
+                  <span class="lang-en hidden">
+                    Using Expo's EAS Build service can simplify the build and publishing process.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 總結 -->
+            <section>
+              <h2 class="lang-zh">總結</h2>
+              <h2 class="lang-en hidden">Conclusion</h2>
+
+              <p class="lang-zh">
+                React Native 提供了一種強大的方式來使用 JavaScript 和 React
+                構建原生移動應用。通過理解本指南中介紹的概念和最佳實踐，您可以開發出高性能、跨平台的移動應用，同時保持較高的代碼復用率和開發效率。
+              </p>
+              <p class="lang-en hidden">
+                React Native provides a powerful way to build native mobile applications using
+                JavaScript and React. By understanding the concepts and best practices introduced in
+                this guide, you can develop high-performance, cross-platform mobile applications
+                while maintaining high code reuse and development efficiency.
+              </p>
+
+              <p class="lang-zh">
+                隨著持續學習和實踐，您將能夠充分利用 React Native 的優勢，創建出用戶喜愛的應用體驗。
+              </p>
+              <p class="lang-en hidden">
+                With continued learning and practice, you'll be able to fully leverage the
+                advantages of React Native to create app experiences that users love.
+              </p>
+            </section>
+          </article>
+
+          <!-- 相關文章 -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">
+              <span class="lang-zh">相關文章</span>
+              <span class="lang-en hidden">Related Articles</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="react-web.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">React Web 元件堆疊層級</span>
+                    <span class="lang-en hidden">React Web Component Stacking</span>
+                  </h4>
+                  <p class="lang-zh">React Web 應用中元件堆疊層級的完整指南</p>
+                  <p class="lang-en hidden">
+                    Complete guide to component stacking levels in React Web applications
+                  </p>
+                </div>
+              </a>
+              <a
+                href="state-management.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">React 狀態管理</span>
+                    <span class="lang-en hidden">React State Management</span>
+                  </h4>
+                  <p class="lang-zh">React 應用中狀態管理的全面指南</p>
+                  <p class="lang-en hidden">
+                    Comprehensive guide to state management in React applications
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>
