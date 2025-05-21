@@ -1,0 +1,514 @@
+<!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+        <div>
+            <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+            <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+        // 主題切換
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const themeLightIcon = document.querySelector('.theme-light');
+        const themeDarkIcon = document.querySelector('.theme-dark');
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeLightIcon.classList.add('hidden');
+                themeDarkIcon.classList.remove('hidden');
+            } else {
+                themeLightIcon.classList.remove('hidden');
+                themeDarkIcon.classList.add('hidden');
+            }
+            
+            // 儲存主題偏好到本地存儲
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // 語言切換
+        const langToggle = document.getElementById('langToggle');
+        const langDisplay = document.getElementById('langDisplay');
+        const zhElements = document.querySelectorAll('.lang-zh');
+        const enElements = document.querySelectorAll('.lang-en');
+
+        // 定義當前語言（默認中文）
+        let currentLang = localStorage.getItem('language') || 'zh';
+        
+        // 設置初始語言顯示
+        updateLanguageDisplay();
+        
+        langToggle.addEventListener('click', () => {
+            // 切換語言
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            
+            // 更新元素顯示
+            updateLanguageState();
+            
+            // 儲存語言偏好到本地存儲
+            localStorage.setItem('language', currentLang);
+        });
+        
+        // 更新語言狀態的函數
+        function updateLanguageState() {
+            if (currentLang === 'zh') {
+                zhElements.forEach(el => el.classList.remove('hidden'));
+                enElements.forEach(el => el.classList.add('hidden'));
+                langDisplay.textContent = '中/EN';
+            } else {
+                zhElements.forEach(el => el.classList.add('hidden'));
+                enElements.forEach(el => el.classList.remove('hidden'));
+                langDisplay.textContent = 'EN/中';
+            }
+        }
+        
+        // 更新語言顯示
+        function updateLanguageDisplay() {
+            langDisplay.textContent = currentLang === 'zh' ? '中/EN' : 'EN/中';
+            updateLanguageState();
+        }
+
+        // 頁面加載時讀取使用者偏好
+        document.addEventListener('DOMContentLoaded', () => {
+            // 載入主題偏好
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    themeLightIcon.classList.add('hidden');
+                    themeDarkIcon.classList.remove('hidden');
+                }
+            }
+            
+            // 載入語言偏好
+            const savedLanguage = localStorage.getItem('language');
+            if (savedLanguage) {
+                currentLang = savedLanguage;
+                updateLanguageState();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Hooks 最佳實踐 | React Hooks Best Practices</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            daisyui: {
+                themes: ["light", "dark"],
+            },
+        }
+    </script>
+</head>
+<body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="../../../index.html" class="lang-zh">首頁</a><a href="../../../index.html" class="lang-en hidden">Home</a></li>
+                    <li><a href="../../frontend/index.html" class="lang-zh">前端技術</a><a href="../../frontend/index.html" class="lang-en hidden">Frontend</a></li>
+                    <li><a href="../../backend/index.html" class="lang-zh">後端技術</a><a href="../../backend/index.html" class="lang-en hidden">Backend</a></li>
+                    <li><a href="../../ui/index.html">UI</a></li>
+                    <li><a href="../../figma/index.html">Figma</a></li>
+                    <li><a href="../../tools/index.html" class="lang-zh">工具</a><a href="../../tools/index.html" class="lang-en hidden">Tools</a></li>
+                    <li><a href="../../ai/index.html">AI</a></li>
+                </ul>
+            </div>
+            <a href="../../../index.html" class="btn btn-ghost text-xl">
+                <span class="lang-zh">開發筆記</span>
+                <span class="lang-en hidden">Dev Notes</span>
+            </a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="../../frontend/index.html" class="lang-zh">前端技術</a><a href="../../frontend/index.html" class="lang-en hidden">Frontend</a></li>
+                <li><a href="../../backend/index.html" class="lang-zh">後端技術</a><a href="../../backend/index.html" class="lang-en hidden">Backend</a></li>
+                <li><a href="../../ui/index.html">UI</a></li>
+                <li><a href="../../figma/index.html">Figma</a></li>
+                <li><a href="../../tools/index.html" class="lang-zh">工具</a><a href="../../tools/index.html" class="lang-en hidden">Tools</a></li>
+                <li><a href="../../ai/index.html">AI</a></li>
+            </ul>
+        </div>
+        <div class="navbar-end">
+            <!-- 語言切換 -->
+            <button id="langToggle" class="btn btn-ghost btn-circle">
+                <span id="langDisplay">中/EN</span>
+            </button>
+            <!-- 主題切換 -->
+            <button id="themeToggle" class="btn btn-ghost btn-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 theme-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 theme-dark hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+        <ul>
+            <li><a href="../../../index.html" class="lang-zh">首頁</a><a href="../../../index.html" class="lang-en hidden">Home</a></li>
+            <li><a href="../../frontend/index.html" class="lang-zh">前端技術</a><a href="../../frontend/index.html" class="lang-en hidden">Frontend</a></li>
+            <li><a href="index.html">React</a></li>
+            <li class="lang-zh">Hooks 最佳實踐</li>
+            <li class="lang-en hidden">Hooks Best Practices</li>
+        </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- 側邊欄 -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-20">
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="text-xl font-bold mb-4">
+                                <span class="lang-zh">React 筆記目錄</span>
+                                <span class="lang-en hidden">React Contents</span>
+                            </h2>
+                            <ul class="menu bg-base-200 rounded-box">
+                                <li><a href="index.html" class="lang-zh">React 概覽</a><a href="index.html" class="lang-en hidden">React Overview</a></li>
+                                <li><a href="hooks-best-practices.html" class="active lang-zh">Hooks 最佳實踐</a><a href="hooks-best-practices.html" class="active lang-en hidden">Hooks Best Practices</a></li>
+                                <li><a href="context-api.html" class="lang-zh">Context API 使用指南</a><a href="context-api.html" class="lang-en hidden">Context API Guide</a></li>
+                                <li><a href="performance.html" class="lang-zh">效能優化技巧</a><a href="performance.html" class="lang-en hidden">Performance Optimization</a></li>
+                                <li><a href="testing.html" class="lang-zh">測試 React 應用</a><a href="testing.html" class="lang-en hidden">Testing React Apps</a></li>
+                                <li><a href="server-components.html" class="lang-zh">React 服務器組件</a><a href="server-components.html" class="lang-en hidden">React Server Components</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 主要內容區 -->
+            <div class="lg:col-span-3">
+                <article class="prose max-w-none">
+                    <header class="mb-8 not-prose">
+                        <h1 class="text-4xl font-bold mb-2">
+                            <span class="lang-zh">React Hooks 最佳實踐</span>
+                            <span class="lang-en hidden">React Hooks Best Practices</span>
+                        </h1>
+                        <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                            <time datetime="2025-05-15">2025-05-15</time>
+                            <span>|</span>
+                            <span class="badge badge-outline">React</span>
+                            <span class="badge badge-outline">Hooks</span>
+                        </div>
+                    </header>
+
+                    <!-- 文章目錄 -->
+                    <div class="card bg-base-200 mb-8">
+                        <div class="card-body">
+                            <h2 class="card-title text-xl mb-2">
+                                <span class="lang-zh">目錄</span>
+                                <span class="lang-en hidden">Contents</span>
+                            </h2>
+                            <ul class="lang-zh">
+                                <li><a href="#introduction">引言</a></li>
+                                <li><a href="#rules">Hooks 使用規則</a></li>
+                                <li><a href="#useState">useState 最佳實踐</a></li>
+                                <li><a href="#useEffect">useEffect 最佳實踐</a></li>
+                                <li><a href="#custom-hooks">自定義 Hooks</a></li>
+                                <li><a href="#performance">性能優化</a></li>
+                                <li><a href="#conclusion">總結</a></li>
+                            </ul>
+                            <ul class="lang-en hidden">
+                                <li><a href="#introduction">Introduction</a></li>
+                                <li><a href="#rules">Rules of Hooks</a></li>
+                                <li><a href="#useState">useState Best Practices</a></li>
+                                <li><a href="#useEffect">useEffect Best Practices</a></li>
+                                <li><a href="#custom-hooks">Custom Hooks</a></li>
+                                <li><a href="#performance">Performance Optimization</a></li>
+                                <li><a href="#conclusion">Conclusion</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 引言部分 -->
+                    <section id="introduction">
+                        <h2 class="lang-zh">引言</h2>
+                        <h2 class="lang-en hidden">Introduction</h2>
+                        <p class="lang-zh">
+                            React Hooks 是 React 16.8 引入的特性，它讓你在不編寫 class 的情況下使用 state 以及其他的 React 特性。透過 Hooks，函數組件現在可以做到以前只有類組件才能做到的事情。然而，要有效地使用 Hooks，需要遵守一些最佳實踐。
+                        </p>
+                        <p class="lang-en hidden">
+                            React Hooks, introduced in React 16.8, allow you to use state and other React features without writing a class. With Hooks, functional components can now do things that previously only class components could do. However, to use Hooks effectively, it's important to follow certain best practices.
+                        </p>
+                    </section>
+
+                    <!-- Hooks 使用規則 -->
+                    <section id="rules">
+                        <h2 class="lang-zh">Hooks 使用規則</h2>
+                        <h2 class="lang-en hidden">Rules of Hooks</h2>
+                        <p class="lang-zh">
+                            使用 Hooks 時有兩條主要規則必須遵守：
+                        </p>
+                        <p class="lang-en hidden">
+                            There are two main rules that must be followed when using Hooks:
+                        </p>
+
+                        <ol>
+                            <li class="lang-zh">只在最頂層使用 Hooks — 不要在循環、條件或嵌套函數中調用 Hook</li>
+                            <li class="lang-en hidden">Only call Hooks at the top level — Don't call Hooks inside loops, conditions, or nested functions</li>
+                            
+                            <li class="lang-zh">只在 React 函數中調用 Hooks — 在 React 函數組件中或自定義 Hook 中調用 Hooks</li>
+                            <li class="lang-en hidden">Only call Hooks from React functions — Call Hooks from React functional components or from custom Hooks</li>
+                        </ol>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 正確
+function MyComponent() {
+  const [count, setCount] = useState(0);
+  // ...
+}
+
+// 錯誤: 在條件語句中使用 Hook
+function MyComponent() {
+  if (condition) {
+    const [count, setCount] = useState(0);
+  }
+  // ...
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- useState 最佳實踐 -->
+                    <section id="useState">
+                        <h2 class="lang-zh">useState 最佳實踐</h2>
+                        <h2 class="lang-en hidden">useState Best Practices</h2>
+                        
+                        <h3 class="lang-zh">使用函數更新狀態</h3>
+                        <h3 class="lang-en hidden">Use Functional Updates</h3>
+                        
+                        <p class="lang-zh">
+                            當新狀態依賴於先前的狀態時，使用函數來更新狀態是最安全的做法。
+                        </p>
+                        <p class="lang-en hidden">
+                            When the new state depends on the previous state, using a function to update the state is the safest approach.
+                        </p>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 不夠安全
+const increment = () => {
+  setCount(count + 1);
+};
+
+// 更安全的做法
+const increment = () => {
+  setCount(prevCount => prevCount + 1);
+};</code></pre>
+                        </div>
+
+                        <h3 class="lang-zh">複雜狀態結構</h3>
+                        <h3 class="lang-en hidden">Complex State Structures</h3>
+                        
+                        <p class="lang-zh">
+                            對於複雜的狀態結構，考慮將相關狀態分組或使用 useReducer。
+                        </p>
+                        <p class="lang-en hidden">
+                            For complex state structures, consider grouping related state or using useReducer.
+                        </p>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 將相關狀態分組
+const [user, setUser] = useState({
+  name: '',
+  email: '',
+  age: 0
+});
+
+// 更新分組狀態的某個屬性
+setUser(prevUser => ({
+  ...prevUser,
+  name: 'New Name'
+}));</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- useEffect 最佳實踐 -->
+                    <section id="useEffect">
+                        <h2 class="lang-zh">useEffect 最佳實踐</h2>
+                        <h2 class="lang-en hidden">useEffect Best Practices</h2>
+                        
+                        <h3 class="lang-zh">合理使用依賴數組</h3>
+                        <h3 class="lang-en hidden">Use Dependency Array Properly</h3>
+                        
+                        <p class="lang-zh">
+                            依賴數組應該包含 effect 函數內部使用的所有響應式值（props、state、衍生值）。eslint-plugin-react-hooks 的 exhaustive-deps 規則可以幫助你發現問題。
+                        </p>
+                        <p class="lang-en hidden">
+                            The dependency array should include all reactive values (props, state, derived values) used inside the effect function. The exhaustive-deps rule from eslint-plugin-react-hooks can help you catch issues.
+                        </p>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 正確使用依賴數組
+useEffect(() => {
+  document.title = `You clicked ${count} times`;
+}, [count]); // 正確: count 是一個依賴
+
+// 避免在不必要時清理
+useEffect(() => {
+  // 沒有需要清理的操作
+}, []); // 只運行一次</code></pre>
+                        </div>
+
+                        <h3 class="lang-zh">分離關注點</h3>
+                        <h3 class="lang-en hidden">Separate Concerns</h3>
+                        
+                        <p class="lang-zh">
+                            比起在一個大的 useEffect 中做多件事，更好的做法是將不同功能的副作用分開放在不同的 useEffect 中。
+                        </p>
+                        <p class="lang-en hidden">
+                            Instead of doing multiple things in one large useEffect, it's better to separate different functionality into different useEffect hooks.
+                        </p>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 不好的做法: 一個 effect 做多件事
+useEffect(() => {
+  document.title = `You clicked ${count} times`;
+  fetchUserData();
+}, [count]); // fetchUserData 不依賴於 count，但會在 count 改變時重新執行
+
+// 好的做法: 分開關注點
+useEffect(() => {
+  document.title = `You clicked ${count} times`;
+}, [count]);
+
+useEffect(() => {
+  fetchUserData();
+}, []); // 只在組件掛載時執行一次</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- 自定義 Hooks -->
+                    <section id="custom-hooks">
+                        <h2 class="lang-zh">自定義 Hooks</h2>
+                        <h2 class="lang-en hidden">Custom Hooks</h2>
+                        
+                        <p class="lang-zh">
+                            自定義 Hooks 是一種重用組件邏輯的強大機制。它們讓你可以提取和共享跨組件的複雜邏輯。
+                        </p>
+                        <p class="lang-en hidden">
+                            Custom Hooks are a powerful mechanism for reusing component logic. They allow you to extract and share complex logic across components.
+                        </p>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 創建自定義 Hook 來管理表單輸入
+function useFormInput(initialValue) {
+  const [value, setValue] = useState(initialValue);
+  
+  function handleChange(e) {
+    setValue(e.target.value);
+  }
+  
+  return {
+    value,
+    onChange: handleChange
+  };
+}
+
+// 在組件中使用
+function LoginForm() {
+  const username = useFormInput('');
+  const password = useFormInput('');
+  
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log('提交', username.value, password.value);
+  }
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" {...username} />
+      <input type="password" {...password} />
+      <button type="submit">登錄</button>
+    </form>
+  );
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- 性能優化 -->
+                    <section id="performance">
+                        <h2 class="lang-zh">性能優化</h2>
+                        <h2 class="lang-en hidden">Performance Optimization</h2>
+                        
+                        <h3 class="lang-zh">使用 useMemo 和 useCallback</h3>
+                        <h3 class="lang-en hidden">Using useMemo and useCallback</h3>
+                        
+                        <p class="lang-zh">
+                            useMemo 和 useCallback 可以用來避免不必要的計算和重新渲染，但請謹慎使用，只在確實需要優化性能的地方應用它們。
+                        </p>
+                        <p class="lang-en hidden">
+                            useMemo and useCallback can be used to avoid unnecessary calculations and re-renders, but use them judiciously and only apply them where performance optimization is actually needed.
+                        </p>
+
+                        <div class="mockup-code my-6">
+                            <pre><code>// 使用 useMemo 避免昂貴計算
+const memoizedValue = useMemo(() => {
+  return computeExpensiveValue(a, b);
+}, [a, b]);
+
+// 使用 useCallback 記憶函數
+const memoizedCallback = useCallback(() => {
+  doSomething(a, b);
+}, [a, b]);</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- 總結 -->
+                    <section id="conclusion">
+                        <h2 class="lang-zh">總結</h2>
+                        <h2 class="lang-en hidden">Conclusion</h2>
+                        
+                        <p class="lang-zh">
+                            React Hooks 是一個強大的特性，正確使用它們可以讓你的代碼更清晰、更易於維護。遵循本文介紹的最佳實踐，你可以充分利用 Hooks 的優勢，同時避免一些常見的陷阱。
+                        </p>
+                        <p class="lang-en hidden">
+                            React Hooks are a powerful feature, and using them correctly can make your code cleaner and more maintainable. By following the best practices introduced in this article, you can take full advantage of Hooks while avoiding common pitfalls.
+                        </p>
+                        
+                        <p class="lang-zh">
+                            記住，這些最佳實踐只是指導方針，具體情況可能需要不同的處理方式。隨著你對 Hooks 使用的熟練，你會開發出更適合你的項目的模式。
+                        </p>
+                        <p class="lang-en hidden">
+                            Remember, these best practices are guidelines, and specific situations may require different approaches. As you become more proficient with Hooks, you'll develop patterns that are more tailored to your projects.
+                        </p>
+                    </section>
+                </article>
+
+                <!-- 前後文章導航 -->
+                <div class="flex justify-between mt-12">
+                    <a href="index.html" class="btn btn-outline">
+                        <span class="lang-zh">← React 概覽</span>
+                        <span class="lang-en hidden">← React Overview</span>
+                    </a>
+                    <a href="context-api.html" class="btn btn-outline">
+                        <span class="lang-zh">Context API 使用指南 →</span>
+                        <span class="lang-en hidden">Context API Guide →</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
