@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jQuery 開發筆記 | jQuery Development Notes</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../index.html" class="lang-zh">首頁</a>
+          <a href="../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li>jQuery</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">jQuery 筆記目錄</span>
+                  <span class="lang-en hidden">jQuery Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html" class="active">jQuery 概覽</a></li>
+                  <li>
+                    <a href="basics.html" class="lang-zh">jQuery 基礎</a>
+                    <a href="basics.html" class="lang-en hidden">jQuery Basics</a>
+                  </li>
+                  <li>
+                    <a href="selectors.html" class="lang-zh">選擇器詳解</a>
+                    <a href="selectors.html" class="lang-en hidden">Selectors Guide</a>
+                  </li>
+                  <li>
+                    <a href="events.html" class="lang-zh">事件處理</a>
+                    <a href="events.html" class="lang-en hidden">Event Handling</a>
+                  </li>
+                  <li>
+                    <a href="ajax.html" class="lang-zh">AJAX 操作</a>
+                    <a href="ajax.html" class="lang-en hidden">AJAX Operations</a>
+                  </li>
+                  <li>
+                    <a href="animations.html" class="lang-zh">動畫效果</a>
+                    <a href="animations.html" class="lang-en hidden">Animations</a>
+                  </li>
+                  <li>
+                    <a href="plugins.html" class="lang-zh">插件開發</a>
+                    <a href="plugins.html" class="lang-en hidden">Plugin Development</a>
+                  </li>
+                  <li>
+                    <a href="performance.html" class="lang-zh">性能優化</a>
+                    <a href="performance.html" class="lang-en hidden">Performance</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <h1 class="text-4xl font-bold mb-6">jQuery</h1>
+
+          <div class="alert bg-base-200 mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="stroke-info shrink-0 w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <div>
+              <span class="lang-zh">
+                jQuery 是一個快速、小型且功能豐富的 JavaScript 函式庫，讓 HTML
+                文檔操作、事件處理、動畫和 Ajax 變得更加簡單。
+              </span>
+              <span class="lang-en hidden">
+                jQuery is a fast, small, and feature-rich JavaScript library that makes HTML
+                document manipulation, event handling, animation, and Ajax much simpler.
+              </span>
+            </div>
+          </div>
+
+          <!-- jQuery 簡介 -->
+          <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">jQuery 簡介</span>
+              <span class="lang-en hidden">Introduction to jQuery</span>
+            </h2>
+
+            <div class="prose max-w-none">
+              <p class="lang-zh">
+                jQuery 是一個輕量級的 JavaScript 函式庫，由 John Resig 於 2006
+                年創建。它的核心理念是「寫得更少，做得更多」（Write Less, Do More），通過提供簡潔的
+                API 來簡化 JavaScript 編程。雖然現代 JavaScript 和框架（如 React、Vue）的興起使
+                jQuery 的使用有所減少，但它仍然是許多專案的重要組成部分。
+              </p>
+              <p class="lang-en hidden">
+                jQuery is a lightweight JavaScript library created by John Resig in 2006. Its core
+                philosophy is "Write Less, Do More," simplifying JavaScript programming by providing
+                concise APIs. While the rise of modern JavaScript and frameworks (like React, Vue)
+                has reduced jQuery usage, it remains an important component of many projects.
+              </p>
+
+              <h3 class="lang-zh">jQuery 的優勢</h3>
+              <h3 class="lang-en hidden">Advantages of jQuery</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">簡潔的語法</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Concise Syntax</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• 鏈式調用支持</li>
+                      <li class="lang-en hidden">• Method chaining support</li>
+                      <li class="lang-zh">• 直觀的選擇器</li>
+                      <li class="lang-en hidden">• Intuitive selectors</li>
+                      <li class="lang-zh">• 簡化的事件處理</li>
+                      <li class="lang-en hidden">• Simplified event handling</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">跨瀏覽器兼容</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Cross-browser Compatibility</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• 統一的 API</li>
+                      <li class="lang-en hidden">• Unified API</li>
+                      <li class="lang-zh">• 自動處理瀏覽器差異</li>
+                      <li class="lang-en hidden">• Automatic handling of browser differences</li>
+                      <li class="lang-zh">• IE6+ 支持</li>
+                      <li class="lang-en hidden">• IE6+ support</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">豐富的插件生態</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Rich Plugin Ecosystem</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• 大量第三方插件</li>
+                      <li class="lang-en hidden">• Abundant third-party plugins</li>
+                      <li class="lang-zh">• 易於擴展</li>
+                      <li class="lang-en hidden">• Easy to extend</li>
+                      <li class="lang-zh">• 活躍的社區支持</li>
+                      <li class="lang-en hidden">• Active community support</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">學習成本低</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Low Learning Curve</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• CSS 選擇器語法</li>
+                      <li class="lang-en hidden">• CSS selector syntax</li>
+                      <li class="lang-zh">• 豐富的文檔資源</li>
+                      <li class="lang-en hidden">• Rich documentation</li>
+                      <li class="lang-zh">• 大量教程和範例</li>
+                      <li class="lang-en hidden">• Abundant tutorials and examples</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="divider"></div>
+
+          <!-- 最新筆記 -->
+          <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">最新筆記</span>
+              <span class="lang-en hidden">Latest Notes</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- 筆記卡片 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">jQuery 基礎操作完整指南</h3>
+                  <p class="text-sm opacity-70">2025-05-22</p>
+                  <p class="lang-zh">從基本語法到 DOM 操作的完整 jQuery 入門指南</p>
+                  <p class="lang-en hidden">
+                    Complete jQuery beginner's guide from basic syntax to DOM manipulation
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="basics.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">jQuery 選擇器深入解析</h3>
+                  <p class="text-sm opacity-70">2025-05-20</p>
+                  <p class="lang-zh">掌握 jQuery 強大的元素選擇器系統</p>
+                  <p class="lang-en hidden">Master jQuery's powerful element selector system</p>
+                  <div class="card-actions justify-end">
+                    <a href="selectors.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">jQuery 事件處理機制</h3>
+                  <p class="text-sm opacity-70">2025-05-18</p>
+                  <p class="lang-zh">深入了解 jQuery 的事件綁定和處理方式</p>
+                  <p class="lang-en hidden">
+                    Deep dive into jQuery's event binding and handling mechanisms
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="events.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">jQuery AJAX 實戰技巧</h3>
+                  <p class="text-sm opacity-70">2025-05-15</p>
+                  <p class="lang-zh">使用 jQuery 處理異步請求的完整方案</p>
+                  <p class="lang-en hidden">
+                    Complete solutions for handling asynchronous requests with jQuery
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="ajax.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="divider"></div>
+
+          <!-- 熱門主題 -->
+          <section>
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">熱門主題</span>
+              <span class="lang-en hidden">Popular Topics</span>
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <!-- 基礎操作 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">基礎操作</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">DOM 操作</span>
+                    <span class="badge badge-primary">選擇器</span>
+                    <span class="badge badge-primary">屬性操作</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="basics.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 事件處理 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">事件處理</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">click()</span>
+                    <span class="badge badge-primary">on()</span>
+                    <span class="badge badge-primary">off()</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="events.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AJAX 操作 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">AJAX 操作</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">$.ajax()</span>
+                    <span class="badge badge-primary">$.get()</span>
+                    <span class="badge badge-primary">$.post()</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="ajax.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 動畫效果 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">動畫效果</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">fadeIn()</span>
+                    <span class="badge badge-primary">slideDown()</span>
+                    <span class="badge badge-primary">animate()</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="animations.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 選擇器 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">選擇器</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">CSS 選擇器</span>
+                    <span class="badge badge-primary">過濾器</span>
+                    <span class="badge badge-primary">偽選擇器</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="selectors.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 插件開發 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">插件開發</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">$.fn.extend</span>
+                    <span class="badge badge-primary">鏈式調用</span>
+                    <span class="badge badge-primary">自定義插件</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="plugins.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 快速開始 -->
+          <section class="mt-10">
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">快速開始</span>
+              <span class="lang-en hidden">Quick Start</span>
+            </h2>
+
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title lang-zh">jQuery 基本語法</h3>
+                <h3 class="card-title lang-en hidden">jQuery Basic Syntax</h3>
+
+                <div class="mockup-code">
+                  <pre><code>// 引入 jQuery (CDN)
+&lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+
+// 文檔就緒事件
+$(document).ready(function() {
+    // 或簡寫為
+    $(function() {
+        console.log('jQuery is ready!');
+    });
+});
+
+// 基本選擇器
+$('#myId')          // ID 選擇器
+$('.myClass')       // class 選擇器  
+$('div')            // 標籤選擇器
+$('div.myClass')    // 組合選擇器
+
+// DOM 操作
+$('#myDiv').text('Hello jQuery!');      // 設置文字
+$('#myDiv').html('&lt;b&gt;Bold text&lt;/b&gt;');    // 設置 HTML
+$('#myDiv').addClass('highlight');      // 添加 class
+$('#myDiv').css('color', 'red');        // 設置樣式
+
+// 事件處理
+$('#myButton').click(function() {
+    alert('Button clicked!');
+});
+
+// 動畫效果
+$('#myDiv').fadeIn();           // 淡入
+$('#myDiv').slideDown();        // 滑動顯示
+$('#myDiv').animate({           // 自定義動畫
+    left: '100px',
+    opacity: 0.5
+}, 1000);
+
+// AJAX 請求
+$.ajax({
+    url: '/api/data',
+    method: 'GET',
+    success: function(data) {
+        console.log('Data received:', data);
+    },
+    error: function(xhr, status, error) {
+        console.error('Error:', error);
+    }
+});</code></pre>
+                </div>
+
+                <p class="mt-4 lang-zh">
+                  這是一個 jQuery 的基本語法示例，展示了選擇器、DOM 操作、事件處理和 AJAX
+                  等核心功能。jQuery 的語法簡潔直觀，非常適合快速開發。
+                </p>
+                <p class="mt-4 lang-en hidden">
+                  This is a basic jQuery syntax example showcasing core features like selectors, DOM
+                  manipulation, event handling, and AJAX. jQuery's syntax is concise and intuitive,
+                  perfect for rapid development.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>

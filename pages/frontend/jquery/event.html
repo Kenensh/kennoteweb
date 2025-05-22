@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jQuery 事件處理詳解 | jQuery Event Handling Guide</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 718.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../../index.html" class="lang-zh">首頁</a>
+          <a href="../../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li><a href="index.html">jQuery</a></li>
+        <li class="lang-zh">事件處理</li>
+        <li class="lang-en hidden">Event Handling</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">jQuery 筆記目錄</span>
+                  <span class="lang-en hidden">jQuery Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html">jQuery 概覽</a></li>
+                  <li>
+                    <a href="basics.html" class="lang-zh">jQuery 基礎</a>
+                    <a href="basics.html" class="lang-en hidden">jQuery Basics</a>
+                  </li>
+                  <li>
+                    <a href="selectors.html" class="lang-zh">選擇器詳解</a>
+                    <a href="selectors.html" class="lang-en hidden">Selectors Guide</a>
+                  </li>
+                  <li>
+                    <a href="events.html" class="active lang-zh">事件處理</a>
+                    <a href="events.html" class="active lang-en hidden">Event Handling</a>
+                  </li>
+                  <li>
+                    <a href="ajax.html" class="lang-zh">AJAX 操作</a>
+                    <a href="ajax.html" class="lang-en hidden">AJAX Operations</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <article class="prose max-w-none">
+            <header class="mb-8 not-prose">
+              <h1 class="text-4xl font-bold mb-2">
+                <span class="lang-zh">jQuery 事件處理完整指南</span>
+                <span class="lang-en hidden">Complete Guide to jQuery Event Handling</span>
+              </h1>
+              <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                <time datetime="2025-05-22">2025-05-22</time>
+                <span>|</span>
+                <span class="badge badge-outline">jQuery</span>
+                <span class="badge badge-outline">Events</span>
+                <span class="badge badge-outline">JavaScript</span>
+              </div>
+            </header>
+
+            <!-- 文章目錄 -->
+            <div class="card bg-base-200 mb-8">
+              <div class="card-body">
+                <h2 class="card-title text-xl mb-2">
+                  <span class="lang-zh">目錄</span>
+                  <span class="lang-en hidden">Contents</span>
+                </h2>
+                <ul class="lang-zh">
+                  <li><a href="#introduction">事件處理介紹</a></li>
+                  <li><a href="#basic-events">基本事件處理</a></li>
+                  <li><a href="#event-object">事件對象</a></li>
+                  <li><a href="#event-delegation">事件委託</a></li>
+                  <li><a href="#custom-events">自定義事件</a></li>
+                  <li><a href="#event-namespaces">事件命名空間</a></li>
+                  <li><a href="#advanced-techniques">高級技巧</a></li>
+                  <li><a href="#best-practices">最佳實踐</a></li>
+                  <li><a href="#summary">總結</a></li>
+                </ul>
+                <ul class="lang-en hidden">
+                  <li><a href="#introduction">Event Handling Introduction</a></li>
+                  <li><a href="#basic-events">Basic Event Handling</a></li>
+                  <li><a href="#event-object">Event Object</a></li>
+                  <li><a href="#event-delegation">Event Delegation</a></li>
+                  <li><a href="#custom-events">Custom Events</a></li>
+                  <li><a href="#event-namespaces">Event Namespaces</a></li>
+                  <li><a href="#advanced-techniques">Advanced Techniques</a></li>
+                  <li><a href="#best-practices">Best Practices</a></li>
+                  <li><a href="#summary">Summary</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 事件處理介紹 -->
+            <section id="introduction">
+              <h2 class="lang-zh">事件處理介紹</h2>
+              <h2 class="lang-en hidden">Event Handling Introduction</h2>
+              <p class="lang-zh">
+                事件處理是 jQuery
+                的核心功能之一，它讓我們能夠響應用戶的互動行為，如點擊、鍵盤輸入、滑鼠移動等。jQuery
+                提供了統一且強大的事件處理系統，簡化了跨瀏覽器的事件處理。
+              </p>
+              <p class="lang-en hidden">
+                Event handling is one of jQuery's core features, allowing us to respond to user
+                interactions such as clicks, keyboard input, mouse movements, etc. jQuery provides a
+                unified and powerful event handling system that simplifies cross-browser event
+                handling.
+              </p>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    jQuery 的事件系統建立在 JavaScript 原生事件之上，但提供了更簡潔的 API
+                    和更好的跨瀏覽器兼容性。
+                  </span>
+                  <span class="lang-en hidden">
+                    jQuery's event system is built on top of native JavaScript events but provides a
+                    cleaner API and better cross-browser compatibility.
+                  </span>
+                </div>
+              </div>
+
+              <h3 class="lang-zh">事件處理的基本概念</h3>
+              <h3 class="lang-en hidden">Basic Event Handling Concepts</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 事件處理的基本語法
+$(selector).eventMethod(handler);
+
+// 或使用通用的 on() 方法
+$(selector).on(eventType, handler);
+
+// 範例
+$('#button').click(function() {
+    alert('按鈕被點擊了！');
+});
+
+// 等同於
+$('#button').on('click', function() {
+    alert('按鈕被點擊了！');
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 基本事件處理 -->
+            <section id="basic-events">
+              <h2 class="lang-zh">基本事件處理</h2>
+              <h2 class="lang-en hidden">Basic Event Handling</h2>
+
+              <p class="lang-zh">jQuery 提供了多種方式來處理常見的事件：</p>
+              <p class="lang-en hidden">jQuery provides multiple ways to handle common events:</p>
+
+              <h3 class="lang-zh">滑鼠事件</h3>
+              <h3 class="lang-en hidden">Mouse Events</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 點擊事件
+$('#button').click(function() {
+    console.log('按鈕被點擊');
+});
+
+// 雙擊事件
+$('#button').dblclick(function() {
+    console.log('按鈕被雙擊');
+});
+
+// 滑鼠按下/釋放
+$('#button').mousedown(function() {
+    console.log('滑鼠按下');
+});
+
+$('#button').mouseup(function() {
+    console.log('滑鼠釋放');
+});
+
+// 滑鼠進入/離開
+$('#div').mouseenter(function() {
+    $(this).addClass('hover');
+});
+
+$('#div').mouseleave(function() {
+    $(this).removeClass('hover');
+});
+
+// 滑鼠懸停（進入和離開的組合）
+$('#div').hover(
+    function() {
+        // 滑鼠進入時執行
+        $(this).addClass('hover');
+    },
+    function() {
+        // 滑鼠離開時執行
+        $(this).removeClass('hover');
+    }
+);
+
+// 滑鼠移動
+$('#div').mousemove(function(e) {
+    console.log('滑鼠位置：', e.pageX, e.pageY);
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">鍵盤事件</h3>
+              <h3 class="lang-en hidden">Keyboard Events</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 鍵盤按下
+$('#input').keydown(function(e) {
+    console.log('按鍵按下：', e.which);
+    
+    // 檢查特定按鍵
+    if (e.which === 13) { // Enter 鍵
+        console.log('按下了 Enter 鍵');
+    }
+});
+
+// 鍵盤釋放
+$('#input').keyup(function(e) {
+    console.log('按鍵釋放：', e.which);
+    
+    // 實時顯示輸入內容
+    $('#output').text($(this).val());
+});
+
+// 按鍵按壓（只對字符鍵有效）
+$('#input').keypress(function(e) {
+    console.log('按鍵按壓：', String.fromCharCode(e.which));
+});
+
+// 常用的鍵盤快捷鍵
+$(document).keydown(function(e) {
+    // Ctrl + S
+    if (e.ctrlKey && e.which === 83) {
+        e.preventDefault();
+        console.log('保存快捷鍵');
+    }
+    
+    // Esc 鍵
+    if (e.which === 27) {
+        console.log('取消操作');
+    }
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">表單事件</h3>
+              <h3 class="lang-en hidden">Form Events</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 表單提交
+$('#form').submit(function(e) {
+    e.preventDefault(); // 阻止默認提交行為
+    
+    // 執行自定義提交邏輯
+    var formData = $(this).serialize();
+    console.log('表單數據：', formData);
+});
+
+// 輸入框獲得/失去焦點
+$('#input').focus(function() {
+    $(this).addClass('focused');
+});
+
+$('#input').blur(function() {
+    $(this).removeClass('focused');
+});
+
+// 值改變事件
+$('#select').change(function() {
+    var selectedValue = $(this).val();
+    console.log('選中值：', selectedValue);
+});
+
+// 輸入事件（實時觸發）
+$('#input').input(function() {
+    var currentValue = $(this).val();
+    $('#live-preview').text(currentValue);
+});
+
+// 重設表單
+$('#resetBtn').click(function() {
+    $('#form')[0].reset();
+    $('.error').removeClass('error');
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">頁面事件</h3>
+              <h3 class="lang-en hidden">Page Events</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 文檔就緒
+$(document).ready(function() {
+    console.log('DOM 載入完成');
+});
+
+// 視窗載入完成
+$(window).load(function() {
+    console.log('所有資源載入完成');
+});
+
+// 視窗大小改變
+$(window).resize(function() {
+    var width = $(window).width();
+    var height = $(window).height();
+    console.log('視窗大小：', width, 'x', height);
+});
+
+// 滾動事件
+$(window).scroll(function() {
+    var scrollTop = $(this).scrollTop();
+    
+    // 滾動到頂部時顯示返回頂部按鈕
+    if (scrollTop > 100) {
+        $('#backToTop').fadeIn();
+    } else {
+        $('#backToTop').fadeOut();
+    }
+});
+
+// 頁面卸載前
+$(window).beforeunload(function() {
+    return '確定要離開此頁面嗎？';
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件方法統整表</h3>
+              <h3 class="lang-en hidden">Event Methods Summary Table</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">類別</th>
+                      <th class="lang-en hidden">Category</th>
+                      <th class="lang-zh">事件</th>
+                      <th class="lang-en hidden">Event</th>
+                      <th class="lang-zh">觸發時機</th>
+                      <th class="lang-en hidden">Trigger Timing</th>
+                      <th class="lang-zh">常用場景</th>
+                      <th class="lang-en hidden">Common Use Cases</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="6" class="lang-zh">滑鼠</td>
+                      <td rowspan="6" class="lang-en hidden">Mouse</td>
+                      <td><code>click</code></td>
+                      <td class="lang-zh">點擊時</td>
+                      <td class="lang-en hidden">On click</td>
+                      <td class="lang-zh">按鈕點擊、連結跳轉</td>
+                      <td class="lang-en hidden">Button clicks, link navigation</td>
+                    </tr>
+                    <tr>
+                      <td><code>dblclick</code></td>
+                      <td class="lang-zh">雙擊時</td>
+                      <td class="lang-en hidden">On double click</td>
+                      <td class="lang-zh">編輯操作、快速選擇</td>
+                      <td class="lang-en hidden">Edit operations, quick select</td>
+                    </tr>
+                    <tr>
+                      <td><code>mouseenter</code></td>
+                      <td class="lang-zh">滑鼠進入時</td>
+                      <td class="lang-en hidden">On mouse enter</td>
+                      <td class="lang-zh">懸停效果、顯示提示</td>
+                      <td class="lang-en hidden">Hover effects, show tooltips</td>
+                    </tr>
+                    <tr>
+                      <td><code>mouseleave</code></td>
+                      <td class="lang-zh">滑鼠離開時</td>
+                      <td class="lang-en hidden">On mouse leave</td>
+                      <td class="lang-zh">隱藏懸停效果</td>
+                      <td class="lang-en hidden">Hide hover effects</td>
+                    </tr>
+                    <tr>
+                      <td><code>mousedown</code></td>
+                      <td class="lang-zh">滑鼠按下時</td>
+                      <td class="lang-en hidden">On mouse down</td>
+                      <td class="lang-zh">拖曳開始、按鈕按下效果</td>
+                      <td class="lang-en hidden">Drag start, button press effects</td>
+                    </tr>
+                    <tr>
+                      <td><code>mouseup</code></td>
+                      <td class="lang-zh">滑鼠釋放時</td>
+                      <td class="lang-en hidden">On mouse up</td>
+                      <td class="lang-zh">拖曳結束、按鈕釋放效果</td>
+                      <td class="lang-en hidden">Drag end, button release effects</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="3" class="lang-zh">鍵盤</td>
+                      <td rowspan="3" class="lang-en hidden">Keyboard</td>
+                      <td><code>keydown</code></td>
+                      <td class="lang-zh">按鍵按下時</td>
+                      <td class="lang-en hidden">On key down</td>
+                      <td class="lang-zh">快捷鍵、特殊按鍵處理</td>
+                      <td class="lang-en hidden">Shortcuts, special key handling</td>
+                    </tr>
+                    <tr>
+                      <td><code>keyup</code></td>
+                      <td class="lang-zh">按鍵釋放時</td>
+                      <td class="lang-en hidden">On key up</td>
+                      <td class="lang-zh">實時搜索、輸入驗證</td>
+                      <td class="lang-en hidden">Real-time search, input validation</td>
+                    </tr>
+                    <tr>
+                      <td><code>keypress</code></td>
+                      <td class="lang-zh">按鍵按壓時</td>
+                      <td class="lang-en hidden">On key press</td>
+                      <td class="lang-zh">字符輸入處理</td>
+                      <td class="lang-en hidden">Character input handling</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="4" class="lang-zh">表單</td>
+                      <td rowspan="4" class="lang-en hidden">Form</td>
+                      <td><code>submit</code></td>
+                      <td class="lang-zh">表單提交時</td>
+                      <td class="lang-en hidden">On form submit</td>
+                      <td class="lang-zh">表單驗證、AJAX 提交</td>
+                      <td class="lang-en hidden">Form validation, AJAX submit</td>
+                    </tr>
+                    <tr>
+                      <td><code>change</code></td>
+                      <td class="lang-zh">值改變時</td>
+                      <td class="lang-en hidden">On value change</td>
+                      <td class="lang-zh">下拉選單、複選框變化</td>
+                      <td class="lang-en hidden">Select, checkbox changes</td>
+                    </tr>
+                    <tr>
+                      <td><code>focus</code></td>
+                      <td class="lang-zh">獲得焦點時</td>
+                      <td class="lang-en hidden">On focus</td>
+                      <td class="lang-zh">輸入框高亮、顯示提示</td>
+                      <td class="lang-en hidden">Input highlight, show hints</td>
+                    </tr>
+                    <tr>
+                      <td><code>blur</code></td>
+                      <td class="lang-zh">失去焦點時</td>
+                      <td class="lang-en hidden">On blur</td>
+                      <td class="lang-zh">輸入驗證、保存數據</td>
+                      <td class="lang-en hidden">Input validation, save data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 事件對象 -->
+            <section id="event-object">
+              <h2 class="lang-zh">事件對象</h2>
+              <h2 class="lang-en hidden">Event Object</h2>
+
+              <p class="lang-zh">事件處理函數會接收一個事件對象，包含了事件的詳細信息：</p>
+              <p class="lang-en hidden">
+                Event handler functions receive an event object containing detailed information
+                about the event:
+              </p>
+
+              <h3 class="lang-zh">事件對象的基本屬性</h3>
+              <h3 class="lang-en hidden">Basic Event Object Properties</h3>
+
+              <div class="mockup-code">
+                <pre><code>$('#button').click(function(event) {
+    // 事件類型
+    console.log('事件類型：', event.type); // 'click'
+    
+    // 觸發事件的元素
+    console.log('目標元素：', event.target);
+    console.log('當前元素：', event.currentTarget);
+    
+    // 時間戳
+    console.log('事件時間：', event.timeStamp);
+    
+    // 滑鼠位置
+    console.log('滑鼠位置：', event.pageX, event.pageY);
+    console.log('相對位置：', event.offsetX, event.offsetY);
+    
+    // 按鍵信息
+    console.log('按鍵代碼：', event.which);
+    console.log('按鍵字符：', String.fromCharCode(event.which));
+    
+    // 修飾鍵狀態
+    console.log('Ctrl 鍵：', event.ctrlKey);
+    console.log('Alt 鍵：', event.altKey);
+    console.log('Shift 鍵：', event.shiftKey);
+    console.log('Meta 鍵：', event.metaKey);
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件對象的方法</h3>
+              <h3 class="lang-en hidden">Event Object Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>$('#link').click(function(event) {
+    // 阻止默認行為
+    event.preventDefault();
+    console.log('連結的默認跳轉被阻止');
+    
+    // 停止事件冒泡
+    event.stopPropagation();
+    console.log('事件冒泡被停止');
+    
+    // 同時阻止默認行為和事件冒泡
+    event.stopImmediatePropagation();
+    
+    // 檢查是否阻止了默認行為
+    if (event.isDefaultPrevented()) {
+        console.log('默認行為已被阻止');
+    }
+    
+    // 檢查是否停止了事件冒泡
+    if (event.isPropagationStopped()) {
+        console.log('事件冒泡已被停止');
+    }
+});
+
+// 事件冒泡示例
+$('#parent').click(function() {
+    console.log('父元素被點擊');
+});
+
+$('#child').click(function(event) {
+    console.log('子元素被點擊');
+    
+    // 如果不停止冒泡，父元素的點擊事件也會被觸發
+    event.stopPropagation();
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">自定義事件數據</h3>
+              <h3 class="lang-en hidden">Custom Event Data</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 綁定事件時傳遞數據
+$('#button').on('click', {name: 'jQuery', version: '3.7'}, function(event) {
+    console.log('庫名稱：', event.data.name);
+    console.log('版本：', event.data.version);
+});
+
+// 觸發事件時傳遞數據
+$('#button').trigger('click', ['額外數據1', '額外數據2']);
+
+$('#button').on('click', function(event, data1, data2) {
+    console.log('額外數據：', data1, data2);
+});
+
+// 使用 triggerHandler 觸發事件（不會冒泡，不會觸發默認行為）
+$('#button').triggerHandler('click', ['只觸發處理器']);</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件對象屬性統整表</h3>
+              <h3 class="lang-en hidden">Event Object Properties Summary</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">屬性/方法</th>
+                      <th class="lang-en hidden">Property/Method</th>
+                      <th class="lang-zh">說明</th>
+                      <th class="lang-en hidden">Description</th>
+                      <th class="lang-zh">範例</th>
+                      <th class="lang-en hidden">Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>type</code></td>
+                      <td class="lang-zh">事件類型</td>
+                      <td class="lang-en hidden">Event type</td>
+                      <td><code>event.type</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>target</code></td>
+                      <td class="lang-zh">觸發事件的元素</td>
+                      <td class="lang-en hidden">Element that triggered the event</td>
+                      <td><code>event.target</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>currentTarget</code></td>
+                      <td class="lang-zh">當前處理事件的元素</td>
+                      <td class="lang-en hidden">Element currently handling the event</td>
+                      <td><code>event.currentTarget</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>pageX/pageY</code></td>
+                      <td class="lang-zh">滑鼠相對於文檔的位置</td>
+                      <td class="lang-en hidden">Mouse position relative to document</td>
+                      <td><code>event.pageX, event.pageY</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>offsetX/offsetY</code></td>
+                      <td class="lang-zh">滑鼠相對於元素的位置</td>
+                      <td class="lang-en hidden">Mouse position relative to element</td>
+                      <td><code>event.offsetX, event.offsetY</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>which</code></td>
+                      <td class="lang-zh">按鍵或滑鼠按鍵代碼</td>
+                      <td class="lang-en hidden">Key or mouse button code</td>
+                      <td><code>event.which</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>ctrlKey</code></td>
+                      <td class="lang-zh">是否按下 Ctrl 鍵</td>
+                      <td class="lang-en hidden">Whether Ctrl key is pressed</td>
+                      <td><code>event.ctrlKey</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>preventDefault()</code></td>
+                      <td class="lang-zh">阻止默認行為</td>
+                      <td class="lang-en hidden">Prevent default behavior</td>
+                      <td><code>event.preventDefault()</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>stopPropagation()</code></td>
+                      <td class="lang-zh">停止事件冒泡</td>
+                      <td class="lang-en hidden">Stop event bubbling</td>
+                      <td><code>event.stopPropagation()</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>data</code></td>
+                      <td class="lang-zh">綁定時傳遞的數據</td>
+                      <td class="lang-en hidden">Data passed when binding</td>
+                      <td><code>event.data</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 事件委託 -->
+            <section id="event-delegation">
+              <h2 class="lang-zh">事件委託</h2>
+              <h2 class="lang-en hidden">Event Delegation</h2>
+
+              <p class="lang-zh">事件委託是一種強大的事件處理技術，特別適用於動態添加的元素：</p>
+              <p class="lang-en hidden">
+                Event delegation is a powerful event handling technique, especially useful for
+                dynamically added elements:
+              </p>
+
+              <h3 class="lang-zh">基本事件委託</h3>
+              <h3 class="lang-en hidden">Basic Event Delegation</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 傳統方式 - 對現有元素綁定事件
+$('.button').click(function() {
+    console.log('按鈕被點擊');
+});
+// 問題：動態添加的按鈕不會有此事件
+
+// 事件委託 - 對父容器綁定事件
+$('#container').on('click', '.button', function() {
+    console.log('按鈕被點擊（委託方式）');
+});
+// 優點：動態添加的按鈕也會有此事件
+
+// 動態添加元素的範例
+$('#addButton').click(function() {
+    var newButton = $('&lt;button class="button"&gt;新按鈕&lt;/button&gt;');
+    $('#container').append(newButton);
+    // 新按鈕自動具有委託的點擊事件
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">複雜的事件委託</h3>
+              <h3 class="lang-en hidden">Complex Event Delegation</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 委託多個事件類型
+$('#container').on('click mouseenter mouseleave', '.item', function(event) {
+    switch(event.type) {
+        case 'click':
+            $(this).toggleClass('active');
+            break;
+        case 'mouseenter':
+            $(this).addClass('hover');
+            break;
+        case 'mouseleave':
+            $(this).removeClass('hover');
+            break;
+    }
+});
+
+// 委託不同的選擇器
+$('#container').on({
+    'click': function() {
+        console.log('按鈕被點擊');
+    },
+    'mouseenter': function() {
+        $(this).addClass('hover');
+    },
+    'mouseleave': function() {
+        $(this).removeClass('hover');
+    }
+}, '.button');
+
+// 委託表單事件
+$('#form-container').on('submit', 'form', function(event) {
+    event.preventDefault();
+    console.log('表單提交：', $(this).attr('id'));
+});
+
+$('#form-container').on('change', 'input, select', function() {
+    console.log('表單元素值改變：', $(this).attr('name'), $(this).val());
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件委託的優勢</h3>
+              <h3 class="lang-en hidden">Advantages of Event Delegation</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 1. 性能優勢 - 減少事件監聽器數量
+// ❌ 為每個元素綁定事件（性能較差）
+$('.item').each(function() {
+    $(this).click(function() {
+        // 處理點擊
+    });
+});
+
+// ✅ 使用事件委託（性能更好）
+$('#container').on('click', '.item', function() {
+    // 處理點擊
+});
+
+// 2. 動態元素支持
+// 動態添加的元素自動具有事件處理能力
+function addItem(text) {
+    var newItem = $('&lt;div class="item"&gt;' + text + '&lt;/div&gt;');
+    $('#container').append(newItem);
+    // 不需要重新綁定事件
+}
+
+// 3. 記憶體效率
+// 只有一個事件監聽器，而不是 N 個
+var itemCount = 1000;
+for (var i = 0; i < itemCount; i++) {
+    $('#container').append('&lt;div class="item"&gt;Item ' + i + '&lt;/div&gt;');
+}
+// 1000 個元素，但只有 1 個事件監聽器
+
+// 4. 簡化事件管理
+// 統一的事件處理邏輯
+$('#container').on('click', '.delete-btn', function() {
+    $(this).closest('.item').remove();
+});
+
+$('#container').on('click', '.edit-btn', function() {
+    var item = $(this).closest('.item');
+    item.find('.content').attr('contenteditable', true);
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件委託最佳實踐</h3>
+              <h3 class="lang-en hidden">Event Delegation Best Practices</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 1. 選擇合適的委託容器
+// ✅ 選擇最近的靜態父元素
+$('#user-list').on('click', '.user-item', handler);
+
+// ❌ 不要委託到太遠的祖先元素
+$(document).on('click', '.user-item', handler); // 過於廣泛
+
+// 2. 使用具體的選擇器
+// ✅ 具體的選擇器
+$('#menu').on('click', '.menu-item.active', handler);
+
+// ❌ 過於寬泛的選擇器
+$('#menu').on('click', 'div', handler); // 可能影響其他 div
+
+// 3. 組合相關事件
+$('#data-table').on({
+    'click': function() {
+        // 處理行點擊
+        $(this).addClass('selected').siblings().removeClass('selected');
+    },
+    'dblclick': function() {
+        // 處理行雙擊
+        editRow($(this));
+    },
+    'contextmenu': function(event) {
+        // 處理右擊
+        event.preventDefault();
+        showContextMenu(event.pageX, event.pageY);
+    }
+}, '.table-row');
+
+// 4. 避免過度委託
+// ✅ 對頻繁變化的元素使用委託
+$('#dynamic-content').on('click', '.dynamic-button', handler);
+
+// ❌ 對靜態元素不必要地使用委託
+$('#static-nav').on('click', '.nav-link', handler); // 直接綁定更好
+$('#static-nav .nav-link').click(handler); // 更直接</code></pre>
+              </div>
+            </section>
+
+            <!-- 自定義事件 -->
+            <section id="custom-events">
+              <h2 class="lang-zh">自定義事件</h2>
+              <h2 class="lang-en hidden">Custom Events</h2>
+
+              <p class="lang-zh">jQuery 允許創建和觸發自定義事件，提供更靈活的事件處理方式：</p>
+              <p class="lang-en hidden">
+                jQuery allows creating and triggering custom events, providing more flexible event
+                handling:
+              </p>
+
+              <h3 class="lang-zh">創建和觸發自定義事件</h3>
+              <h3 class="lang-en hidden">Creating and Triggering Custom Events</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 綁定自定義事件
+$('#myElement').on('customEvent', function(event, data) {
+    console.log('自定義事件被觸發：', data);
+});
+
+// 觸發自定義事件
+$('#myElement').trigger('customEvent', ['自定義數據']);
+
+// 更複雜的自定義事件
+$('#user-manager').on('userAdded', function(event, user) {
+    console.log('用戶添加：', user.name);
+    updateUserList();
+});
+
+$('#user-manager').on('userDeleted', function(event, userId) {
+    console.log('用戶刪除：', userId);
+    updateUserList();
+});
+
+// 觸發用戶相關事件
+function addUser(userData) {
+    // 添加用戶邏輯
+    users.push(userData);
+    
+    // 觸發自定義事件
+    $('#user-manager').trigger('userAdded', [userData]);
+}
+
+function deleteUser(userId) {
+    // 刪除用戶邏輯
+    users = users.filter(user => user.id !== userId);
+    
+    // 觸發自定義事件
+    $('#user-manager').trigger('userDeleted', [userId]);
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件命名空間</h3>
+              <h3 class="lang-en hidden">Event Namespaces</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 使用命名空間區分事件
+$('#element').on('click.navigation', function() {
+    console.log('導航相關的點擊');
+});
+
+$('#element').on('click.validation', function() {
+    console.log('驗證相關的點擊');
+});
+
+$('#element').on('click.analytics', function() {
+    console.log('分析相關的點擊');
+});
+
+// 觸發特定命名空間的事件
+$('#element').trigger('click.navigation');
+
+// 移除特定命名空間的事件
+$('#element').off('click.validation');
+
+// 移除所有命名空間的點擊事件
+$('#element').off('click');
+
+// 使用命名空間組織複雜的事件系統
+var App = {
+    init: function() {
+        this.bindEvents();
+    },
+    
+    bindEvents: function() {
+        // 導航相關事件
+        $(document).on('click.app.navigation', '.nav-link', this.handleNavigation);
+        
+        // 表單相關事件
+        $(document).on('submit.app.forms', 'form', this.handleFormSubmit);
+        $(document).on('change.app.forms', 'input', this.handleInputChange);
+        
+        // 模態框相關事件
+        $(document).on('click.app.modal', '[data-toggle="modal"]', this.showModal);
+        $(document).on('click.app.modal', '.modal-close', this.hideModal);
+    },
+    
+    destroy: function() {
+        // 移除所有應用相關的事件
+        $(document).off('.app');
+    }
+};</code></pre>
+              </div>
+
+              <h3 class="lang-zh">自定義事件實際應用</h3>
+              <h3 class="lang-en hidden">Practical Custom Event Applications</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 購物車系統的自定義事件
+var ShoppingCart = {
+    items: [],
+    
+    init: function() {
+        this.bindEvents();
+    },
+    
+    bindEvents: function() {
+        // 監聽購物車事件
+        $(document).on('cart:itemAdded', this.onItemAdded.bind(this));
+        $(document).on('cart:itemRemoved', this.onItemRemoved.bind(this));
+        $(document).on('cart:cleared', this.onCartCleared.bind(this));
+    },
+    
+    addItem: function(item) {
+        this.items.push(item);
+        $(document).trigger('cart:itemAdded', [item]);
+    },
+    
+    removeItem: function(itemId) {
+        this.items = this.items.filter(item => item.id !== itemId);
+        $(document).trigger('cart:itemRemoved', [itemId]);
+    },
+    
+    clear: function() {
+        this.items = [];
+        $(document).trigger('cart:cleared');
+    },
+    
+    onItemAdded: function(event, item) {
+        this.updateCartDisplay();
+        this.showNotification('商品已添加到購物車');
+    },
+    
+    onItemRemoved: function(event, itemId) {
+        this.updateCartDisplay();
+        this.showNotification('商品已從購物車移除');
+    },
+    
+    onCartCleared: function() {
+        this.updateCartDisplay();
+        this.showNotification('購物車已清空');
+    }
+};
+
+// 表單驗證系統的自定義事件
+var FormValidator = {
+    init: function() {
+        this.bindEvents();
+    },
+    
+    bindEvents: function() {
+        $(document).on('form:validate', this.validateForm.bind(this));
+        $(document).on('field:validate', this.validateField.bind(this));
+        $(document).on('validation:success', this.onValidationSuccess.bind(this));
+        $(document).on('validation:error', this.onValidationError.bind(this));
+    },
+    
+    validateForm: function(event, form) {
+        var isValid = true;
+        var errors = [];
+        
+        $(form).find('[required]').each(function() {
+            var field = $(this);
+            var value = field.val().trim();
+            
+            if (!value) {
+                isValid = false;
+                errors.push({
+                    field: field.attr('name'),
+                    message: '此欄位為必填'
+                });
+            }
+        });
+        
+        if (isValid) {
+            $(document).trigger('validation:success', [form]);
+        } else {
+            $(document).trigger('validation:error', [form, errors]);
+        }
+    },
+    
+    onValidationSuccess: function(event, form) {
+        $(form).find('.error').removeClass('error');
+        $(form).find('.error-message').remove();
+    },
+    
+    onValidationError: function(event, form, errors) {
+        errors.forEach(function(error) {
+            var field = $(form).find('[name="' + error.field + '"]');
+            field.addClass('error');
+            field.after('&lt;span class="error-message"&gt;' + error.message + '&lt;/span&gt;');
+        });
+    }
+};</code></pre>
+              </div>
+            </section>
+
+            <!-- 高級技巧 -->
+            <section id="advanced-techniques">
+              <h2 class="lang-zh">高級技巧</h2>
+              <h2 class="lang-en hidden">Advanced Techniques</h2>
+
+              <p class="lang-zh">這些高級技巧可以幫助您更有效地處理複雜的事件場景：</p>
+              <p class="lang-en hidden">
+                These advanced techniques help you handle complex event scenarios more effectively:
+              </p>
+
+              <h3 class="lang-zh">事件節流和防抖</h3>
+              <h3 class="lang-en hidden">Event Throttling and Debouncing</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 防抖函數 - 延遲執行，頻繁觸發時重新計時
+function debounce(func, wait) {
+    var timeout;
+    return function() {
+        var context = this;
+        var args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            func.apply(context, args);
+        }, wait);
+    };
+}
+
+// 節流函數 - 限制執行頻率
+function throttle(func, wait) {
+    var timeout;
+    return function() {
+        var context = this;
+        var args = arguments;
+        if (!timeout) {
+            timeout = setTimeout(function() {
+                timeout = null;
+                func.apply(context, args);
+            }, wait);
+        }
+    };
+}
+
+// 使用防抖處理搜索輸入
+$('#search-input').on('keyup', debounce(function() {
+    var query = $(this).val();
+    if (query.length > 2) {
+        performSearch(query);
+    }
+}, 300));
+
+// 使用節流處理滾動事件
+$(window).on('scroll', throttle(function() {
+    var scrollTop = $(this).scrollTop();
+    updateScrollPosition(scrollTop);
+}, 100));
+
+// 使用節流處理窗口大小改變
+$(window).on('resize', throttle(function() {
+    var width = $(this).width();
+    var height = $(this).height();
+    updateLayout(width, height);
+}, 200));</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件隊列和批次處理</h3>
+              <h3 class="lang-en hidden">Event Queue and Batch Processing</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 事件隊列管理
+var EventQueue = {
+    queue: [],
+    processing: false,
+    
+    add: function(eventData) {
+        this.queue.push(eventData);
+        this.process();
+    },
+    
+    process: function() {
+        if (this.processing || this.queue.length === 0) {
+            return;
+        }
+        
+        this.processing = true;
+        
+        // 批次處理事件
+        var batch = this.queue.splice(0, 10); // 每次處理 10 個事件
+        
+        batch.forEach(function(eventData) {
+            this.handleEvent(eventData);
+        }.bind(this));
+        
+        this.processing = false;
+        
+        // 繼續處理剩餘事件
+        if (this.queue.length > 0) {
+            setTimeout(this.process.bind(this), 0);
+        }
+    },
+    
+    handleEvent: function(eventData) {
+        // 處理單個事件
+        console.log('處理事件：', eventData);
+    }
+};
+
+// 批次處理 DOM 更新
+var DOMUpdater = {
+    updates: [],
+    
+    scheduleUpdate: function(element, property, value) {
+        this.updates.push({
+            element: element,
+            property: property,
+            value: value
+        });
+        
+        // 使用 requestAnimationFrame 批次更新
+        if (!this.scheduled) {
+            this.scheduled = true;
+            requestAnimationFrame(this.applyUpdates.bind(this));
+        }
+    },
+    
+    applyUpdates: function() {
+        this.updates.forEach(function(update) {
+            $(update.element).css(update.property, update.value);
+        });
+        
+        this.updates = [];
+        this.scheduled = false;
+    }
+};</code></pre>
+              </div>
+
+              <h3 class="lang-zh">條件事件處理</h3>
+              <h3 class="lang-en hidden">Conditional Event Handling</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基於條件的事件處理
+function createConditionalHandler(condition, handler) {
+    return function(event) {
+        if (condition.call(this, event)) {
+            handler.call(this, event);
+        }
+    };
+}
+
+// 只在特定條件下處理點擊
+$('#button').on('click', createConditionalHandler(
+    function(event) {
+        // 條件：只在工作時間內響應
+        var hour = new Date().getHours();
+        return hour >= 9 && hour <= 17;
+    },
+    function(event) {
+        console.log('工作時間內的點擊');
+    }
+));
+
+// 基於用戶角色的事件處理
+function createRoleBasedHandler(allowedRoles, handler) {
+    return function(event) {
+        var userRole = $(this).data('user-role');
+        if (allowedRoles.includes(userRole)) {
+            handler.call(this, event);
+        } else {
+            console.log('權限不足');
+        }
+    };
+}
+
+$('.admin-button').on('click', createRoleBasedHandler(
+    ['admin', 'moderator'],
+    function(event) {
+        console.log('管理員操作');
+    }
+));
+
+// 基於設備類型的事件處理
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+if (isMobileDevice()) {
+    // 移動設備事件
+    $('#menu').on('touchstart', function(event) {
+        // 處理觸摸開始
+    });
+} else {
+    // 桌面設備事件
+    $('#menu').on('mouseenter', function(event) {
+        // 處理滑鼠懸停
+    });
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">事件記錄和調試</h3>
+              <h3 class="lang-en hidden">Event Logging and Debugging</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 事件記錄器
+var EventLogger = {
+    logs: [],
+    enabled: true,
+    
+    log: function(eventType, element, data) {
+        if (!this.enabled) return;
+        
+        var logEntry = {
+            timestamp: new Date().toISOString(),
+            type: eventType,
+            element: element.tagName + (element.id ? '#' + element.id : ''),
+            data: data || {}
+        };
+        
+        this.logs.push(logEntry);
+        console.log('Event:', logEntry);
+        
+        // 限制日誌數量
+        if (this.logs.length > 1000) {
+            this.logs = this.logs.slice(-500);
+        }
+    },
+    
+    getRecentLogs: function(count) {
+        return this.logs.slice(-count || -10);
+    },
+    
+    clearLogs: function() {
+        this.logs = [];
+    }
+};
+
+// 包裝事件處理器以添加日誌
+function loggedHandler(handler, eventType) {
+    return function(event) {
+        EventLogger.log(eventType || event.type, this, {
+            target: event.target,
+            timeStamp: event.timeStamp
+        });
+        
+        return handler.call(this, event);
+    };
+}
+
+// 使用記錄器
+$('#button').on('click', loggedHandler(function(event) {
+    console.log('按鈕點擊處理器');
+}, 'button-click'));
+
+// 全局事件監聽器（用於調試）
+if (window.DEBUG) {
+    $(document).on('click keydown submit', function(event) {
+        console.log('Global event:', event.type, event.target);
+    });
+}</code></pre>
+              </div>
+            </section>
+
+            <!-- 最佳實踐 -->
+            <section id="best-practices">
+              <h2 class="lang-zh">最佳實踐</h2>
+              <h2 class="lang-en hidden">Best Practices</h2>
+
+              <p class="lang-zh">以下是 jQuery 事件處理的最佳實踐：</p>
+              <p class="lang-en hidden">Here are the best practices for jQuery event handling:</p>
+
+              <h3 class="lang-zh">性能優化</h3>
+              <h3 class="lang-en hidden">Performance Optimization</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ 使用事件委託減少事件監聽器數量
+$('#container').on('click', '.item', handler);
+
+// ❌ 為每個元素單獨綁定事件
+$('.item').each(function() {
+    $(this).click(handler);
+});
+
+// ✅ 快取 jQuery 對象
+$('#form').on('submit', function(event) {
+    var $form = $(this);
+    var $inputs = $form.find('input');
+    
+    $inputs.each(function() {
+        // 使用快取的對象
+    });
+});
+
+// ❌ 重複查詢 DOM
+$('#form').on('submit', function(event) {
+    $(this).find('input').each(function() {
+        // 每次都重新查詢
+    });
+});
+
+// ✅ 使用命名空間管理事件
+$('#element').on('click.module', handler);
+
+// ✅ 及時移除不需要的事件監聽器
+function cleanup() {
+    $('#element').off('.module');
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">代碼組織</h3>
+              <h3 class="lang-en hidden">Code Organization</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ 使用對象組織相關的事件處理
+var UserInterface = {
+    init: function() {
+        this.bindEvents();
+    },
+    
+    bindEvents: function() {
+        $(document).on('click.ui', '.btn-primary', this.handlePrimaryButton.bind(this));
+        $(document).on('click.ui', '.btn-secondary', this.handleSecondaryButton.bind(this));
+        $(document).on('submit.ui', 'form', this.handleFormSubmit.bind(this));
+    },
+    
+    handlePrimaryButton: function(event) {
+        // 處理主按鈕點擊
+    },
+    
+    handleSecondaryButton: function(event) {
+        // 處理次要按鈕點擊
+    },
+    
+    handleFormSubmit: function(event) {
+        // 處理表單提交
+    },
+    
+    destroy: function() {
+        $(document).off('.ui');
+    }
+};
+
+// ✅ 使用模塊模式封裝事件處理
+var EventManager = (function() {
+    var handlers = {};
+    
+    function bindEvent(selector, eventType, handler) {
+        var key = selector + ':' + eventType;
+        handlers[key] = handler;
+        $(document).on(eventType, selector, handler);
+    }
+    
+    function unbindEvent(selector, eventType) {
+        var key = selector + ':' + eventType;
+        if (handlers[key]) {
+            $(document).off(eventType, selector, handlers[key]);
+            delete handlers[key];
+        }
+    }
+    
+    return {
+        bind: bindEvent,
+        unbind: unbindEvent,
+        handlers: handlers
+    };
+})();</code></pre>
+              </div>
+
+              <h3 class="lang-zh">錯誤處理</h3>
+              <h3 class="lang-en hidden">Error Handling</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ 在事件處理器中包含錯誤處理
+$('#button').on('click', function(event) {
+    try {
+        // 主要處理邏輯
+        var result = processData($(this).data('value'));
+        updateUI(result);
+    } catch (error) {
+        console.error('按鈕點擊處理錯誤：', error);
+        showErrorMessage('操作失敗，請重試');
+    }
+});
+
+// ✅ 使用 Promise 處理異步操作的錯誤
+$('#submit-btn').on('click', function(event) {
+    event.preventDefault();
+    
+    var formData = $('#form').serialize();
+    
+    $.ajax({
+        url: '/api/submit',
+        method: 'POST',
+        data: formData
+    })
+    .done(function(response) {
+        showSuccessMessage('提交成功');
+    })
+    .fail(function(xhr, status, error) {
+        console.error('提交失敗：', error);
+        showErrorMessage('提交失敗：' + error);
+    });
+});
+
+// ✅ 全局錯誤處理
+$(document).on('error', function(event) {
+    console.error('全局錯誤：', event.originalEvent);
+});
+
+// ✅ 防御性編程
+$('#dynamic-content').on('click', '.item', function(event) {
+    var $item = $(this);
+    var itemId = $item.data('id');
+    
+    // 檢查必要的數據
+    if (!itemId) {
+        console.warn('缺少項目 ID');
+        return;
+    }
+    
+    // 檢查元素狀態
+    if ($item.hasClass('disabled')) {
+        return;
+    }
+    
+    // 執行主要邏輯
+    processItem(itemId);
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">可訪問性考慮</h3>
+              <h3 class="lang-en hidden">Accessibility Considerations</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ 支持鍵盤導航
+$('.custom-button').on('click keydown', function(event) {
+    // 處理點擊和鍵盤事件
+    if (event.type === 'keydown' && event.which !== 13 && event.which !== 32) {
+        return; // 只響應 Enter 和 Space 鍵
+    }
+    
+    event.preventDefault();
+    handleButtonActivation($(this));
+});
+
+// ✅ 管理焦點
+$('.modal-trigger').on('click', function(event) {
+    event.preventDefault();
+    
+    var $modal = $('#modal');
+    $modal.show();
+    
+    // 將焦點移到模態框
+    $modal.find('.modal-close').focus();
+});
+
+$('.modal-close').on('click', function(event) {
+    event.preventDefault();
+    
+    $('#modal').hide();
+    
+    // 將焦點返回到觸發元素
+    $('.modal-trigger').focus();
+});
+
+// ✅ 為動態內容添加 ARIA 屬性
+$('#add-item').on('click', function() {
+    var $newItem = $('&lt;div class="item" role="listitem"&gt;新項目&lt;/div&gt;');
+    $('#item-list').append($newItem);
+    
+    // 通知屏幕閱讀器
+    $newItem.attr('aria-live', 'polite');
+    $newItem.text('新項目已添加');
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 總結 -->
+            <section id="summary">
+              <h2 class="lang-zh">總結</h2>
+              <h2 class="lang-en hidden">Summary</h2>
+
+              <p class="lang-zh">
+                jQuery 事件處理系統是構建互動式網頁應用的基石。通過本指南，您應該已經掌握了：
+              </p>
+              <p class="lang-en hidden">
+                jQuery's event handling system is the foundation for building interactive web
+                applications. Through this guide, you should have mastered:
+              </p>
+
+              <ul>
+                <li class="lang-zh">基本事件類型和處理方法</li>
+                <li class="lang-en hidden">Basic event types and handling methods</li>
+
+                <li class="lang-zh">事件對象的屬性和方法</li>
+                <li class="lang-en hidden">Event object properties and methods</li>
+
+                <li class="lang-zh">事件委託的強大功能</li>
+                <li class="lang-en hidden">Powerful capabilities of event delegation</li>
+
+                <li class="lang-zh">自定義事件和命名空間的使用</li>
+                <li class="lang-en hidden">Usage of custom events and namespaces</li>
+
+                <li class="lang-zh">高級事件處理技巧</li>
+                <li class="lang-en hidden">Advanced event handling techniques</li>
+
+                <li class="lang-zh">性能優化和最佳實踐</li>
+                <li class="lang-en hidden">Performance optimization and best practices</li>
+              </ul>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    事件處理是用戶體驗的核心，良好的事件處理不僅要考慮功能實現，還要考慮性能、可訪問性和可維護性。
+                  </span>
+                  <span class="lang-en hidden">
+                    Event handling is at the core of user experience. Good event handling should
+                    consider not only functionality but also performance, accessibility, and
+                    maintainability.
+                  </span>
+                </div>
+              </div>
+
+              <p class="lang-zh">
+                掌握這些事件處理技巧後，您將能夠創建響應迅速、用戶友好的網頁應用程式，並為後續學習
+                AJAX、動畫效果等高級功能奠定堅實基礎。
+              </p>
+              <p class="lang-en hidden">
+                After mastering these event handling techniques, you'll be able to create
+                responsive, user-friendly web applications and lay a solid foundation for learning
+                advanced features like AJAX and animation effects.
+              </p>
+            </section>
+          </article>
+
+          <!-- 相關文章 -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">
+              <span class="lang-zh">相關文章</span>
+              <span class="lang-en hidden">Related Articles</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="selectors.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">jQuery 選擇器詳解</span>
+                    <span class="lang-en hidden">jQuery Selectors Guide</span>
+                  </h4>
+                  <p class="lang-zh">深入了解 jQuery 強大的選擇器系統</p>
+                  <p class="lang-en hidden">Deep dive into jQuery's powerful selector system</p>
+                </div>
+              </a>
+              <a href="ajax.html" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">jQuery AJAX 操作</span>
+                    <span class="lang-en hidden">jQuery AJAX Operations</span>
+                  </h4>
+                  <p class="lang-zh">學習使用 jQuery 處理異步請求</p>
+                  <p class="lang-en hidden">Learn to handle asynchronous requests with jQuery</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>

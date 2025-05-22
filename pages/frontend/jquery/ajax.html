@@ -1,0 +1,2448 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jQuery AJAX 操作詳解 | jQuery AJAX Operations Guide</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 718.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../../index.html" class="lang-zh">首頁</a>
+          <a href="../../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li><a href="index.html">jQuery</a></li>
+        <li class="lang-zh">AJAX 操作</li>
+        <li class="lang-en hidden">AJAX Operations</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">jQuery 筆記目錄</span>
+                  <span class="lang-en hidden">jQuery Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html">jQuery 概覽</a></li>
+                  <li>
+                    <a href="basics.html" class="lang-zh">jQuery 基礎</a>
+                    <a href="basics.html" class="lang-en hidden">jQuery Basics</a>
+                  </li>
+                  <li>
+                    <a href="selectors.html" class="lang-zh">選擇器詳解</a>
+                    <a href="selectors.html" class="lang-en hidden">Selectors Guide</a>
+                  </li>
+                  <li>
+                    <a href="events.html" class="lang-zh">事件處理</a>
+                    <a href="events.html" class="lang-en hidden">Event Handling</a>
+                  </li>
+                  <li>
+                    <a href="ajax.html" class="active lang-zh">AJAX 操作</a>
+                    <a href="ajax.html" class="active lang-en hidden">AJAX Operations</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <article class="prose max-w-none">
+            <header class="mb-8 not-prose">
+              <h1 class="text-4xl font-bold mb-2">
+                <span class="lang-zh">jQuery AJAX 操作完整指南</span>
+                <span class="lang-en hidden">Complete Guide to jQuery AJAX Operations</span>
+              </h1>
+              <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                <time datetime="2025-05-22">2025-05-22</time>
+                <span>|</span>
+                <span class="badge badge-outline">jQuery</span>
+                <span class="badge badge-outline">AJAX</span>
+                <span class="badge badge-outline">HTTP</span>
+              </div>
+            </header>
+
+            <!-- 文章目錄 -->
+            <div class="card bg-base-200 mb-8">
+              <div class="card-body">
+                <h2 class="card-title text-xl mb-2">
+                  <span class="lang-zh">目錄</span>
+                  <span class="lang-en hidden">Contents</span>
+                </h2>
+                <ul class="lang-zh">
+                  <li><a href="#introduction">AJAX 介紹</a></li>
+                  <li><a href="#basic-methods">基本 AJAX 方法</a></li>
+                  <li><a href="#ajax-function">$.ajax() 詳解</a></li>
+                  <li><a href="#data-handling">數據處理</a></li>
+                  <li><a href="#error-handling">錯誤處理</a></li>
+                  <li><a href="#advanced-techniques">高級技巧</a></li>
+                  <li><a href="#real-world-examples">實際應用範例</a></li>
+                  <li><a href="#best-practices">最佳實踐</a></li>
+                  <li><a href="#summary">總結</a></li>
+                </ul>
+                <ul class="lang-en hidden">
+                  <li><a href="#introduction">AJAX Introduction</a></li>
+                  <li><a href="#basic-methods">Basic AJAX Methods</a></li>
+                  <li><a href="#ajax-function">$.ajax() Detailed</a></li>
+                  <li><a href="#data-handling">Data Handling</a></li>
+                  <li><a href="#error-handling">Error Handling</a></li>
+                  <li><a href="#advanced-techniques">Advanced Techniques</a></li>
+                  <li><a href="#real-world-examples">Real-world Examples</a></li>
+                  <li><a href="#best-practices">Best Practices</a></li>
+                  <li><a href="#summary">Summary</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- AJAX 介紹 -->
+            <section id="introduction">
+              <h2 class="lang-zh">AJAX 介紹</h2>
+              <h2 class="lang-en hidden">AJAX Introduction</h2>
+              <p class="lang-zh">
+                AJAX（Asynchronous JavaScript and XML）是一種在不重新載入整個頁面的情況下，與服務器交換數據並更新部分網頁內容的技術。jQuery 提供了簡潔而強大的 AJAX API，讓異步請求變得更加容易。
+              </p>
+              <p class="lang-en hidden">
+                AJAX (Asynchronous JavaScript and XML) is a technique for exchanging data with servers and updating parts of web pages without reloading the entire page. jQuery provides a concise and powerful AJAX API that makes asynchronous requests much easier.
+              </p>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    雖然 AJAX 的名稱包含 XML，但現代應用程式多使用 JSON 格式進行數據交換，jQuery 完全支持這兩種格式。
+                  </span>
+                  <span class="lang-en hidden">
+                    Although AJAX's name includes XML, modern applications mostly use JSON format for data exchange, and jQuery fully supports both formats.
+                  </span>
+                </div>
+              </div>
+
+              <h3 class="lang-zh">AJAX 的優勢</h3>
+              <h3 class="lang-en hidden">Advantages of AJAX</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">用戶體驗</h4>
+                    <h4 class="card-title text-lg lang-en hidden">User Experience</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• 無需重新載入頁面</li>
+                      <li class="lang-en hidden">• No page reload required</li>
+                      <li class="lang-zh">• 響應速度更快</li>
+                      <li class="lang-en hidden">• Faster response times</li>
+                      <li class="lang-zh">• 流暢的互動體驗</li>
+                      <li class="lang-en hidden">• Smooth interaction experience</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">性能優勢</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Performance Benefits</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• 減少服務器負載</li>
+                      <li class="lang-en hidden">• Reduced server load</li>
+                      <li class="lang-zh">• 節省帶寬使用</li>
+                      <li class="lang-en hidden">• Bandwidth savings</li>
+                      <li class="lang-zh">• 按需載入數據</li>
+                      <li class="lang-en hidden">• Load data on demand</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="lang-zh">jQuery AJAX 的基本概念</h3>
+              <h3 class="lang-en hidden">Basic jQuery AJAX Concepts</h3>
+
+              <div class="mockup-code">
+                <pre><code>// AJAX 請求的基本流程
+// 1. 發送請求到服務器
+// 2. 服務器處理請求
+// 3. 服務器返回響應
+// 4. 客戶端處理響應數據
+// 5. 更新頁面內容
+
+// jQuery AJAX 的基本語法
+$.ajax({
+    url: '/api/data',
+    method: 'GET',
+    success: function(data) {
+        console.log('請求成功：', data);
+    },
+    error: function(xhr, status, error) {
+        console.log('請求失敗：', error);
+    }
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 基本 AJAX 方法 -->
+            <section id="basic-methods">
+              <h2 class="lang-zh">基本 AJAX 方法</h2>
+              <h2 class="lang-en hidden">Basic AJAX Methods</h2>
+
+              <p class="lang-zh">jQuery 提供了多個簡化的 AJAX 方法來處理常見的請求類型：</p>
+              <p class="lang-en hidden">jQuery provides several simplified AJAX methods to handle common request types:</p>
+
+              <h3 class="lang-zh">GET 請求</h3>
+              <h3 class="lang-en hidden">GET Requests</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基本 GET 請求
+$.get('/api/users', function(data) {
+    console.log('用戶數據：', data);
+});
+
+// 帶參數的 GET 請求
+$.get('/api/users', {
+    page: 1,
+    limit: 10,
+    search: 'john'
+}, function(data) {
+    console.log('搜索結果：', data);
+});
+
+// 指定數據類型
+$.get('/api/users', function(data) {
+    console.log('JSON 數據：', data);
+}, 'json');
+
+// 使用 Promise 風格
+$.get('/api/users')
+    .done(function(data) {
+        console.log('請求成功：', data);
+    })
+    .fail(function() {
+        console.log('請求失敗');
+    });
+
+// 載入 HTML 內容
+$('#content').load('/api/content.html');
+
+// 載入 HTML 的特定部分
+$('#menu').load('/api/page.html #navigation');</code></pre>
+              </div>
+
+              <h3 class="lang-zh">POST 請求</h3>
+              <h3 class="lang-en hidden">POST Requests</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基本 POST 請求
+$.post('/api/users', {
+    name: 'John Doe',
+    email: 'john@example.com',
+    age: 30
+}, function(data) {
+    console.log('用戶創建成功：', data);
+});
+
+// 發送 JSON 數據
+$.post('/api/users', JSON.stringify({
+    name: 'Jane Smith',
+    email: 'jane@example.com'
+}), function(data) {
+    console.log('響應：', data);
+}, 'json');
+
+// 表單提交
+$('#userForm').submit(function(event) {
+    event.preventDefault();
+    
+    var formData = $(this).serialize();
+    
+    $.post('/api/users', formData)
+        .done(function(response) {
+            alert('提交成功！');
+            $('#userForm')[0].reset();
+        })
+        .fail(function() {
+            alert('提交失敗，請重試。');
+        });
+});
+
+// 發送 FormData（用於文件上傳）
+var formData = new FormData();
+formData.append('name', 'John');
+formData.append('file', $('#fileInput')[0].files[0]);
+
+$.ajax({
+    url: '/api/upload',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+        console.log('上傳成功：', response);
+    }
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">其他 HTTP 方法</h3>
+              <h3 class="lang-en hidden">Other HTTP Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>// PUT 請求（更新資源）
+$.ajax({
+    url: '/api/users/123',
+    type: 'PUT',
+    data: {
+        name: 'Updated Name',
+        email: 'updated@example.com'
+    },
+    success: function(response) {
+        console.log('更新成功：', response);
+    }
+});
+
+// DELETE 請求（刪除資源）
+$.ajax({
+    url: '/api/users/123',
+    type: 'DELETE',
+    success: function() {
+        console.log('刪除成功');
+        $('#user-123').remove();
+    }
+});
+
+// PATCH 請求（部分更新）
+$.ajax({
+    url: '/api/users/123',
+    type: 'PATCH',
+    data: {
+        email: 'newemail@example.com'
+    },
+    success: function(response) {
+        console.log('部分更新成功：', response);
+    }
+});
+
+// HEAD 請求（獲取頭信息）
+$.ajax({
+    url: '/api/file.pdf',
+    type: 'HEAD',
+    success: function(data, status, xhr) {
+        var fileSize = xhr.getResponseHeader('Content-Length');
+        console.log('文件大小：', fileSize);
+    }
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">基本 AJAX 方法統整表</h3>
+              <h3 class="lang-en hidden">Basic AJAX Methods Summary</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">方法</th>
+                      <th class="lang-en hidden">Method</th>
+                      <th class="lang-zh">HTTP 動詞</th>
+                      <th class="lang-en hidden">HTTP Verb</th>
+                      <th class="lang-zh">用途</th>
+                      <th class="lang-en hidden">Purpose</th>
+                      <th class="lang-zh">語法範例</th>
+                      <th class="lang-en hidden">Syntax Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>$.get()</code></td>
+                      <td>GET</td>
+                      <td class="lang-zh">獲取數據</td>
+                      <td class="lang-en hidden">Retrieve data</td>
+                      <td><code>$.get(url, data, callback)</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>$.post()</code></td>
+                      <td>POST</td>
+                      <td class="lang-zh">提交數據</td>
+                      <td class="lang-en hidden">Submit data</td>
+                      <td><code>$.post(url, data, callback)</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>$.load()</code></td>
+                      <td>GET</td>
+                      <td class="lang-zh">載入 HTML</td>
+                      <td class="lang-en hidden">Load HTML</td>
+                      <td><code>$(selector).load(url)</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>$.getJSON()</code></td>
+                      <td>GET</td>
+                      <td class="lang-zh">獲取 JSON</td>
+                      <td class="lang-en hidden">Get JSON</td>
+                      <td><code>$.getJSON(url, callback)</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>$.getScript()</code></td>
+                      <td>GET</td>
+                      <td class="lang-zh">載入腳本</td>
+                      <td class="lang-en hidden">Load script</td>
+                      <td><code>$.getScript(url, callback)</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>$.ajax()</code></td>
+                      <td class="lang-zh">任意</td>
+                      <td class="lang-en hidden">Any</td>
+                      <td class="lang-zh">完全控制</td>
+                      <td class="lang-en hidden">Full control</td>
+                      <td><code>$.ajax(options)</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- $.ajax() 詳解 -->
+            <section id="ajax-function">
+              <h2 class="lang-zh">$.ajax() 詳解</h2>
+              <h2 class="lang-en hidden">$.ajax() Detailed</h2>
+
+              <p class="lang-zh">$.ajax() 是 jQuery 最強大和靈活的 AJAX 方法，提供了完整的配置選項：</p>
+              <p class="lang-en hidden">$.ajax() is jQuery's most powerful and flexible AJAX method, providing complete configuration options:</p>
+
+              <h3 class="lang-zh">基本配置選項</h3>
+              <h3 class="lang-en hidden">Basic Configuration Options</h3>
+
+              <div class="mockup-code">
+                <pre><code>$.ajax({
+    // 基本設置
+    url: '/api/data',              // 請求 URL
+    type: 'GET',                   // HTTP 方法 (GET, POST, PUT, DELETE 等)
+    method: 'GET',                 // 同 type，推薦使用 method
+    
+    // 數據設置
+    data: {                        // 發送的數據
+        id: 123,
+        name: 'test'
+    },
+    dataType: 'json',              // 期望的響應數據類型
+    contentType: 'application/json', // 請求內容類型
+    
+    // 請求頭
+    headers: {
+        'Authorization': 'Bearer token123',
+        'X-Custom-Header': 'value'
+    },
+    
+    // 超時設置
+    timeout: 5000,                 // 5秒超時
+    
+    // 緩存設置
+    cache: false,                  // 禁用緩存
+    
+    // 異步設置
+    async: true,                   // 異步請求（默認）
+    
+    // 回調函數
+    success: function(data, textStatus, xhr) {
+        console.log('請求成功：', data);
+    },
+    
+    error: function(xhr, textStatus, errorThrown) {
+        console.log('請求失敗：', errorThrown);
+    },
+    
+    complete: function(xhr, textStatus) {
+        console.log('請求完成（無論成功或失敗）');
+    },
+    
+    // 請求前的處理
+    beforeSend: function(xhr) {
+        console.log('發送請求前');
+        // 可以修改請求頭或顯示載入動畫
+        $('#loading').show();
+    }
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">高級配置選項</h3>
+              <h3 class="lang-en hidden">Advanced Configuration Options</h3>
+
+              <div class="mockup-code">
+                <pre><code>$.ajax({
+    url: '/api/data',
+    type: 'POST',
+    
+    // 數據處理
+    processData: false,            // 不處理數據（用於 FormData）
+    contentType: false,            // 不設置內容類型（用於文件上傳）
+    
+    // 跨域設置
+    crossDomain: true,             // 跨域請求
+    xhrFields: {
+        withCredentials: true      // 發送 cookies
+    },
+    
+    // 狀態碼處理
+    statusCode: {
+        200: function(data) {
+            console.log('成功：', data);
+        },
+        404: function() {
+            console.log('資源未找到');
+        },
+        500: function() {
+            console.log('服務器錯誤');
+        }
+    },
+    
+    // 數據過濾
+    dataFilter: function(data, type) {
+        // 在成功回調前處理數據
+        if (type === 'json') {
+            var parsed = JSON.parse(data);
+            return JSON.stringify(parsed.result);
+        }
+        return data;
+    },
+    
+    // 上下文設置
+    context: document.body,        // 回調函數的 this 指向
+    
+    // 自定義 XMLHttpRequest
+    xhr: function() {
+        var xhr = new XMLHttpRequest();
+        
+        // 上傳進度
+        xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                var percentComplete = (e.loaded / e.total) * 100;
+                $('#progress').val(percentComplete);
+            }
+        });
+        
+        return xhr;
+    }
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">Promise 風格的 AJAX</h3>
+              <h3 class="lang-en hidden">Promise-style AJAX</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基本 Promise 用法
+var request = $.ajax({
+    url: '/api/data',
+    type: 'GET'
+});
+
+request.done(function(data) {
+    console.log('成功：', data);
+});
+
+request.fail(function(xhr, status, error) {
+    console.log('失敗：', error);
+});
+
+request.always(function() {
+    console.log('完成');
+});
+
+// 鏈式調用
+$.ajax('/api/data')
+    .done(function(data) {
+        return processData(data);
+    })
+    .done(function(processedData) {
+        updateUI(processedData);
+    })
+    .fail(function(error) {
+        showError(error);
+    })
+    .always(function() {
+        hideLoading();
+    });
+
+// 使用 then() 方法
+$.ajax('/api/data')
+    .then(
+        function(data) {
+            // 成功處理
+            console.log('數據：', data);
+            return data;
+        },
+        function(error) {
+            // 錯誤處理
+            console.log('錯誤：', error);
+        }
+    );
+
+// 多個請求的協調
+var request1 = $.ajax('/api/users');
+var request2 = $.ajax('/api/posts');
+var request3 = $.ajax('/api/comments');
+
+$.when(request1, request2, request3)
+    .done(function(users, posts, comments) {
+        console.log('所有請求完成');
+        console.log('用戶：', users[0]);
+        console.log('文章：', posts[0]);
+        console.log('評論：', comments[0]);
+    })
+    .fail(function() {
+        console.log('至少一個請求失敗');
+    });</code></pre>
+              </div>
+
+              <h3 class="lang-zh">$.ajax() 配置選項統整表</h3>
+              <h3 class="lang-en hidden">$.ajax() Configuration Options Summary</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">選項</th>
+                      <th class="lang-en hidden">Option</th>
+                      <th class="lang-zh">類型</th>
+                      <th class="lang-en hidden">Type</th>
+                      <th class="lang-zh">默認值</th>
+                      <th class="lang-en hidden">Default</th>
+                      <th class="lang-zh">說明</th>
+                      <th class="lang-en hidden">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>url</code></td>
+                      <td>String</td>
+                      <td class="lang-zh">當前頁面</td>
+                      <td class="lang-en hidden">Current page</td>
+                      <td class="lang-zh">請求的 URL 地址</td>
+                      <td class="lang-en hidden">Request URL address</td>
+                    </tr>
+                    <tr>
+                      <td><code>type/method</code></td>
+                      <td>String</td>
+                      <td>'GET'</td>
+                      <td class="lang-zh">HTTP 請求方法</td>
+                      <td class="lang-en hidden">HTTP request method</td>
+                    </tr>
+                    <tr>
+                      <td><code>data</code></td>
+                      <td>Object/String</td>
+                      <td>-</td>
+                      <td class="lang-zh">發送到服務器的數據</td>
+                      <td class="lang-en hidden">Data sent to server</td>
+                    </tr>
+                    <tr>
+                      <td><code>dataType</code></td>
+                      <td>String</td>
+                      <td class="lang-zh">智能猜測</td>
+                      <td class="lang-en hidden">Intelligent guess</td>
+                      <td class="lang-zh">期望的響應數據類型</td>
+                      <td class="lang-en hidden">Expected response data type</td>
+                    </tr>
+                    <tr>
+                      <td><code>contentType</code></td>
+                      <td>String</td>
+                      <td>'application/x-www-form-urlencoded'</td>
+                      <td class="lang-zh">請求內容類型</td>
+                      <td class="lang-en hidden">Request content type</td>
+                    </tr>
+                    <tr>
+                      <td><code>timeout</code></td>
+                      <td>Number</td>
+                      <td>0 (無限制)</td>
+                      <td class="lang-zh">請求超時時間（毫秒）</td>
+                      <td class="lang-en hidden">Request timeout (milliseconds)</td>
+                    </tr>
+                    <tr>
+                      <td><code>cache</code></td>
+                      <td>Boolean</td>
+                      <td>true</td>
+                      <td class="lang-zh">是否緩存請求</td>
+                      <td class="lang-en hidden">Whether to cache request</td>
+                    </tr>
+                    <tr>
+                      <td><code>async</code></td>
+                      <td>Boolean</td>
+                      <td>true</td>
+                      <td class="lang-zh">是否異步請求</td>
+                      <td class="lang-en hidden">Whether asynchronous request</td>
+                    </tr>
+                    <tr>
+                      <td><code>headers</code></td>
+                      <td>Object</td>
+                      <td>{}</td>
+                      <td class="lang-zh">請求頭</td>
+                      <td class="lang-en hidden">Request headers</td>
+                    </tr>
+                    <tr>
+                      <td><code>beforeSend</code></td>
+                      <td>Function</td>
+                      <td>-</td>
+                      <td class="lang-zh">發送請求前的回調</td>
+                      <td class="lang-en hidden">Callback before sending request</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 數據處理 -->
+            <section id="data-handling">
+              <h2 class="lang-zh">數據處理</h2>
+              <h2 class="lang-en hidden">Data Handling</h2>
+
+              <p class="lang-zh">正確處理請求和響應數據是 AJAX 應用的關鍵：</p>
+              <p class="lang-en hidden">Proper handling of request and response data is key to AJAX applications:</p>
+
+              <h3 class="lang-zh">發送不同格式的數據</h3>
+              <h3 class="lang-en hidden">Sending Different Data Formats</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 1. 發送表單數據（URL 編碼）
+var formData = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    age: 30
+};
+
+$.ajax({
+    url: '/api/users',
+    type: 'POST',
+    data: formData,
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    success: function(response) {
+        console.log('用戶創建：', response);
+    }
+});
+
+// 2. 發送 JSON 數據
+var jsonData = {
+    user: {
+        name: 'Jane Smith',
+        profile: {
+            age: 25,
+            location: 'Taiwan'
+        }
+    }
+};
+
+$.ajax({
+    url: '/api/users',
+    type: 'POST',
+    data: JSON.stringify(jsonData),
+    contentType: 'application/json; charset=UTF-8',
+    dataType: 'json',
+    success: function(response) {
+        console.log('JSON 響應：', response);
+    }
+});
+
+// 3. 發送 FormData（用於文件上傳）
+var formData = new FormData();
+formData.append('name', 'Test User');
+formData.append('avatar', $('#fileInput')[0].files[0]);
+formData.append('metadata', JSON.stringify({type: 'user'}));
+
+$.ajax({
+    url: '/api/upload',
+    type: 'POST',
+    data: formData,
+    processData: false,    // 重要：不處理數據
+    contentType: false,    // 重要：不設置內容類型
+    success: function(response) {
+        console.log('上傳成功：', response);
+    }
+});
+
+// 4. 序列化表單數據
+$('#myForm').submit(function(event) {
+    event.preventDefault();
+    
+    // 序列化為字符串
+    var serializedData = $(this).serialize();
+    console.log('序列化數據：', serializedData);
+    // 結果：name=John&email=john@example.com&age=30
+    
+    // 序列化為陣列
+    var serializedArray = $(this).serializeArray();
+    console.log('序列化陣列：', serializedArray);
+    // 結果：[{name: 'name', value: 'John'}, {name: 'email', value: 'john@example.com'}]
+    
+    $.post('/api/submit', serializedData, function(response) {
+        console.log('表單提交成功：', response);
+    });
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">處理不同格式的響應數據</h3>
+              <h3 class="lang-en hidden">Handling Different Response Data Formats</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 1. 處理 JSON 響應
+$.ajax({
+    url: '/api/users',
+    dataType: 'json',
+    success: function(data) {
+        // data 已經是 JavaScript 對象
+        console.log('用戶姓名：', data.name);
+        console.log('用戶列表：', data.users);
+        
+        // 更新 UI
+        data.users.forEach(function(user) {
+            $('#userList').append('&lt;li&gt;' + user.name + '&lt;/li&gt;');
+        });
+    }
+});
+
+// 2. 處理 XML 響應
+$.ajax({
+    url: '/api/data.xml',
+    dataType: 'xml',
+    success: function(xmlDoc) {
+        // 使用 jQuery 處理 XML
+        $(xmlDoc).find('user').each(function() {
+            var name = $(this).find('name').text();
+            var email = $(this).find('email').text();
+            console.log('用戶：', name, email);
+        });
+    }
+});
+
+// 3. 處理 HTML 響應
+$.get('/api/partial.html', function(html) {
+    // 直接插入 HTML
+    $('#content').html(html);
+    
+    // 或處理特定部分
+    var $html = $(html);
+    var title = $html.find('h1').text();
+    $('#pageTitle').text(title);
+});
+
+// 4. 處理純文本響應
+$.ajax({
+    url: '/api/log.txt',
+    dataType: 'text',
+    success: function(text) {
+        // 處理純文本
+        var lines = text.split('\n');
+        lines.forEach(function(line) {
+            if (line.includes('ERROR')) {
+                console.error('錯誤行：', line);
+            }
+        });
+    }
+});
+
+// 5. 處理二進制數據（如圖片）
+$.ajax({
+    url: '/api/image.jpg',
+    type: 'GET',
+    xhr: function() {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        return xhr;
+    },
+    success: function(blob) {
+        // 創建 URL 並顯示圖片
+        var url = URL.createObjectURL(blob);
+        $('#image').attr('src', url);
+    }
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">數據驗證和轉換</h3>
+              <h3 class="lang-en hidden">Data Validation and Transformation</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 數據驗證函數
+function validateUserData(userData) {
+    var errors = [];
+    
+    if (!userData.name || userData.name.trim() === '') {
+        errors.push('姓名不能為空');
+    }
+    
+    if (!userData.email || !isValidEmail(userData.email)) {
+        errors.push('請輸入有效的電子郵件地址');
+    }
+    
+    if (userData.age && (userData.age < 0 || userData.age > 120)) {
+        errors.push('年齡必須在 0-120 之間');
+    }
+    
+    return {
+        isValid: errors.length === 0,
+        errors: errors
+    };
+}
+
+function isValidEmail(email) {
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// 在發送前驗證數據
+$('#userForm').submit(function(event) {
+    event.preventDefault();
+    
+    var userData = {
+        name: $('#name').val(),
+        email: $('#email').val(),
+        age: parseInt($('#age').val())
+    };
+    
+    var validation = validateUserData(userData);
+    
+    if (!validation.isValid) {
+        // 顯示錯誤信息
+        var errorHtml = validation.errors.map(function(error) {
+            return '&lt;li&gt;' + error + '&lt;/li&gt;';
+        }).join('');
+        
+        $('#errors').html('&lt;ul&gt;' + errorHtml + '&lt;/ul&gt;').show();
+        return;
+    }
+    
+    // 數據有效，發送請求
+    $.ajax({
+        url: '/api/users',
+        type: 'POST',
+        data: JSON.stringify(userData),
+        contentType: 'application/json',
+        success: function(response) {
+            $('#errors').hide();
+            alert('用戶創建成功！');
+        }
+    });
+});
+
+// 響應數據轉換
+$.ajax({
+    url: '/api/users',
+    dataType: 'json',
+    dataFilter: function(data, type) {
+        if (type === 'json') {
+            var parsed = JSON.parse(data);
+            
+            // 轉換日期格式
+            if (parsed.users) {
+                parsed.users.forEach(function(user) {
+                    if (user.createdAt) {
+                        user.createdAt = new Date(user.createdAt);
+                        user.createdAtFormatted = user.createdAt.toLocaleDateString('zh-TW');
+                    }
+                });
+            }
+            
+            return JSON.stringify(parsed);
+        }
+        return data;
+    },
+    success: function(data) {
+        // 數據已經被轉換
+        console.log('轉換後的數據：', data);
+    }
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 錯誤處理 -->
+            <section id="error-handling">
+              <h2 class="lang-zh">錯誤處理</h2>
+              <h2 class="lang-en hidden">Error Handling</h2>
+
+              <p class="lang-zh">良好的錯誤處理是穩定 AJAX 應用的基礎：</p>
+              <p class="lang-en hidden">Good error handling is the foundation of stable AJAX applications:</p>
+
+              <h3 class="lang-zh">基本錯誤處理</h3>
+              <h3 class="lang-en hidden">Basic Error Handling</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基本錯誤處理
+$.ajax({
+    url: '/api/data',
+    type: 'GET',
+    success: function(data) {
+        console.log('請求成功：', data);
+    },
+    error: function(xhr, status, error) {
+        console.log('請求失敗：');
+        console.log('狀態：', status);
+        console.log('錯誤：', error);
+        console.log('響應：', xhr.responseText);
+        
+        // 根據不同錯誤類型處理
+        if (xhr.status === 404) {
+            showMessage('找不到請求的資源');
+        } else if (xhr.status === 500) {
+            showMessage('服務器內部錯誤');
+        } else if (status === 'timeout') {
+            showMessage('請求超時，請重試');
+        } else if (status === 'abort') {
+            showMessage('請求被中止');
+        } else {
+            showMessage('請求失敗：' + error);
+        }
+    }
+});
+
+// 使用 Promise 風格的錯誤處理
+$.ajax('/api/data')
+    .done(function(data) {
+        console.log('成功：', data);
+    })
+    .fail(function(xhr, status, error) {
+        console.log('失敗：', error);
+        handleAjaxError(xhr, status, error);
+    })
+    .always(function() {
+        console.log('請求完成');
+        hideLoadingSpinner();
+    });</code></pre>
+              </div>
+
+              <h3 class="lang-zh">詳細的錯誤處理策略</h3>
+              <h3 class="lang-en hidden">Detailed Error Handling Strategies</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 全面的錯誤處理函數
+function handleAjaxError(xhr, status, error) {
+    var errorInfo = {
+        status: xhr.status,
+        statusText: xhr.statusText,
+        responseText: xhr.responseText,
+        errorType: status,
+        errorMessage: error
+    };
+    
+    // 記錄錯誤
+    console.error('AJAX 錯誤：', errorInfo);
+    
+    // 根據狀態碼處理
+    switch (xhr.status) {
+        case 400:
+            handleBadRequest(xhr.responseText);
+            break;
+        case 401:
+            handleUnauthorized();
+            break;
+        case 403:
+            handleForbidden();
+            break;
+        case 404:
+            handleNotFound();
+            break;
+        case 422:
+            handleValidationError(xhr.responseText);
+            break;
+        case 500:
+            handleServerError();
+            break;
+        case 503:
+            handleServiceUnavailable();
+            break;
+        default:
+            if (xhr.status >= 500) {
+                handleServerError();
+            } else if (xhr.status >= 400) {
+                handleClientError(xhr.status, xhr.statusText);
+            } else {
+                handleNetworkError(status, error);
+            }
+    }
+}
+
+// 具體錯誤處理函數
+function handleBadRequest(responseText) {
+    try {
+        var errorData = JSON.parse(responseText);
+        showMessage('請求錯誤：' + (errorData.message || '請檢查請求參數'));
+    } catch (e) {
+        showMessage('請求格式錯誤');
+    }
+}
+
+function handleUnauthorized() {
+    showMessage('未授權訪問，請重新登錄');
+    // 重定向到登錄頁面
+    setTimeout(function() {
+        window.location.href = '/login';
+    }, 2000);
+}
+
+function handleForbidden() {
+    showMessage('權限不足，無法訪問此資源');
+}
+
+function handleNotFound() {
+    showMessage('請求的資源不存在');
+}
+
+function handleValidationError(responseText) {
+    try {
+        var errorData = JSON.parse(responseText);
+        if (errorData.errors) {
+            // 顯示字段級錯誤
+            Object.keys(errorData.errors).forEach(function(field) {
+                showFieldError(field, errorData.errors[field]);
+            });
+        } else {
+            showMessage('數據驗證失敗');
+        }
+    } catch (e) {
+        showMessage('數據驗證失敗');
+    }
+}
+
+function handleServerError() {
+    showMessage('服務器錯誤，請稍後重試');
+}
+
+function handleServiceUnavailable() {
+    showMessage('服務暫時不可用，請稍後重試');
+}
+
+function handleNetworkError(status, error) {
+    if (status === 'timeout') {
+        showMessage('請求超時，請檢查網路連接並重試');
+    } else if (status === 'abort') {
+        showMessage('請求已取消');
+    } else {
+        showMessage('網路錯誤：' + error);
+    }
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">重試機制</h3>
+              <h3 class="lang-en hidden">Retry Mechanism</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 帶重試功能的 AJAX 請求
+function ajaxWithRetry(options, maxRetries) {
+    maxRetries = maxRetries || 3;
+    var currentTry = 0;
+    
+    function makeRequest() {
+        currentTry++;
+        
+        var ajaxOptions = $.extend({}, options, {
+            error: function(xhr, status, error) {
+                console.log('請求失敗，嘗試次數：', currentTry);
+                
+                // 如果是網路錯誤且還有重試次數
+                if (shouldRetry(xhr.status, status) && currentTry < maxRetries) {
+                    console.log('將在 2 秒後重試...');
+                    setTimeout(makeRequest, 2000 * currentTry); // 延遲增加
+                } else {
+                    // 達到最大重試次數或不應重試的錯誤
+                    if (options.error) {
+                        options.error(xhr, status, error);
+                    }
+                }
+            }
+        });
+        
+        return $.ajax(ajaxOptions);
+    }
+    
+    function shouldRetry(status, errorType) {
+        // 網路錯誤、超時或 5xx 服務器錯誤可以重試
+        return errorType === 'timeout' || 
+               errorType === 'error' || 
+               (status >= 500 && status < 600);
+    }
+    
+    return makeRequest();
+}
+
+// 使用重試機制
+ajaxWithRetry({
+    url: '/api/data',
+    type: 'GET',
+    success: function(data) {
+        console.log('請求成功：', data);
+    },
+    error: function(xhr, status, error) {
+        console.log('請求最終失敗：', error);
+        showMessage('請求失敗，請稍後重試');
+    }
+}, 3); // 最多重試 3 次
+
+// 更高級的重試機制（指數退避）
+function exponentialBackoffRetry(requestFn, maxRetries) {
+    return new Promise(function(resolve, reject) {
+        let retryCount = 0;
+        
+        function attempt() {
+            requestFn()
+                .then(resolve)
+                .catch(function(error) {
+                    retryCount++;
+                    
+                    if (retryCount >= maxRetries) {
+                        reject(error);
+                        return;
+                    }
+                    
+                    // 指數退避：1s, 2s, 4s, 8s...
+                    const delay = Math.pow(2, retryCount) * 1000;
+                    console.log(`重試 ${retryCount}/${maxRetries}，${delay}ms 後重試`);
+                    
+                    setTimeout(attempt, delay);
+                });
+        }
+        
+        attempt();
+    });
+}
+
+// 使用指數退避重試
+function fetchUserData() {
+    return $.ajax({
+        url: '/api/users',
+        type: 'GET'
+    });
+}
+
+exponentialBackoffRetry(fetchUserData, 3)
+    .then(function(data) {
+        console.log('獲取用戶數據成功：', data);
+    })
+    .catch(function(error) {
+        console.log('獲取用戶數據最終失敗：', error);
+    });</code></pre>
+              </div>
+
+              <h3 class="lang-zh">全局錯誤處理</h3>
+              <h3 class="lang-en hidden">Global Error Handling</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 設置全局 AJAX 錯誤處理
+$(document).ajaxError(function(event, xhr, settings, error) {
+    console.log('全局 AJAX 錯誤：');
+    console.log('URL：', settings.url);
+    console.log('類型：', settings.type);
+    console.log('錯誤：', error);
+    
+    // 對特定錯誤進行全局處理
+    if (xhr.status === 401) {
+        // 統一處理未授權錯誤
+        handleGlobalUnauthorized();
+    } else if (xhr.status >= 500) {
+        // 統一處理服務器錯誤
+        showGlobalErrorMessage('服務器錯誤，請稍後重試');
+    }
+});
+
+// 全局 AJAX 設置
+$.ajaxSetup({
+    timeout: 10000, // 10秒超時
+    cache: false,
+    beforeSend: function(xhr, settings) {
+        // 為所有請求添加 CSRF token
+        var token = $('meta[name="csrf-token"]').attr('content');
+        if (token) {
+            xhr.setRequestHeader('X-CSRF-Token', token);
+        }
+        
+        // 顯示載入指示器
+        showGlobalLoading();
+    },
+    complete: function() {
+        // 隱藏載入指示器
+        hideGlobalLoading();
+    }
+});
+
+// 全局載入狀態管理
+var activeRequests = 0;
+
+$(document).ajaxStart(function() {
+    activeRequests++;
+    if (activeRequests === 1) {
+        $('#globalLoading').show();
+    }
+});
+
+$(document).ajaxComplete(function() {
+    activeRequests--;
+    if (activeRequests === 0) {
+        $('#globalLoading').hide();
+    }
+});
+
+function handleGlobalUnauthorized() {
+    // 清除本地存儲的認證信息
+    localStorage.removeItem('authToken');
+    
+    // 顯示登錄提示
+    showLoginPrompt();
+    
+    // 可選：自動重定向到登錄頁面
+    setTimeout(function() {
+        window.location.href = '/login';
+    }, 3000);
+}</code></pre>
+              </div>
+            </section>
+
+            <!-- 實際應用範例 -->
+            <section id="real-world-examples">
+              <h2 class="lang-zh">實際應用範例</h2>
+              <h2 class="lang-en hidden">Real-world Examples</h2>
+
+              <p class="lang-zh">以下是一些常見的 AJAX 應用場景和完整實現：</p>
+              <p class="lang-en hidden">Here are some common AJAX application scenarios and complete implementations:</p>
+
+              <h3 class="lang-zh">1. 實時搜索</h3>
+              <h3 class="lang-en hidden">1. Real-time Search</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 實時搜索功能
+var SearchManager = {
+    currentRequest: null,
+    searchCache: {},
+    
+    init: function() {
+        this.bindEvents();
+    },
+    
+    bindEvents: function() {
+        var self = this;
+        
+        $('#searchInput').on('keyup', function() {
+            var query = $(this).val().trim();
+            
+            if (query.length < 2) {
+                self.hideResults();
+                return;
+            }
+            
+            // 防抖處理
+            clearTimeout(self.searchTimeout);
+            self.searchTimeout = setTimeout(function() {
+                self.search(query);
+            }, 300);
+        });
+        
+        // 點擊其他地方隱藏結果
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('#searchContainer').length) {
+                self.hideResults();
+            }
+        });
+    },
+    
+    search: function(query) {
+        var self = this;
+        
+        // 檢查緩存
+        if (this.searchCache[query]) {
+            this.displayResults(this.searchCache[query]);
+            return;
+        }
+        
+        // 取消之前的請求
+        if (this.currentRequest) {
+            this.currentRequest.abort();
+        }
+        
+        // 顯示載入狀態
+        this.showLoading();
+        
+        // 發送搜索請求
+        this.currentRequest = $.ajax({
+            url: '/api/search',
+            type: 'GET',
+            data: {
+                q: query,
+                limit: 10
+            },
+            dataType: 'json',
+            success: function(data) {
+                self.currentRequest = null;
+                self.searchCache[query] = data; // 緩存結果
+                self.displayResults(data);
+            },
+            error: function(xhr, status, error) {
+                self.currentRequest = null;
+                
+                if (status !== 'abort') {
+                    self.showError('搜索失敗，請重試');
+                }
+            }
+        });
+    },
+    
+    displayResults: function(results) {
+        var $resultsContainer = $('#searchResults');
+        
+        if (results.length === 0) {
+            $resultsContainer.html('&lt;div class="no-results"&gt;未找到相關結果&lt;/div&gt;');
+        } else {
+            var html = results.map(function(item) {
+                return '&lt;div class="search-item" data-id="' + item.id + '"&gt;' +
+                       '&lt;h4&gt;' + item.title + '&lt;/h4&gt;' +
+                       '&lt;p&gt;' + item.description + '&lt;/p&gt;' +
+                       '&lt;/div&gt;';
+            }).join('');
+            
+            $resultsContainer.html(html);
+        }
+        
+        $resultsContainer.show();
+    },
+    
+    showLoading: function() {
+        $('#searchResults').html('&lt;div class="loading"&gt;搜索中...&lt;/div&gt;').show();
+    },
+    
+    showError: function(message) {
+        $('#searchResults').html('&lt;div class="error"&gt;' + message + '&lt;/div&gt;').show();
+    },
+    
+    hideResults: function() {
+        $('#searchResults').hide();
+    }
+};
+
+// 初始化搜索功能
+$(document).ready(function() {
+    SearchManager.init();
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">2. 無限滾動載入</h3>
+              <h3 class="lang-en hidden">2. Infinite Scroll Loading</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 無限滾動載入功能
+var InfiniteScroll = {
+    currentPage: 1,
+    totalPages: 1,
+    isLoading: false,
+    hasMoreData: true,
+    
+    init: function() {
+        this.loadPage(1);
+        this.bindScrollEvent();
+    },
+    
+    bindScrollEvent: function() {
+        var self = this;
+        
+        $(window).on('scroll', function() {
+            // 檢查是否接近頁面底部
+            var scrollTop = $(window).scrollTop();
+            var windowHeight = $(window).height();
+            var documentHeight = $(document).height();
+            
+            if (scrollTop + windowHeight >= documentHeight - 100) {
+                self.loadNextPage();
+            }
+        });
+    },
+    
+    loadNextPage: function() {
+        if (this.isLoading || !this.hasMoreData) {
+            return;
+        }
+        
+        this.currentPage++;
+        this.loadPage(this.currentPage);
+    },
+    
+    loadPage: function(page) {
+        var self = this;
+        
+        this.isLoading = true;
+        this.showLoadingIndicator();
+        
+        $.ajax({
+            url: '/api/posts',
+            type: 'GET',
+            data: {
+                page: page,
+                per_page: 10
+            },
+            dataType: 'json',
+            success: function(response) {
+                self.isLoading = false;
+                self.hideLoadingIndicator();
+                
+                // 更新分頁信息
+                self.totalPages = response.total_pages;
+                self.hasMoreData = page < self.totalPages;
+                
+                // 添加新內容
+                self.appendPosts(response.data);
+                
+                // 如果沒有更多數據，顯示提示
+                if (!self.hasMoreData) {
+                    self.showEndMessage();
+                }
+            },
+            error: function(xhr, status, error) {
+                self.isLoading = false;
+                self.hideLoadingIndicator();
+                self.showError('載入失敗，請重試');
+                
+                // 重置頁面計數器
+                self.currentPage--;
+            }
+        });
+    },
+    
+    appendPosts: function(posts) {
+        var $container = $('#postsContainer');
+        
+        posts.forEach(function(post) {
+            var postHtml = '&lt;article class="post" data-id="' + post.id + '"&gt;' +
+                          '&lt;h2&gt;' + post.title + '&lt;/h2&gt;' +
+                          '&lt;p&gt;' + post.excerpt + '&lt;/p&gt;' +
+                          '&lt;div class="post-meta"&gt;' +
+                          '&lt;span&gt;' + post.author + '&lt;/span&gt; | ' +
+                          '&lt;span&gt;' + post.created_at + '&lt;/span&gt;' +
+                          '&lt;/div&gt;' +
+                          '&lt;/article&gt;';
+            
+            $container.append(postHtml);
+        });
+        
+        // 觸發自定義事件
+        $(document).trigger('postsLoaded', [posts]);
+    },
+    
+    showLoadingIndicator: function() {
+        if ($('#loadingIndicator').length === 0) {
+            $('body').append('&lt;div id="loadingIndicator"&gt;載入中...&lt;/div&gt;');
+        }
+        $('#loadingIndicator').show();
+    },
+    
+    hideLoadingIndicator: function() {
+        $('#loadingIndicator').hide();
+    },
+    
+    showEndMessage: function() {
+        $('#postsContainer').append('&lt;div class="end-message"&gt;沒有更多內容了&lt;/div&gt;');
+    },
+    
+    showError: function(message) {
+        $('#postsContainer').append('&lt;div class="error-message"&gt;' + message + '&lt;/div&gt;');
+    }
+};
+
+// 初始化無限滾動
+$(document).ready(function() {
+    InfiniteScroll.init();
+});</code></pre>
+              </div>
+
+              <h3 class="lang-zh">3. 表單提交與驗證</h3>
+              <h3 class="lang-en hidden">3. Form Submission and Validation</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 高級表單處理
+var FormHandler = {
+    init: function() {
+        this.bindEvents();
+        this.setupValidation();
+    },
+    
+    bindEvents: function() {
+        var self = this;
+        
+        // 表單提交
+        $('#contactForm').on('submit', function(event) {
+            event.preventDefault();
+            self.handleSubmit($(this));
+        });
+        
+        // 實時驗證
+        $('#contactForm input, #contactForm textarea').on('blur', function() {
+            self.validateField($(this));
+        });
+        
+        // 文件上傳預覽
+        $('#fileInput').on('change', function() {
+            self.previewFiles(this.files);
+        });
+    },
+    
+    setupValidation: function() {
+        this.validationRules = {
+            name: {
+                required: true,
+                minLength: 2
+            },
+            email: {
+                required: true,
+                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            },
+            phone: {
+                pattern: /^\d{10}$/
+            },
+            message: {
+                required: true,
+                minLength: 10
+            }
+        };
+    },
+    
+    validateField: function($field) {
+        var fieldName = $field.attr('name');
+        var value = $field.val().trim();
+        var rules = this.validationRules[fieldName];
+        
+        if (!rules) return true;
+        
+        var errors = [];
+        
+        // 必填驗證
+        if (rules.required && !value) {
+            errors.push('此欄位為必填');
+        }
+        
+        // 最小長度驗證
+        if (value && rules.minLength && value.length < rules.minLength) {
+            errors.push('至少需要 ' + rules.minLength + ' 個字符');
+        }
+        
+        // 模式驗證
+        if (value && rules.pattern && !rules.pattern.test(value)) {
+            if (fieldName === 'email') {
+                errors.push('請輸入有效的電子郵件地址');
+            } else if (fieldName === 'phone') {
+                errors.push('請輸入有效的電話號碼');
+            } else {
+                errors.push('格式不正確');
+            }
+        }
+        
+        // 顯示驗證結果
+        this.showFieldValidation($field, errors);
+        
+        return errors.length === 0;
+    },
+    
+    validateForm: function($form) {
+        var self = this;
+        var isValid = true;
+        
+        $form.find('input, textarea').each(function() {
+            if (!self.validateField($(this))) {
+                isValid = false;
+            }
+        });
+        
+        return isValid;
+    },
+    
+    handleSubmit: function($form) {
+        var self = this;
+        
+        // 驗證表單
+        if (!this.validateForm($form)) {
+            this.showMessage('請修正表單中的錯誤', 'error');
+            return;
+        }
+        
+        // 準備數據
+        var formData = new FormData($form[0]);
+        
+        // 禁用提交按鈕
+        var $submitBtn = $form.find('button[type="submit"]');
+        $submitBtn.prop('disabled', true).text('提交中...');
+        
+        // 發送請求
+        $.ajax({
+            url: $form.attr('action') || '/api/contact',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                var xhr = new XMLHttpRequest();
+                
+                // 上傳進度
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        var percentComplete = (e.loaded / e.total) * 100;
+                        self.updateProgress(percentComplete);
+                    }
+                });
+                
+                return xhr;
+            },
+            success: function(response) {
+                self.showMessage('提交成功！', 'success');
+                $form[0].reset();
+                self.clearValidation($form);
+            },
+            error: function(xhr, status, error) {
+                if (xhr.status === 422) {
+                    // 處理驗證錯誤
+                    try {
+                        var errors = JSON.parse(xhr.responseText).errors;
+                        self.showServerValidationErrors(errors);
+                    } catch (e) {
+                        self.showMessage('驗證失敗', 'error');
+                    }
+                } else {
+                    self.showMessage('提交失敗，請重試', 'error');
+                }
+            },
+            complete: function() {
+                $submitBtn.prop('disabled', false).text('提交');
+                self.hideProgress();
+            }
+        });
+    },
+    
+    showFieldValidation: function($field, errors) {
+        var $fieldGroup = $field.closest('.field-group');
+        var $errorContainer = $fieldGroup.find('.field-errors');
+        
+        if (errors.length > 0) {
+            $field.addClass('error');
+            
+            if ($errorContainer.length === 0) {
+                $errorContainer = $('&lt;div class="field-errors"&gt;&lt;/div&gt;');
+                $fieldGroup.append($errorContainer);
+            }
+            
+            $errorContainer.html(errors.join('&lt;br&gt;')).show();
+        } else {
+            $field.removeClass('error');
+            $errorContainer.hide();
+        }
+    },
+    
+    showServerValidationErrors: function(errors) {
+        var self = this;
+        
+        Object.keys(errors).forEach(function(fieldName) {
+            var $field = $('[name="' + fieldName + '"]');
+            if ($field.length) {
+                self.showFieldValidation($field, errors[fieldName]);
+            }
+        });
+    },
+    
+    clearValidation: function($form) {
+        $form.find('.error').removeClass('error');
+        $form.find('.field-errors').hide();
+    },
+    
+    showMessage: function(message, type) {
+        var $message = $('#formMessage');
+        if ($message.length === 0) {
+            $message = $('&lt;div id="formMessage"&gt;&lt;/div&gt;');
+            $('#contactForm').before($message);
+        }
+        
+        $message.removeClass('success error')
+                .addClass(type)
+                .text(message)
+                .show();
+        
+        // 3秒後自動隱藏
+        setTimeout(function() {
+            $message.fadeOut();
+        }, 3000);
+    },
+    
+    updateProgress: function(percent) {
+        var $progress = $('#uploadProgress');
+        if ($progress.length === 0) {
+            $progress = $('&lt;div id="uploadProgress"&gt;&lt;div class="progress-bar"&gt;&lt;/div&gt;&lt;/div&gt;');
+            $('#contactForm').append($progress);
+        }
+        
+        $progress.show().find('.progress-bar').css('width', percent + '%');
+    },
+    
+    hideProgress: function() {
+        $('#uploadProgress').hide();
+    },
+    
+    previewFiles: function(files) {
+        var $preview = $('#filePreview');
+        if ($preview.length === 0) {
+            $preview = $('&lt;div id="filePreview"&gt;&lt;/div&gt;');
+            $('#fileInput').after($preview);
+        }
+        
+        $preview.empty();
+        
+        Array.from(files).forEach(function(file) {
+            var $fileItem = $('&lt;div class="file-item"&gt;' +
+                            '&lt;span class="file-name"&gt;' + file.name + '&lt;/span&gt;' +
+                            '&lt;span class="file-size"&gt;(' + (file.size / 1024).toFixed(1) + ' KB)&lt;/span&gt;' +
+                            '&lt;/div&gt;');
+            $preview.append($fileItem);
+        });
+    }
+};
+
+// 初始化表單處理
+$(document).ready(function() {
+    FormHandler.init();
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 最佳實踐 -->
+            <section id="best-practices">
+              <h2 class="lang-zh">最佳實踐</h2>
+              <h2 class="lang-en hidden">Best Practices</h2>
+
+              <p class="lang-zh">以下是 jQuery AJAX 開發的最佳實踐：</p>
+              <p class="lang-en hidden">Here are the best practices for jQuery AJAX development:</p>
+
+              <h3 class="lang-zh">性能優化</h3>
+              <h3 class="lang-en hidden">Performance Optimization</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ 使用請求緩存
+var RequestCache = {
+    cache: {},
+    
+    get: function(url, params) {
+        var key = url + JSON.stringify(params || {});
+        
+        if (this.cache[key]) {
+            // 返回緩存的 Promise
+            return this.cache[key];
+        }
+        
+        // 創建新請求並緩存
+        this.cache[key] = $.ajax({
+            url: url,
+            data: params,
+            dataType: 'json'
+        });
+        
+        return this.cache[key];
+    },
+    
+    clear: function(pattern) {
+        if (pattern) {
+            // 清除匹配模式的緩存
+            Object.keys(this.cache).forEach(function(key) {
+                if (key.includes(pattern)) {
+                    delete this.cache[key];
+                }
+            }.bind(this));
+        } else {
+            // 清除所有緩存
+            this.cache = {};
+        }
+    }
+};
+
+// ✅ 請求去重
+var RequestDeduplicator = {
+    pendingRequests: {},
+    
+    request: function(options) {
+        var key = options.url + (options.type || 'GET') + JSON.stringify(options.data || {});
+        
+        // 如果相同請求正在進行中，返回相同的 Promise
+        if (this.pendingRequests[key]) {
+            return this.pendingRequests[key];
+        }
+        
+        // 創建新請求
+        var request = $.ajax(options);
+        
+        // 緩存請求
+        this.pendingRequests[key] = request;
+        
+        // 請求完成後清除緩存
+        request.always(function() {
+            delete this.pendingRequests[key];
+        }.bind(this));
+        
+        return request;
+    }
+};
+
+// ✅ 批量請求處理
+function batchRequests(requests, batchSize) {
+    batchSize = batchSize || 3;
+    var results = [];
+    var index = 0;
+    
+    function processBatch() {
+        var batch = requests.slice(index, index + batchSize);
+        index += batchSize;
+        
+        if (batch.length === 0) {
+            return Promise.resolve(results);
+        }
+        
+        return Promise.all(batch.map(function(request) {
+            return $.ajax(request);
+        }))
+        .then(function(batchResults) {
+            results = results.concat(batchResults);
+            return processBatch();
+        });
+    }
+    
+    return processBatch();
+}
+
+// 使用批量處理
+var userRequests = [
+    {url: '/api/users/1'},
+    {url: '/api/users/2'},
+    {url: '/api/users/3'},
+    // ... 更多請求
+];
+
+batchRequests(userRequests, 3)
+    .then(function(allResults) {
+        console.log('所有用戶數據：', allResults);
+    });</code></pre>
+              </div>
+
+              <h3 class="lang-zh">安全考慮</h3>
+              <h3 class="lang-en hidden">Security Considerations</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ CSRF 保護
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        // 添加 CSRF token
+        var token = $('meta[name="csrf-token"]').attr('content');
+        if (token && !settings.crossDomain) {
+            xhr.setRequestHeader('X-CSRF-Token', token);
+        }
+    }
+});
+
+// ✅ 輸入驗證和清理
+function sanitizeInput(input) {
+    if (typeof input !== 'string') return input;
+    
+    return input
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+}
+
+function validateAndSendData(data) {
+    // 驗證數據
+    var errors = [];
+    
+    if (!data.name || data.name.trim().length < 2) {
+        errors.push('姓名至少需要 2 個字符');
+    }
+    
+    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+        errors.push('請輸入有效的電子郵件');
+    }
+    
+    if (errors.length > 0) {
+        return Promise.reject({errors: errors});
+    }
+    
+    // 清理數據
+    var cleanData = {
+        name: sanitizeInput(data.name.trim()),
+        email: sanitizeInput(data.email.trim()),
+        message: sanitizeInput(data.message ? data.message.trim() : '')
+    };
+    
+    return $.ajax({
+        url: '/api/contact',
+        type: 'POST',
+        data: JSON.stringify(cleanData),
+        contentType: 'application/json'
+    });
+}
+
+// ✅ 限制請求頻率
+var RateLimiter = {
+    requests: {},
+    
+    canMakeRequest: function(key, limit, timeWindow) {
+        var now = Date.now();
+        var windowStart = now - timeWindow;
+        
+        if (!this.requests[key]) {
+            this.requests[key] = [];
+        }
+        
+        // 清除過期的請求記錄
+        this.requests[key] = this.requests[key].filter(function(timestamp) {
+            return timestamp > windowStart;
+        });
+        
+        // 檢查是否超過限制
+        if (this.requests[key].length >= limit) {
+            return false;
+        }
+        
+        // 記錄當前請求
+        this.requests[key].push(now);
+        return true;
+    }
+};
+
+// 使用速率限制
+function limitedAjaxRequest(options, key) {
+    // 每分鐘最多 10 次請求
+    if (!RateLimiter.canMakeRequest(key, 10, 60000)) {
+        return Promise.reject(new Error('請求頻率過高，請稍後重試'));
+    }
+    
+    return $.ajax(options);
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">可維護性</h3>
+              <h3 class="lang-en hidden">Maintainability</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ API 服務封裝
+var ApiService = {
+    baseUrl: '/api',
+    
+    request: function(endpoint, options) {
+        options = options || {};
+        
+        var config = {
+            url: this.baseUrl + endpoint,
+            type: options.method || 'GET',
+            data: options.data,
+            dataType: options.dataType || 'json',
+            timeout: options.timeout || 10000
+        };
+        
+        if (options.headers) {
+            config.headers = options.headers;
+        }
+        
+        return $.ajax(config)
+            .then(function(data) {
+                return data;
+            })
+            .catch(function(xhr) {
+                throw new Error('API 請求失敗: ' + xhr.statusText);
+            });
+    },
+    
+    // 用戶相關 API
+    users: {
+        getAll: function(params) {
+            return ApiService.request('/users', {
+                data: params
+            });
+        },
+        
+        getById: function(id) {
+            return ApiService.request('/users/' + id);
+        },
+        
+        create: function(userData) {
+            return ApiService.request('/users', {
+                method: 'POST',
+                data: JSON.stringify(userData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        
+        update: function(id, userData) {
+            return ApiService.request('/users/' + id, {
+                method: 'PUT',
+                data: JSON.stringify(userData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        
+        delete: function(id) {
+            return ApiService.request('/users/' + id, {
+                method: 'DELETE'
+            });
+        }
+    }
+};
+
+// 使用 API 服務
+ApiService.users.getAll({page: 1, limit: 10})
+    .then(function(users) {
+        console.log('用戶列表：', users);
+    })
+    .catch(function(error) {
+        console.error('獲取用戶失敗：', error);
+    });
+
+// ✅ 請求攔截器
+var RequestInterceptor = {
+    interceptors: {
+        request: [],
+        response: []
+    },
+    
+    addRequestInterceptor: function(interceptor) {
+        this.interceptors.request.push(interceptor);
+    },
+    
+    addResponseInterceptor: function(interceptor) {
+        this.interceptors.response.push(interceptor);
+    },
+    
+    request: function(config) {
+        var self = this;
+        
+        // 應用請求攔截器
+        this.interceptors.request.forEach(function(interceptor) {
+            config = interceptor(config) || config;
+        });
+        
+        return $.ajax(config)
+            .then(function(data, textStatus, xhr) {
+                // 應用響應攔截器
+                self.interceptors.response.forEach(function(interceptor) {
+                    data = interceptor(data, xhr) || data;
+                });
+                
+                return data;
+            });
+    }
+};
+
+// 添加請求攔截器
+RequestInterceptor.addRequestInterceptor(function(config) {
+    // 添加認證頭
+    var token = localStorage.getItem('authToken');
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = 'Bearer ' + token;
+    }
+    
+    // 記錄請求
+    console.log('發送請求：', config.url);
+    
+    return config;
+});
+
+// 添加響應攔截器
+RequestInterceptor.addResponseInterceptor(function(data, xhr) {
+    // 記錄響應
+    console.log('收到響應：', xhr.status, data);
+    
+    return data;
+});</code></pre>
+              </div>
+            </section>
+
+            <!-- 總結 -->
+            <section id="summary">
+              <h2 class="lang-zh">總結</h2>
+              <h2 class="lang-en hidden">Summary</h2>
+
+              <p class="lang-zh">
+                jQuery AJAX 是現代網頁應用開發中不可或缺的技術。通過本指南，您應該已經掌握了：
+              </p>
+              <p class="lang-en hidden">
+                jQuery AJAX is an indispensable technology in modern web application development. Through this guide, you should have mastered:
+              </p>
+
+              <ul>
+                <li class="lang-zh">AJAX 的基本概念和優勢</li>
+                <li class="lang-en hidden">Basic AJAX concepts and advantages</li>
+
+                <li class="lang-zh">jQuery 提供的各種 AJAX 方法</li>
+                <li class="lang-en hidden">Various AJAX methods provided by jQuery</li>
+
+                <li class="lang-zh">$.ajax() 的完整配置選項</li>
+                <li class="lang-en hidden">Complete configuration options for $.ajax()</li>
+
+                <li class="lang-zh">數據處理和格式轉換</li>
+                <li class="lang-en hidden">Data handling and format conversion</li>
+
+                <li class="lang-zh">全面的錯誤處理策略</li>
+                <li class="lang-en hidden">Comprehensive error handling strategies</li>
+
+                <li class="lang-zh">實際應用場景的實現方法</li>
+                <li class="lang-en hidden">Implementation methods for real-world scenarios</li>
+
+                <li class="lang-zh">性能優化和安全最佳實踐</li>
+                <li class="lang-en hidden">Performance optimization and security best practices</li>
+              </ul>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    雖然現代 JavaScript 提供了 Fetch API 等新的異步請求方式，但 jQuery AJAX 依然因其簡潔性和兼容性而被廣泛使用。
+                  </span>
+                  <span class="lang-en hidden">
+                    While modern JavaScript provides new asynchronous request methods like the Fetch API, jQuery AJAX is still widely used for its simplicity and compatibility.
+                  </span>
+                </div>
+              </div>
+
+              <p class="lang-zh">
+                熟練掌握 jQuery AJAX 後，您將能夠創建響應式的單頁應用、實現實時數據更新、處理複雜的表單提交等高級功能，為用戶提供流暢的網頁體驗。
+              </p>
+              <p class="lang-en hidden">
+                After mastering jQuery AJAX, you'll be able to create responsive single-page applications, implement real-time data updates, handle complex form submissions, and other advanced features, providing users with a smooth web experience.
+              </p>
+            </section>
+          </article>
+
+          <!-- 相關文章 -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">
+              <span class="lang-zh">相關文章</span>
+              <span class="lang-en hidden">Related Articles</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="events.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">jQuery 事件處理</span>
+                    <span class="lang-en hidden">jQuery Event Handling</span>
+                  </h4>
+                  <p class="lang-zh">學習 jQuery 的事件綁定和處理機制</p>
+                  <p class="lang-en hidden">Learn jQuery event binding and handling mechanisms</p>
+                </div>
+              </a>
+              <a href="animations.html" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">jQuery 動畫效果</span>
+                    <span class="lang-en hidden">jQuery Animation Effects</span>
+                  </h4>
+                  <p class="lang-zh">探索 jQuery 豐富的動畫和效果功能</p>
+                  <p class="lang-en hidden">Explore jQuery's rich animation and effects features</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>

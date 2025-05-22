@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 陣列操作指南 | JavaScript Array Operations Guide</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../../index.html" class="lang-zh">首頁</a>
+          <a href="../../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li><a href="index.html">JavaScript</a></li>
+        <li class="lang-zh">陣列操作指南</li>
+        <li class="lang-en hidden">Array Operations Guide</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">JavaScript 筆記目錄</span>
+                  <span class="lang-en hidden">JavaScript Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html">JavaScript 概覽</a></li>
+                  <li>
+                    <a href="arrays.html" class="active lang-zh">陣列操作指南</a>
+                    <a href="arrays.html" class="active lang-en hidden">Array Operations Guide</a>
+                  </li>
+                  <li>
+                    <a href="functions.html" class="lang-zh">函數進階</a>
+                    <a href="functions.html" class="lang-en hidden">Advanced Functions</a>
+                  </li>
+                  <li>
+                    <a href="async.html" class="lang-zh">異步編程</a>
+                    <a href="async.html" class="lang-en hidden">Async Programming</a>
+                  </li>
+                  <li>
+                    <a href="es6.html" class="lang-zh">ES6+ 特性</a>
+                    <a href="es6.html" class="lang-en hidden">ES6+ Features</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <article class="prose max-w-none">
+            <header class="mb-8 not-prose">
+              <h1 class="text-4xl font-bold mb-2">
+                <span class="lang-zh">JavaScript 陣列操作完整指南</span>
+                <span class="lang-en hidden">Complete Guide to JavaScript Array Operations</span>
+              </h1>
+              <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                <time datetime="2025-05-22">2025-05-22</time>
+                <span>|</span>
+                <span class="badge badge-outline">JavaScript</span>
+                <span class="badge badge-outline">Array</span>
+                <span class="badge badge-outline">ES6+</span>
+              </div>
+            </header>
+
+            <!-- 文章目錄 -->
+            <div class="card bg-base-200 mb-8">
+              <div class="card-body">
+                <h2 class="card-title text-xl mb-2">
+                  <span class="lang-zh">目錄</span>
+                  <span class="lang-en hidden">Contents</span>
+                </h2>
+                <ul class="lang-zh">
+                  <li><a href="#introduction">介紹</a></li>
+                  <li><a href="#basic-operations">基本陣列操作</a></li>
+                  <li><a href="#common-operations">常見陣列操作</a></li>
+                  <li><a href="#best-practices">最佳實踐技巧</a></li>
+                  <li><a href="#performance-tips">性能優化建議</a></li>
+                  <li><a href="#summary">總結</a></li>
+                </ul>
+                <ul class="lang-en hidden">
+                  <li><a href="#introduction">Introduction</a></li>
+                  <li><a href="#basic-operations">Basic Array Operations</a></li>
+                  <li><a href="#common-operations">Common Array Operations</a></li>
+                  <li><a href="#best-practices">Best Practices</a></li>
+                  <li><a href="#performance-tips">Performance Optimization Tips</a></li>
+                  <li><a href="#summary">Summary</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 介紹部分 -->
+            <section id="introduction">
+              <h2 class="lang-zh">介紹</h2>
+              <h2 class="lang-en hidden">Introduction</h2>
+              <p class="lang-zh">
+                JavaScript 陣列是前端開發中最重要的數據結構之一。本指南將全面介紹 JavaScript
+                陣列的各種操作方法，從基本的增刪改查到高級的函數式編程技巧，幫助您掌握陣列操作的精髓。
+              </p>
+              <p class="lang-en hidden">
+                JavaScript arrays are one of the most important data structures in frontend
+                development. This guide will comprehensively introduce various JavaScript array
+                operation methods, from basic CRUD operations to advanced functional programming
+                techniques, helping you master the essence of array operations.
+              </p>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    陣列操作是 JavaScript 開發的基石，熟練掌握這些方法能大幅提升代碼質量和開發效率。
+                  </span>
+                  <span class="lang-en hidden">
+                    Array operations are the cornerstone of JavaScript development. Mastering these
+                    methods can significantly improve code quality and development efficiency.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 基本陣列操作 -->
+            <section id="basic-operations">
+              <h2 class="lang-zh">基本陣列操作</h2>
+              <h2 class="lang-en hidden">Basic Array Operations</h2>
+
+              <p class="lang-zh">以下是 JavaScript 中最基本和常用的陣列操作方法：</p>
+              <p class="lang-en hidden">
+                Below are the most basic and commonly used array operation methods in JavaScript:
+              </p>
+
+              <h3 class="lang-zh">創建和初始化陣列</h3>
+              <h3 class="lang-en hidden">Creating and Initializing Arrays</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 字面量方式創建
+const arr1 = [];
+const arr2 = [1, 2, 3, 4, 5];
+
+// 構造函數方式創建
+const arr3 = new Array();
+const arr4 = new Array(5); // 創建長度為 5 的空陣列
+const arr5 = new Array(1, 2, 3); // 創建包含元素的陣列
+
+// Array.from() 創建
+const arr6 = Array.from([1, 2, 3]);
+const arr7 = Array.from({length: 5}, (v, i) => i + 1); // [1, 2, 3, 4, 5]
+
+// Array.of() 創建
+const arr8 = Array.of(1, 2, 3, 4, 5);</code></pre>
+              </div>
+
+              <h3 class="lang-zh">添加和刪除元素</h3>
+              <h3 class="lang-en hidden">Adding and Removing Elements</h3>
+
+              <div class="mockup-code">
+                <pre><code>const arr = [1, 2, 3];
+
+// 末尾添加元素
+arr.push(4); // [1, 2, 3, 4]
+arr.push(5, 6); // [1, 2, 3, 4, 5, 6]
+
+// 開頭添加元素
+arr.unshift(0); // [0, 1, 2, 3, 4, 5, 6]
+
+// 刪除末尾元素
+const lastElement = arr.pop(); // 返回 6，arr 變為 [0, 1, 2, 3, 4, 5]
+
+// 刪除開頭元素
+const firstElement = arr.shift(); // 返回 0，arr 變為 [1, 2, 3, 4, 5]
+
+// 在指定位置添加/刪除元素
+arr.splice(2, 1, 'a', 'b'); // 從索引 2 開始刪除 1 個元素，並添加 'a', 'b'
+// arr 變為 [1, 2, 'a', 'b', 4, 5]</code></pre>
+              </div>
+
+              <h3 class="lang-zh">訪問和修改元素</h3>
+              <h3 class="lang-en hidden">Accessing and Modifying Elements</h3>
+
+              <div class="mockup-code">
+                <pre><code>const arr = ['a', 'b', 'c', 'd', 'e'];
+
+// 通過索引訪問
+console.log(arr[0]); // 'a'
+console.log(arr[arr.length - 1]); // 'e' (最後一個元素)
+
+// 使用 at() 方法 (ES2022)
+console.log(arr.at(0)); // 'a'
+console.log(arr.at(-1)); // 'e' (負數索引從末尾開始)
+
+// 修改元素
+arr[1] = 'B';
+console.log(arr); // ['a', 'B', 'c', 'd', 'e']
+
+// 檢查元素是否存在
+console.log(arr.includes('B')); // true
+console.log(arr.indexOf('c')); // 2
+console.log(arr.lastIndexOf('c')); // 2</code></pre>
+              </div>
+
+              <h3 class="lang-zh">基本陣列操作統整表</h3>
+              <h3 class="lang-en hidden">Basic Array Operations Summary Table</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">方法</th>
+                      <th class="lang-en hidden">Method</th>
+                      <th class="lang-zh">描述</th>
+                      <th class="lang-en hidden">Description</th>
+                      <th class="lang-zh">是否改變原陣列</th>
+                      <th class="lang-en hidden">Mutates Original</th>
+                      <th class="lang-zh">返回值</th>
+                      <th class="lang-en hidden">Return Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>push()</code></td>
+                      <td class="lang-zh">在末尾添加元素</td>
+                      <td class="lang-en hidden">Add element(s) to end</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">新長度</td>
+                      <td class="lang-en hidden">New length</td>
+                    </tr>
+                    <tr>
+                      <td><code>pop()</code></td>
+                      <td class="lang-zh">刪除末尾元素</td>
+                      <td class="lang-en hidden">Remove last element</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">被刪除的元素</td>
+                      <td class="lang-en hidden">Removed element</td>
+                    </tr>
+                    <tr>
+                      <td><code>unshift()</code></td>
+                      <td class="lang-zh">在開頭添加元素</td>
+                      <td class="lang-en hidden">Add element(s) to beginning</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">新長度</td>
+                      <td class="lang-en hidden">New length</td>
+                    </tr>
+                    <tr>
+                      <td><code>shift()</code></td>
+                      <td class="lang-zh">刪除開頭元素</td>
+                      <td class="lang-en hidden">Remove first element</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">被刪除的元素</td>
+                      <td class="lang-en hidden">Removed element</td>
+                    </tr>
+                    <tr>
+                      <td><code>splice()</code></td>
+                      <td class="lang-zh">在指定位置添加/刪除元素</td>
+                      <td class="lang-en hidden">Add/remove elements at specific position</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">被刪除元素組成的陣列</td>
+                      <td class="lang-en hidden">Array of removed elements</td>
+                    </tr>
+                    <tr>
+                      <td><code>slice()</code></td>
+                      <td class="lang-zh">提取部分元素</td>
+                      <td class="lang-en hidden">Extract portion of array</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td class="lang-zh">新陣列</td>
+                      <td class="lang-en hidden">New array</td>
+                    </tr>
+                    <tr>
+                      <td><code>indexOf()</code></td>
+                      <td class="lang-zh">查找元素索引</td>
+                      <td class="lang-en hidden">Find element index</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td class="lang-zh">索引或 -1</td>
+                      <td class="lang-en hidden">Index or -1</td>
+                    </tr>
+                    <tr>
+                      <td><code>includes()</code></td>
+                      <td class="lang-zh">檢查元素是否存在</td>
+                      <td class="lang-en hidden">Check if element exists</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td class="lang-zh">布爾值</td>
+                      <td class="lang-en hidden">Boolean</td>
+                    </tr>
+                    <tr>
+                      <td><code>concat()</code></td>
+                      <td class="lang-zh">合併陣列</td>
+                      <td class="lang-en hidden">Merge arrays</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td class="lang-zh">新陣列</td>
+                      <td class="lang-en hidden">New array</td>
+                    </tr>
+                    <tr>
+                      <td><code>join()</code></td>
+                      <td class="lang-zh">將陣列轉為字符串</td>
+                      <td class="lang-en hidden">Convert array to string</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td class="lang-zh">字符串</td>
+                      <td class="lang-en hidden">String</td>
+                    </tr>
+                    <tr>
+                      <td><code>reverse()</code></td>
+                      <td class="lang-zh">翻轉陣列</td>
+                      <td class="lang-en hidden">Reverse array</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">翻轉後的陣列</td>
+                      <td class="lang-en hidden">Reversed array</td>
+                    </tr>
+                    <tr>
+                      <td><code>sort()</code></td>
+                      <td class="lang-zh">排序陣列</td>
+                      <td class="lang-en hidden">Sort array</td>
+                      <td class="lang-zh">是</td>
+                      <td class="lang-en hidden">Yes</td>
+                      <td class="lang-zh">排序後的陣列</td>
+                      <td class="lang-en hidden">Sorted array</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 常見陣列操作 -->
+            <section id="common-operations">
+              <h2 class="lang-zh">常見陣列操作</h2>
+              <h2 class="lang-en hidden">Common Array Operations</h2>
+
+              <p class="lang-zh">
+                這些是現代 JavaScript 開發中最常用的高階陣列方法，多數遵循函數式編程的理念：
+              </p>
+              <p class="lang-en hidden">
+                These are the most commonly used higher-order array methods in modern JavaScript
+                development, most following functional programming principles:
+              </p>
+
+              <h3 class="lang-zh">迭代方法</h3>
+              <h3 class="lang-en hidden">Iteration Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>const numbers = [1, 2, 3, 4, 5];
+
+// forEach - 遍歷陣列（無返回值）
+numbers.forEach((num, index) => {
+    console.log(`索引 ${index}: ${num}`);
+});
+
+// map - 轉換每個元素並返回新陣列
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]
+
+// filter - 過濾符合條件的元素
+const evenNumbers = numbers.filter(num => num % 2 === 0);
+console.log(evenNumbers); // [2, 4]
+
+// find - 找到第一個符合條件的元素
+const firstEven = numbers.find(num => num % 2 === 0);
+console.log(firstEven); // 2
+
+// findIndex - 找到第一個符合條件元素的索引
+const firstEvenIndex = numbers.findIndex(num => num % 2 === 0);
+console.log(firstEvenIndex); // 1</code></pre>
+              </div>
+
+              <h3 class="lang-zh">歸約方法</h3>
+              <h3 class="lang-en hidden">Reduction Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>const numbers = [1, 2, 3, 4, 5];
+
+// reduce - 將陣列歸約為單一值
+const sum = numbers.reduce((acc, num) => acc + num, 0);
+console.log(sum); // 15
+
+const product = numbers.reduce((acc, num) => acc * num, 1);
+console.log(product); // 120
+
+// reduceRight - 從右到左歸約
+const rightSum = numbers.reduceRight((acc, num) => acc + num, 0);
+console.log(rightSum); // 15
+
+// 使用 reduce 進行更複雜的操作
+const people = [
+    { name: 'Alice', age: 25 },
+    { name: 'Bob', age: 30 },
+    { name: 'Charlie', age: 25 }
+];
+
+// 按年齡分組
+const groupedByAge = people.reduce((acc, person) => {
+    const age = person.age;
+    if (!acc[age]) {
+        acc[age] = [];
+    }
+    acc[age].push(person);
+    return acc;
+}, {});
+
+console.log(groupedByAge);
+// { 25: [{name: 'Alice', age: 25}, {name: 'Charlie', age: 25}], 30: [{name: 'Bob', age: 30}] }</code></pre>
+              </div>
+
+              <h3 class="lang-zh">條件檢查方法</h3>
+              <h3 class="lang-en hidden">Conditional Check Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>const numbers = [2, 4, 6, 8, 10];
+const mixedNumbers = [1, 2, 3, 4, 5];
+
+// every - 檢查所有元素是否都符合條件
+const allEven = numbers.every(num => num % 2 === 0);
+console.log(allEven); // true
+
+const allEvenMixed = mixedNumbers.every(num => num % 2 === 0);
+console.log(allEvenMixed); // false
+
+// some - 檢查是否至少有一個元素符合條件
+const hasEven = mixedNumbers.some(num => num % 2 === 0);
+console.log(hasEven); // true
+
+const hasNegative = numbers.some(num => num < 0);
+console.log(hasNegative); // false</code></pre>
+              </div>
+
+              <h3 class="lang-zh">扁平化方法</h3>
+              <h3 class="lang-en hidden">Flattening Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>// flat() - 扁平化陣列
+const nested = [1, [2, 3], [4, [5, 6]]];
+const flattened1 = nested.flat(); // [1, 2, 3, 4, [5, 6]]
+const flattened2 = nested.flat(2); // [1, 2, 3, 4, 5, 6]
+const flattenedAll = nested.flat(Infinity); // 完全扁平化
+
+// flatMap() - 先 map 再 flat
+const words = ['hello world', 'foo bar'];
+const allWords = words.flatMap(str => str.split(' '));
+console.log(allWords); // ['hello', 'world', 'foo', 'bar']
+
+// 等同於
+const allWords2 = words.map(str => str.split(' ')).flat();
+console.log(allWords2); // ['hello', 'world', 'foo', 'bar']</code></pre>
+              </div>
+
+              <h3 class="lang-zh">常見陣列操作統整表</h3>
+              <h3 class="lang-en hidden">Common Array Operations Summary Table</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">方法</th>
+                      <th class="lang-en hidden">Method</th>
+                      <th class="lang-zh">用途</th>
+                      <th class="lang-en hidden">Purpose</th>
+                      <th class="lang-zh">返回值</th>
+                      <th class="lang-en hidden">Return Value</th>
+                      <th class="lang-zh">是否改變原陣列</th>
+                      <th class="lang-en hidden">Mutates Original</th>
+                      <th class="lang-zh">時間複雜度</th>
+                      <th class="lang-en hidden">Time Complexity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>forEach()</code></td>
+                      <td class="lang-zh">遍歷陣列執行函數</td>
+                      <td class="lang-en hidden">Iterate and execute function</td>
+                      <td><code>undefined</code></td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>map()</code></td>
+                      <td class="lang-zh">轉換每個元素</td>
+                      <td class="lang-en hidden">Transform each element</td>
+                      <td class="lang-zh">新陣列</td>
+                      <td class="lang-en hidden">New array</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>filter()</code></td>
+                      <td class="lang-zh">過濾符合條件的元素</td>
+                      <td class="lang-en hidden">Filter elements by condition</td>
+                      <td class="lang-zh">新陣列</td>
+                      <td class="lang-en hidden">New array</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>reduce()</code></td>
+                      <td class="lang-zh">歸約為單一值</td>
+                      <td class="lang-en hidden">Reduce to single value</td>
+                      <td class="lang-zh">累積值</td>
+                      <td class="lang-en hidden">Accumulated value</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>find()</code></td>
+                      <td class="lang-zh">找到第一個符合條件的元素</td>
+                      <td class="lang-en hidden">Find first matching element</td>
+                      <td class="lang-zh">元素或 undefined</td>
+                      <td class="lang-en hidden">Element or undefined</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>findIndex()</code></td>
+                      <td class="lang-zh">找到第一個符合條件元素的索引</td>
+                      <td class="lang-en hidden">Find index of first matching element</td>
+                      <td class="lang-zh">索引或 -1</td>
+                      <td class="lang-en hidden">Index or -1</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>every()</code></td>
+                      <td class="lang-zh">檢查所有元素是否符合條件</td>
+                      <td class="lang-en hidden">Check if all elements match condition</td>
+                      <td class="lang-zh">布爾值</td>
+                      <td class="lang-en hidden">Boolean</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>some()</code></td>
+                      <td class="lang-zh">檢查是否有元素符合條件</td>
+                      <td class="lang-en hidden">Check if any element matches condition</td>
+                      <td class="lang-zh">布爾值</td>
+                      <td class="lang-en hidden">Boolean</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>flat()</code></td>
+                      <td class="lang-zh">扁平化陣列</td>
+                      <td class="lang-en hidden">Flatten array</td>
+                      <td class="lang-zh">新陣列</td>
+                      <td class="lang-en hidden">New array</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                    <tr>
+                      <td><code>flatMap()</code></td>
+                      <td class="lang-zh">映射後扁平化</td>
+                      <td class="lang-en hidden">Map then flatten</td>
+                      <td class="lang-zh">新陣列</td>
+                      <td class="lang-en hidden">New array</td>
+                      <td class="lang-zh">否</td>
+                      <td class="lang-en hidden">No</td>
+                      <td>O(n)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 最佳實踐技巧 -->
+            <section id="best-practices">
+              <h2 class="lang-zh">最佳實踐技巧</h2>
+              <h2 class="lang-en hidden">Best Practices</h2>
+
+              <p class="lang-zh">以下是在實際開發中使用陣列操作的最佳實踐和高級技巧：</p>
+              <p class="lang-en hidden">
+                Below are best practices and advanced techniques for using array operations in real
+                development:
+              </p>
+
+              <h3 class="lang-zh">鏈式調用</h3>
+              <h3 class="lang-en hidden">Method Chaining</h3>
+
+              <div class="mockup-code">
+                <pre><code>const users = [
+    { name: 'Alice', age: 25, active: true },
+    { name: 'Bob', age: 30, active: false },
+    { name: 'Charlie', age: 35, active: true },
+    { name: 'David', age: 20, active: true }
+];
+
+// 鏈式調用：過濾活躍用戶 -> 按年齡排序 -> 取名字 -> 轉為大寫
+const result = users
+    .filter(user => user.active)
+    .sort((a, b) => a.age - b.age)
+    .map(user => user.name)
+    .map(name => name.toUpperCase());
+
+console.log(result); // ['DAVID', 'ALICE', 'CHARLIE']</code></pre>
+              </div>
+
+              <h3 class="lang-zh">避免變異操作</h3>
+              <h3 class="lang-en hidden">Avoiding Mutating Operations</h3>
+
+              <div class="mockup-code">
+                <pre><code>const originalArray = [1, 2, 3, 4, 5];
+
+// ❌ 不好的做法 - 變異原陣列
+originalArray.push(6);
+originalArray.sort();
+
+// ✅ 好的做法 - 創建新陣列
+const newArray = [...originalArray, 6];
+const sortedArray = [...originalArray].sort();
+
+// 或使用不變性的方法
+const addedArray = originalArray.concat(6);
+const sortedArray2 = originalArray.slice().sort();</code></pre>
+              </div>
+
+              <h3 class="lang-zh">性能優化技巧</h3>
+              <h3 class="lang-en hidden">Performance Optimization Tips</h3>
+
+              <div class="mockup-code">
+                <pre><code>const largeArray = Array.from({length: 100000}, (_, i) => i);
+
+// ✅ 使用 for 循環處理大量數據（性能更好）
+function sumWithFor(arr) {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+// ✅ 使用 reduce 處理中等數據（可讀性更好）
+function sumWithReduce(arr) {
+    return arr.reduce((sum, num) => sum + num, 0);
+}
+
+// ✅ 提前退出的優化
+function findFirstEven(arr) {
+    // 使用 find 會在找到第一個符合條件的元素時提前退出
+    return arr.find(num => num % 2 === 0);
+}
+
+// ❌ 避免不必要的鏈式調用
+// 每次調用都會創建新陣列，消耗記憶體
+const inefficient = largeArray
+    .map(x => x * 2)
+    .map(x => x + 1)
+    .filter(x => x > 100);
+
+// ✅ 合併操作
+const efficient = largeArray
+    .map(x => x * 2 + 1)
+    .filter(x => x > 100);</code></pre>
+              </div>
+
+              <h3 class="lang-zh">處理空值和邊界情況</h3>
+              <h3 class="lang-en hidden">Handling Null Values and Edge Cases</h3>
+
+              <div class="mockup-code">
+                <pre><code>const mixedArray = [1, null, 2, undefined, 3, '', 0, false, 4];
+
+// 過濾假值
+const truthyValues = mixedArray.filter(Boolean);
+console.log(truthyValues); // [1, 2, 3, 4]
+
+// 過濾 null 和 undefined
+const definedValues = mixedArray.filter(item => item != null);
+console.log(definedValues); // [1, 2, 3, '', 0, false, 4]
+
+// 安全的陣列操作
+function safeArrayOperation(arr, operation) {
+    if (!Array.isArray(arr) || arr.length === 0) {
+        return [];
+    }
+    return arr.map(operation);
+}
+
+// 使用 Optional Chaining 和 Nullish Coalescing
+const users = [
+    { profile: { name: 'Alice' } },
+    { profile: null },
+    {}
+];
+
+const names = users.map(user => user.profile?.name ?? 'Unknown');
+console.log(names); // ['Alice', 'Unknown', 'Unknown']</code></pre>
+              </div>
+
+              <h3 class="lang-zh">常用的組合模式</h3>
+              <h3 class="lang-en hidden">Common Combination Patterns</h3>
+
+              <div class="mockup-code">
+                <pre><code>const data = [
+    { category: 'A', value: 10 },
+    { category: 'B', value: 20 },
+    { category: 'A', value: 30 },
+    { category: 'C', value: 15 },
+    { category: 'B', value: 25 }
+];
+
+// 1. 去重陣列
+const uniqueArray = [...new Set([1, 2, 2, 3, 3, 4])];
+console.log(uniqueArray); // [1, 2, 3, 4]
+
+// 2. 按屬性分組
+const groupBy = (array, key) => {
+    return array.reduce((groups, item) => {
+        const group = item[key];
+        groups[group] = groups[group] || [];
+        groups[group].push(item);
+        return groups;
+    }, {});
+};
+
+const grouped = groupBy(data, 'category');
+console.log(grouped);
+
+// 3. 統計每個類別的總和
+const categoryTotals = Object.entries(grouped)
+    .map(([category, items]) => ({
+        category,
+        total: items.reduce((sum, item) => sum + item.value, 0)
+    }));
+
+console.log(categoryTotals);
+
+// 4. 陣列交集和差集
+const arr1 = [1, 2, 3, 4, 5];
+const arr2 = [3, 4, 5, 6, 7];
+
+const intersection = arr1.filter(x => arr2.includes(x));
+const difference = arr1.filter(x => !arr2.includes(x));
+const union = [...new Set([...arr1, ...arr2])];
+
+console.log('交集:', intersection); // [3, 4, 5]
+console.log('差集:', difference);   // [1, 2]
+console.log('聯集:', union);        // [1, 2, 3, 4, 5, 6, 7]</code></pre>
+              </div>
+
+              <h3 class="lang-zh">最佳實踐技巧統整表</h3>
+              <h3 class="lang-en hidden">Best Practices Summary Table</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">技巧</th>
+                      <th class="lang-en hidden">Technique</th>
+                      <th class="lang-zh">說明</th>
+                      <th class="lang-en hidden">Description</th>
+                      <th class="lang-zh">使用場景</th>
+                      <th class="lang-en hidden">Use Case</th>
+                      <th class="lang-zh">範例</th>
+                      <th class="lang-en hidden">Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="lang-zh">方法鏈</td>
+                      <td class="lang-en hidden">Method Chaining</td>
+                      <td class="lang-zh">連續調用多個陣列方法</td>
+                      <td class="lang-en hidden">Chain multiple array methods</td>
+                      <td class="lang-zh">數據轉換管道</td>
+                      <td class="lang-en hidden">Data transformation pipeline</td>
+                      <td><code>arr.filter().map().sort()</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">不變性</td>
+                      <td class="lang-en hidden">Immutability</td>
+                      <td class="lang-zh">避免修改原始陣列</td>
+                      <td class="lang-en hidden">Avoid modifying original array</td>
+                      <td class="lang-zh">函數式編程</td>
+                      <td class="lang-en hidden">Functional programming</td>
+                      <td><code>[...arr, newItem]</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">提前退出</td>
+                      <td class="lang-en hidden">Early Exit</td>
+                      <td class="lang-zh">找到結果後立即停止</td>
+                      <td class="lang-en hidden">Stop immediately after finding result</td>
+                      <td class="lang-zh">搜索和檢查</td>
+                      <td class="lang-en hidden">Search and validation</td>
+                      <td><code>find(), some(), every()</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">空值處理</td>
+                      <td class="lang-en hidden">Null Handling</td>
+                      <td class="lang-zh">安全處理空值和未定義值</td>
+                      <td class="lang-en hidden">Safely handle null and undefined</td>
+                      <td class="lang-zh">數據清理</td>
+                      <td class="lang-en hidden">Data cleaning</td>
+                      <td><code>item?.prop ?? defaultValue</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">去重</td>
+                      <td class="lang-en hidden">Deduplication</td>
+                      <td class="lang-zh">移除重複元素</td>
+                      <td class="lang-en hidden">Remove duplicate elements</td>
+                      <td class="lang-zh">數據去重</td>
+                      <td class="lang-en hidden">Data deduplication</td>
+                      <td><code>[...new Set(arr)]</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">分組</td>
+                      <td class="lang-en hidden">Grouping</td>
+                      <td class="lang-zh">按屬性將元素分組</td>
+                      <td class="lang-en hidden">Group elements by property</td>
+                      <td class="lang-zh">數據分析</td>
+                      <td class="lang-en hidden">Data analysis</td>
+                      <td><code>reduce + grouping logic</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">集合操作</td>
+                      <td class="lang-en hidden">Set Operations</td>
+                      <td class="lang-zh">交集、聯集、差集</td>
+                      <td class="lang-en hidden">Intersection, union, difference</td>
+                      <td class="lang-zh">數據比較</td>
+                      <td class="lang-en hidden">Data comparison</td>
+                      <td><code>filter + includes</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">性能優化</td>
+                      <td class="lang-en hidden">Performance</td>
+                      <td class="lang-zh">選擇適合的方法和結構</td>
+                      <td class="lang-en hidden">Choose appropriate methods and structures</td>
+                      <td class="lang-zh">大數據處理</td>
+                      <td class="lang-en hidden">Large data processing</td>
+                      <td><code>for loops vs methods</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">類型檢查</td>
+                      <td class="lang-en hidden">Type Checking</td>
+                      <td class="lang-zh">確保操作對象是陣列</td>
+                      <td class="lang-en hidden">Ensure object is an array</td>
+                      <td class="lang-zh">防御性編程</td>
+                      <td class="lang-en hidden">Defensive programming</td>
+                      <td><code>Array.isArray()</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">函數組合</td>
+                      <td class="lang-en hidden">Function Composition</td>
+                      <td class="lang-zh">將多個操作組合成可重用函數</td>
+                      <td class="lang-en hidden">Combine operations into reusable functions</td>
+                      <td class="lang-zh">代碼復用</td>
+                      <td class="lang-en hidden">Code reuse</td>
+                      <td><code>const process = pipe(filter, map, sort)</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 性能優化建議 -->
+            <section id="performance-tips">
+              <h2 class="lang-zh">性能優化建議</h2>
+              <h2 class="lang-en hidden">Performance Optimization Tips</h2>
+
+              <div class="alert alert-warning bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    性能優化應該在確實需要時進行，過度優化可能會犧牲代碼的可讀性和可維護性。
+                  </span>
+                  <span class="lang-en hidden">
+                    Performance optimization should be done when actually needed. Over-optimization
+                    may sacrifice code readability and maintainability.
+                  </span>
+                </div>
+              </div>
+
+              <h3 class="lang-zh">何時使用 for 循環 vs 陣列方法</h3>
+              <h3 class="lang-en hidden">When to Use for Loops vs Array Methods</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 大量數據處理 - 使用 for 循環
+function processLargeDataset(data) {
+    if (data.length > 100000) {
+        const result = [];
+        for (let i = 0; i < data.length; i++) {
+            if (data[i] > 0) {
+                result.push(data[i] * 2);
+            }
+        }
+        return result;
+    } else {
+        // 中小量數據 - 使用陣列方法
+        return data
+            .filter(item => item > 0)
+            .map(item => item * 2);
+    }
+}
+
+// 需要索引的情況 - 使用 for 循環
+function findPairSum(arr, target) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+            if (arr[i] + arr[j] === target) {
+                return [i, j];
+            }
+        }
+    }
+    return null;
+}</code></pre>
+              </div>
+
+              <h3 class="lang-zh">記憶體效率優化</h3>
+              <h3 class="lang-en hidden">Memory Efficiency Optimization</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ❌ 創建多個中間陣列
+const inefficient = largeArray
+    .map(x => x * 2)
+    .filter(x => x > 100)
+    .map(x => x + 1);
+
+// ✅ 使用單次遍歷
+const efficient = largeArray.reduce((acc, x) => {
+    const doubled = x * 2;
+    if (doubled > 100) {
+        acc.push(doubled + 1);
+    }
+    return acc;
+}, []);
+
+// ✅ 使用 Generator 處理大數據集
+function* processLargeData(data) {
+    for (const item of data) {
+        if (item > 0) {
+            yield item * 2;
+        }
+    }
+}
+
+// 使用時不會一次性載入所有數據到記憶體
+const processor = processLargeData(hugeArray);
+for (const processed of processor) {
+    console.log(processed);
+}</code></pre>
+              </div>
+            </section>
+
+            <!-- 總結 -->
+            <section id="summary">
+              <h2 class="lang-zh">總結</h2>
+              <h2 class="lang-en hidden">Summary</h2>
+
+              <p class="lang-zh">
+                JavaScript 陣列操作是現代前端開發的核心技能。通過掌握這些方法和最佳實踐，您可以：
+              </p>
+              <p class="lang-en hidden">
+                JavaScript array operations are core skills in modern frontend development. By
+                mastering these methods and best practices, you can:
+              </p>
+
+              <ul>
+                <li class="lang-zh">編寫更簡潔、易讀的代碼</li>
+                <li class="lang-en hidden">Write more concise and readable code</li>
+
+                <li class="lang-zh">提高開發效率和代碼質量</li>
+                <li class="lang-en hidden">Improve development efficiency and code quality</li>
+
+                <li class="lang-zh">實現複雜的數據轉換和處理</li>
+                <li class="lang-en hidden">
+                  Implement complex data transformations and processing
+                </li>
+
+                <li class="lang-zh">遵循函數式編程的最佳實踐</li>
+                <li class="lang-en hidden">Follow functional programming best practices</li>
+
+                <li class="lang-zh">優化應用性能和記憶體使用</li>
+                <li class="lang-en hidden">Optimize application performance and memory usage</li>
+              </ul>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    記住，選擇正確的方法比記住所有方法更重要。根據具體需求和性能要求來選擇最合適的陣列操作方法。
+                  </span>
+                  <span class="lang-en hidden">
+                    Remember, choosing the right method is more important than memorizing all
+                    methods. Select the most appropriate array operation method based on specific
+                    requirements and performance needs.
+                  </span>
+                </div>
+              </div>
+
+              <p class="lang-zh">
+                繼續實踐和探索這些方法的組合使用，您將能夠處理各種複雜的數據操作需求，成為更優秀的
+                JavaScript 開發者。
+              </p>
+              <p class="lang-en hidden">
+                Continue practicing and exploring the combination of these methods, and you'll be
+                able to handle various complex data operation requirements, becoming a better
+                JavaScript developer.
+              </p>
+            </section>
+          </article>
+
+          <!-- 相關文章 -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">
+              <span class="lang-zh">相關文章</span>
+              <span class="lang-en hidden">Related Articles</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="functions.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">JavaScript 函數進階</span>
+                    <span class="lang-en hidden">Advanced JavaScript Functions</span>
+                  </h4>
+                  <p class="lang-zh">深入了解 JavaScript 函數的高級特性和用法</p>
+                  <p class="lang-en hidden">
+                    Deep dive into advanced JavaScript function features and usage
+                  </p>
+                </div>
+              </a>
+              <a href="es6.html" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">ES6+ 新特性</span>
+                    <span class="lang-en hidden">ES6+ New Features</span>
+                  </h4>
+                  <p class="lang-zh">探索現代 JavaScript 的新特性和語法</p>
+                  <p class="lang-en hidden">Explore new features and syntax in modern JavaScript</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 開發筆記 | JavaScript Development Notes</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 718.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../index.html" class="lang-zh">首頁</a>
+          <a href="../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li>JavaScript</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">JavaScript 筆記目錄</span>
+                  <span class="lang-en hidden">JavaScript Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html" class="active">JavaScript 概覽</a></li>
+                  <li>
+                    <a href="arrays.html" class="lang-zh">陣列操作指南</a>
+                    <a href="arrays.html" class="lang-en hidden">Array Operations Guide</a>
+                  </li>
+                  <li>
+                    <a href="functions.html" class="lang-zh">函數進階</a>
+                    <a href="functions.html" class="lang-en hidden">Advanced Functions</a>
+                  </li>
+                  <li>
+                    <a href="async.html" class="lang-zh">異步編程</a>
+                    <a href="async.html" class="lang-en hidden">Async Programming</a>
+                  </li>
+                  <li>
+                    <a href="es6.html" class="lang-zh">ES6+ 特性</a>
+                    <a href="es6.html" class="lang-en hidden">ES6+ Features</a>
+                  </li>
+                  <li>
+                    <a href="dom.html" class="lang-zh">DOM 操作</a>
+                    <a href="dom.html" class="lang-en hidden">DOM Manipulation</a>
+                  </li>
+                  <li>
+                    <a href="objects.html" class="lang-zh">對象與原型</a>
+                    <a href="objects.html" class="lang-en hidden">Objects & Prototypes</a>
+                  </li>
+                  <li>
+                    <a href="modules.html" class="lang-zh">模塊系統</a>
+                    <a href="modules.html" class="lang-en hidden">Module System</a>
+                  </li>
+                  <li>
+                    <a href="performance.html" class="lang-zh">性能優化</a>
+                    <a href="performance.html" class="lang-en hidden">Performance Optimization</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <h1 class="text-4xl font-bold mb-6">JavaScript</h1>
+
+          <div class="alert bg-base-200 mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="stroke-info shrink-0 w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <div>
+              <span class="lang-zh">
+                JavaScript 是現代網頁開發的核心語言，也是全端開發者的必備技能。
+              </span>
+              <span class="lang-en hidden">
+                JavaScript is the core language of modern web development and an essential skill for
+                full-stack developers.
+              </span>
+            </div>
+          </div>
+
+          <!-- JavaScript 簡介 -->
+          <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">JavaScript 簡介</span>
+              <span class="lang-en hidden">Introduction to JavaScript</span>
+            </h2>
+
+            <div class="prose max-w-none">
+              <p class="lang-zh">
+                JavaScript
+                是一種高級、解釋型的編程語言，最初設計用於為網頁添加交互性。如今，JavaScript
+                已經發展成為一種多功能的編程語言，不僅可以用於前端開發，還可以用於後端開發（Node.js）、移動應用開發、桌面應用開發等領域。
+              </p>
+              <p class="lang-en hidden">
+                JavaScript is a high-level, interpreted programming language originally designed to
+                add interactivity to web pages. Today, JavaScript has evolved into a versatile
+                programming language that can be used not only for frontend development but also for
+                backend development (Node.js), mobile app development, desktop app development, and
+                more.
+              </p>
+
+              <h3 class="lang-zh">JavaScript 的特點</h3>
+              <h3 class="lang-en hidden">Features of JavaScript</h3>
+
+              <ul>
+                <li class="lang-zh">
+                  <strong>動態類型</strong>
+                  - 變數類型在運行時確定
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Dynamic Typing</strong>
+                  - Variable types are determined at runtime
+                </li>
+
+                <li class="lang-zh">
+                  <strong>原型繼承</strong>
+                  - 基於原型鏈的物件導向編程
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Prototype Inheritance</strong>
+                  - Object-oriented programming based on prototype chain
+                </li>
+
+                <li class="lang-zh">
+                  <strong>函數式編程</strong>
+                  - 支持高階函數和閉包
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Functional Programming</strong>
+                  - Supports higher-order functions and closures
+                </li>
+
+                <li class="lang-zh">
+                  <strong>事件驅動</strong>
+                  - 異步編程和事件處理
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Event-Driven</strong>
+                  - Asynchronous programming and event handling
+                </li>
+
+                <li class="lang-zh">
+                  <strong>跨平台</strong>
+                  - 可在瀏覽器、服務器和移動設備運行
+                </li>
+                <li class="lang-en hidden">
+                  <strong>Cross-Platform</strong>
+                  - Runs on browsers, servers, and mobile devices
+                </li>
+              </ul>
+
+              <h3 class="lang-zh">JavaScript 的應用領域</h3>
+              <h3 class="lang-en hidden">Application Areas of JavaScript</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">前端開發</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Frontend Development</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• 網頁交互效果</li>
+                      <li class="lang-en hidden">• Web interactivity</li>
+                      <li class="lang-zh">• SPA 單頁應用</li>
+                      <li class="lang-en hidden">• Single Page Applications</li>
+                      <li class="lang-zh">• PWA 漸進式應用</li>
+                      <li class="lang-en hidden">• Progressive Web Apps</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">後端開發</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Backend Development</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• Node.js 服務器</li>
+                      <li class="lang-en hidden">• Node.js servers</li>
+                      <li class="lang-zh">• API 開發</li>
+                      <li class="lang-en hidden">• API development</li>
+                      <li class="lang-zh">• 微服務架構</li>
+                      <li class="lang-en hidden">• Microservices architecture</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">移動開發</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Mobile Development</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• React Native</li>
+                      <li class="lang-en hidden">• React Native</li>
+                      <li class="lang-zh">• Ionic Framework</li>
+                      <li class="lang-en hidden">• Ionic Framework</li>
+                      <li class="lang-zh">• Cordova/PhoneGap</li>
+                      <li class="lang-en hidden">• Cordova/PhoneGap</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-sm">
+                  <div class="card-body">
+                    <h4 class="card-title text-lg lang-zh">桌面應用</h4>
+                    <h4 class="card-title text-lg lang-en hidden">Desktop Applications</h4>
+                    <ul class="text-sm">
+                      <li class="lang-zh">• Electron 應用</li>
+                      <li class="lang-en hidden">• Electron apps</li>
+                      <li class="lang-zh">• Tauri 應用</li>
+                      <li class="lang-en hidden">• Tauri apps</li>
+                      <li class="lang-zh">• NW.js 應用</li>
+                      <li class="lang-en hidden">• NW.js apps</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="divider"></div>
+
+          <!-- 最新筆記 -->
+          <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">最新筆記</span>
+              <span class="lang-en hidden">Latest Notes</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- 筆記卡片 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">JavaScript 陣列操作完整指南</h3>
+                  <p class="text-sm opacity-70">2025-05-22</p>
+                  <p class="lang-zh">從基本操作到高級技巧的完整陣列操作指南</p>
+                  <p class="lang-en hidden">
+                    Complete array operations guide from basic to advanced techniques
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="arrays.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">ES6+ 現代 JavaScript 特性</h3>
+                  <p class="text-sm opacity-70">2025-05-20</p>
+                  <p class="lang-zh">探索現代 JavaScript 的新特性和語法糖</p>
+                  <p class="lang-en hidden">
+                    Explore new features and syntax sugar in modern JavaScript
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="es6.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">異步編程深度解析</h3>
+                  <p class="text-sm opacity-70">2025-05-18</p>
+                  <p class="lang-zh">Promise、async/await 和異步編程模式詳解</p>
+                  <p class="lang-en hidden">
+                    Detailed explanation of Promise, async/await and async programming patterns
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="async.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">JavaScript 函數進階技巧</h3>
+                  <p class="text-sm opacity-70">2025-05-15</p>
+                  <p class="lang-zh">高階函數、閉包和函數式編程實踐</p>
+                  <p class="lang-en hidden">
+                    Higher-order functions, closures and functional programming practices
+                  </p>
+                  <div class="card-actions justify-end">
+                    <a href="functions.html" class="btn btn-sm btn-primary">
+                      <span class="lang-zh">閱讀更多</span>
+                      <span class="lang-en hidden">Read More</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="divider"></div>
+
+          <!-- 熱門主題 -->
+          <section>
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">熱門主題</span>
+              <span class="lang-en hidden">Popular Topics</span>
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <!-- 基礎語法 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">基礎語法</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">Variables</span>
+                    <span class="badge badge-primary">Functions</span>
+                    <span class="badge badge-primary">Objects</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="#basics" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 陣列操作 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">陣列操作</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">map()</span>
+                    <span class="badge badge-primary">filter()</span>
+                    <span class="badge badge-primary">reduce()</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="arrays.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 異步編程 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">異步編程</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">Promise</span>
+                    <span class="badge badge-primary">async/await</span>
+                    <span class="badge badge-primary">Fetch API</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="async.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ES6+ 特性 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">ES6+ 特性</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">Arrow Functions</span>
+                    <span class="badge badge-primary">Destructuring</span>
+                    <span class="badge badge-primary">Modules</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="es6.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DOM 操作 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">DOM 操作</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">querySelector</span>
+                    <span class="badge badge-primary">Events</span>
+                    <span class="badge badge-primary">Manipulation</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="dom.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 性能優化 -->
+              <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
+                <div class="card-body">
+                  <h3 class="card-title">性能優化</h3>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span class="badge badge-primary">Debouncing</span>
+                    <span class="badge badge-primary">Throttling</span>
+                    <span class="badge badge-primary">Memoization</span>
+                  </div>
+                  <div class="card-actions justify-end mt-4">
+                    <a href="performance.html" class="btn btn-sm btn-outline">
+                      <span class="lang-zh">查看全部</span>
+                      <span class="lang-en hidden">View All</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 快速開始 -->
+          <section class="mt-10">
+            <h2 class="text-2xl font-semibold mb-4">
+              <span class="lang-zh">快速開始</span>
+              <span class="lang-en hidden">Quick Start</span>
+            </h2>
+
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title lang-zh">JavaScript 基本語法</h3>
+                <h3 class="card-title lang-en hidden">JavaScript Basic Syntax</h3>
+
+                <div class="mockup-code">
+                  <pre><code>// 變數宣告
+let name = 'JavaScript';
+const version = 'ES2024';
+var isAwesome = true;
+
+// 函數定義
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+// 箭頭函數
+const add = (a, b) => a + b;
+
+// 物件與陣列
+const person = {
+    name: 'Alice',
+    age: 30,
+    skills: ['JavaScript', 'React', 'Node.js']
+};
+
+// 解構賦值
+const { name: personName, skills } = person;
+const [firstSkill, ...otherSkills] = skills;
+
+// 異步操作
+async function fetchData() {
+    try {
+        const response = await fetch('/api/data');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}</code></pre>
+                </div>
+
+                <p class="mt-4 lang-zh">
+                  這是一個 JavaScript
+                  的基本語法示例，涵蓋了變數宣告、函數定義、物件操作和異步編程等核心概念。
+                </p>
+                <p class="mt-4 lang-en hidden">
+                  This is a basic JavaScript syntax example covering core concepts such as variable
+                  declaration, function definition, object manipulation, and asynchronous
+                  programming.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>

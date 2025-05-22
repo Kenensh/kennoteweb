@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jQuery 選擇器詳解 | jQuery Selectors Guide</title>
+    <!-- Tailwind CSS 和 DaisyUI CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 自訂 Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        daisyui: {
+          themes: ["light", "dark"],
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
+    <!-- 導航欄 -->
+    <nav class="navbar bg-base-100 shadow-sm sticky top-0 z-10">
+      <div class="flex justify-center w-full">
+        <div class="flex gap-2">
+          <a href="../../frontend/index.html" class="btn btn-sm">
+            <span class="lang-zh">前端技術</span>
+            <span class="lang-en hidden">Frontend</span>
+          </a>
+          <a href="../../backend/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">後端技術</span>
+            <span class="lang-en hidden">Backend</span>
+          </a>
+          <a href="../../ui/index.html" class="btn btn-sm btn-ghost">UI</a>
+          <a href="../../figma/index.html" class="btn btn-sm btn-ghost">Figma</a>
+          <a href="../../tools/index.html" class="btn btn-sm btn-ghost">
+            <span class="lang-zh">工具</span>
+            <span class="lang-en hidden">Tools</span>
+          </a>
+          <a href="../../ai/index.html" class="btn btn-sm btn-ghost">AI</a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <!-- 語言切換 -->
+        <button id="langToggle" class="btn btn-ghost">
+          <span id="langDisplay">中/EN</span>
+        </button>
+        <!-- 主題切換 -->
+        <button id="themeToggle" class="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-light"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 theme-dark hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 718.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 麵包屑導航 -->
+    <div class="text-sm breadcrumbs bg-base-200 p-4">
+      <ul>
+        <li>
+          <a href="../../../index.html" class="lang-zh">首頁</a>
+          <a href="../../../index.html" class="lang-en hidden">Home</a>
+        </li>
+        <li>
+          <a href="../../frontend/index.html" class="lang-zh">前端技術</a>
+          <a href="../../frontend/index.html" class="lang-en hidden">Frontend</a>
+        </li>
+        <li><a href="index.html">jQuery</a></li>
+        <li class="lang-zh">選擇器詳解</li>
+        <li class="lang-en hidden">Selectors Guide</li>
+      </ul>
+    </div>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- 側邊欄 -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-20">
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h2 class="text-xl font-bold mb-4">
+                  <span class="lang-zh">jQuery 筆記目錄</span>
+                  <span class="lang-en hidden">jQuery Contents</span>
+                </h2>
+                <ul class="menu bg-base-200 rounded-box">
+                  <li><a href="index.html">jQuery 概覽</a></li>
+                  <li>
+                    <a href="basics.html" class="lang-zh">jQuery 基礎</a>
+                    <a href="basics.html" class="lang-en hidden">jQuery Basics</a>
+                  </li>
+                  <li>
+                    <a href="selectors.html" class="active lang-zh">選擇器詳解</a>
+                    <a href="selectors.html" class="active lang-en hidden">Selectors Guide</a>
+                  </li>
+                  <li>
+                    <a href="events.html" class="lang-zh">事件處理</a>
+                    <a href="events.html" class="lang-en hidden">Event Handling</a>
+                  </li>
+                  <li>
+                    <a href="ajax.html" class="lang-zh">AJAX 操作</a>
+                    <a href="ajax.html" class="lang-en hidden">AJAX Operations</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="lg:col-span-3">
+          <article class="prose max-w-none">
+            <header class="mb-8 not-prose">
+              <h1 class="text-4xl font-bold mb-2">
+                <span class="lang-zh">jQuery 選擇器完整詳解</span>
+                <span class="lang-en hidden">Complete Guide to jQuery Selectors</span>
+              </h1>
+              <div class="flex items-center gap-4 text-sm opacity-70 mb-4">
+                <time datetime="2025-05-22">2025-05-22</time>
+                <span>|</span>
+                <span class="badge badge-outline">jQuery</span>
+                <span class="badge badge-outline">Selectors</span>
+                <span class="badge badge-outline">CSS</span>
+              </div>
+            </header>
+
+            <!-- 文章目錄 -->
+            <div class="card bg-base-200 mb-8">
+              <div class="card-body">
+                <h2 class="card-title text-xl mb-2">
+                  <span class="lang-zh">目錄</span>
+                  <span class="lang-en hidden">Contents</span>
+                </h2>
+                <ul class="lang-zh">
+                  <li><a href="#introduction">選擇器介紹</a></li>
+                  <li><a href="#basic-selectors">基本選擇器</a></li>
+                  <li><a href="#hierarchy-selectors">層級選擇器</a></li>
+                  <li><a href="#filter-selectors">過濾選擇器</a></li>
+                  <li><a href="#attribute-selectors">屬性選擇器</a></li>
+                  <li><a href="#form-selectors">表單選擇器</a></li>
+                  <li><a href="#custom-selectors">自定義選擇器</a></li>
+                  <li><a href="#performance-tips">性能優化技巧</a></li>
+                  <li><a href="#summary">總結</a></li>
+                </ul>
+                <ul class="lang-en hidden">
+                  <li><a href="#introduction">Selector Introduction</a></li>
+                  <li><a href="#basic-selectors">Basic Selectors</a></li>
+                  <li><a href="#hierarchy-selectors">Hierarchy Selectors</a></li>
+                  <li><a href="#filter-selectors">Filter Selectors</a></li>
+                  <li><a href="#attribute-selectors">Attribute Selectors</a></li>
+                  <li><a href="#form-selectors">Form Selectors</a></li>
+                  <li><a href="#custom-selectors">Custom Selectors</a></li>
+                  <li><a href="#performance-tips">Performance Tips</a></li>
+                  <li><a href="#summary">Summary</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 選擇器介紹 -->
+            <section id="introduction">
+              <h2 class="lang-zh">選擇器介紹</h2>
+              <h2 class="lang-en hidden">Selector Introduction</h2>
+              <p class="lang-zh">
+                jQuery 選擇器是 jQuery 的核心功能之一，它基於 CSS
+                選擇器語法，並提供了額外的功能和擴展。選擇器讓我們能夠精確地定位和操作 HTML
+                元素，是所有 jQuery 操作的基礎。
+              </p>
+              <p class="lang-en hidden">
+                jQuery selectors are one of jQuery's core features, based on CSS selector syntax
+                with additional functionality and extensions. Selectors allow us to precisely locate
+                and manipulate HTML elements, forming the foundation of all jQuery operations.
+              </p>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-info shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    掌握選擇器是學習 jQuery
+                    的關鍵，不同的選擇器在性能上有很大差異，正確選擇能大幅提升代碼效率。
+                  </span>
+                  <span class="lang-en hidden">
+                    Mastering selectors is key to learning jQuery. Different selectors vary greatly
+                    in performance, and choosing correctly can significantly improve code
+                    efficiency.
+                  </span>
+                </div>
+              </div>
+
+              <h3 class="lang-zh">選擇器的基本語法</h3>
+              <h3 class="lang-en hidden">Basic Selector Syntax</h3>
+
+              <div class="mockup-code">
+                <pre><code>// jQuery 選擇器的基本結構
+$(selector)
+
+// 範例
+$('#myId')        // 選擇 ID 為 myId 的元素
+$('.myClass')     // 選擇 class 為 myClass 的元素
+$('div')          // 選擇所有 div 元素
+$('*')            // 選擇所有元素</code></pre>
+              </div>
+            </section>
+
+            <!-- 基本選擇器 -->
+            <section id="basic-selectors">
+              <h2 class="lang-zh">基本選擇器</h2>
+              <h2 class="lang-en hidden">Basic Selectors</h2>
+
+              <p class="lang-zh">基本選擇器是最常用的選擇器類型，對應 CSS 的基本選擇器：</p>
+              <p class="lang-en hidden">
+                Basic selectors are the most commonly used selector types, corresponding to CSS
+                basic selectors:
+              </p>
+
+              <h3 class="lang-zh">元素選擇器</h3>
+              <h3 class="lang-en hidden">Element Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 標籤名選擇器
+$('p')            // 選擇所有 p 標籤
+$('div')          // 選擇所有 div 標籤
+$('span')         // 選擇所有 span 標籤
+$('h1')           // 選擇所有 h1 標籤
+
+// 通用選擇器
+$('*')            // 選擇頁面中所有元素（慎用，性能較差）
+
+// 多選擇器
+$('h1, h2, h3')   // 選擇所有 h1、h2、h3 標籤
+$('p, div, span') // 選擇所有 p、div、span 標籤</code></pre>
+              </div>
+
+              <h3 class="lang-zh">ID 選擇器</h3>
+              <h3 class="lang-en hidden">ID Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ID 選擇器（最快的選擇器）
+$('#header')      // 選擇 ID 為 header 的元素
+$('#main')        // 選擇 ID 為 main 的元素
+$('#footer')      // 選擇 ID 為 footer 的元素
+
+// ID 應該是唯一的，每個頁面只能有一個相同的 ID
+// 如果有多個相同 ID，只會選擇第一個</code></pre>
+              </div>
+
+              <h3 class="lang-zh">Class 選擇器</h3>
+              <h3 class="lang-en hidden">Class Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// Class 選擇器
+$('.highlight')   // 選擇所有 class 為 highlight 的元素
+$('.btn')         // 選擇所有 class 為 btn 的元素
+$('.active')      // 選擇所有 class 為 active 的元素
+
+// 多個 class 的元素
+$('.btn.primary') // 選擇同時有 btn 和 primary class 的元素
+$('.menu.open')   // 選擇同時有 menu 和 open class 的元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">組合選擇器</h3>
+              <h3 class="lang-en hidden">Combined Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 元素 + Class
+$('div.container')    // 選擇 class 為 container 的 div 元素
+$('p.intro')          // 選擇 class 為 intro 的 p 元素
+
+// 元素 + ID
+$('div#main')         // 選擇 ID 為 main 的 div 元素
+$('section#about')    // 選擇 ID 為 about 的 section 元素
+
+// 複雜組合
+$('div.container.main')   // 選擇同時有 container 和 main class 的 div
+$('input.form-control.required') // 選擇有多個 class 的 input</code></pre>
+              </div>
+
+              <h3 class="lang-zh">基本選擇器性能比較</h3>
+              <h3 class="lang-en hidden">Basic Selector Performance Comparison</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">選擇器類型</th>
+                      <th class="lang-en hidden">Selector Type</th>
+                      <th class="lang-zh">語法</th>
+                      <th class="lang-en hidden">Syntax</th>
+                      <th class="lang-zh">性能</th>
+                      <th class="lang-en hidden">Performance</th>
+                      <th class="lang-zh">使用場景</th>
+                      <th class="lang-en hidden">Use Case</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>ID</td>
+                      <td><code>#id</code></td>
+                      <td class="lang-zh">最快</td>
+                      <td class="lang-en hidden">Fastest</td>
+                      <td class="lang-zh">選擇唯一元素</td>
+                      <td class="lang-en hidden">Select unique element</td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">標籤名</td>
+                      <td class="lang-en hidden">Tag</td>
+                      <td><code>tag</code></td>
+                      <td class="lang-zh">快</td>
+                      <td class="lang-en hidden">Fast</td>
+                      <td class="lang-zh">選擇相同類型元素</td>
+                      <td class="lang-en hidden">Select same type elements</td>
+                    </tr>
+                    <tr>
+                      <td>Class</td>
+                      <td><code>.class</code></td>
+                      <td class="lang-zh">中等</td>
+                      <td class="lang-en hidden">Medium</td>
+                      <td class="lang-zh">選擇相同樣式元素</td>
+                      <td class="lang-en hidden">Select same style elements</td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">通用</td>
+                      <td class="lang-en hidden">Universal</td>
+                      <td><code>*</code></td>
+                      <td class="lang-zh">慢</td>
+                      <td class="lang-en hidden">Slow</td>
+                      <td class="lang-zh">選擇所有元素（慎用）</td>
+                      <td class="lang-en hidden">Select all elements (use carefully)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 層級選擇器 -->
+            <section id="hierarchy-selectors">
+              <h2 class="lang-zh">層級選擇器</h2>
+              <h2 class="lang-en hidden">Hierarchy Selectors</h2>
+
+              <p class="lang-zh">層級選擇器用於選擇元素之間的層級關係：</p>
+              <p class="lang-en hidden">
+                Hierarchy selectors are used to select elements based on their hierarchical
+                relationships:
+              </p>
+
+              <h3 class="lang-zh">後代選擇器</h3>
+              <h3 class="lang-en hidden">Descendant Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 後代選擇器（空格分隔）
+$('div p')        // 選擇 div 內的所有 p 元素（包括孫輩）
+$('ul li')        // 選擇 ul 內的所有 li 元素
+$('.container p') // 選擇 class 為 container 的元素內的所有 p
+
+// 多層後代
+$('div p span')   // 選擇 div 內 p 元素中的所有 span
+$('#header .nav a') // 選擇 ID 為 header 內 class 為 nav 的元素中的所有 a</code></pre>
+              </div>
+
+              <h3 class="lang-zh">子元素選擇器</h3>
+              <h3 class="lang-en hidden">Child Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 子元素選擇器（> 分隔）
+$('div > p')      // 選擇 div 的直接子元素中的 p（不包括孫輩）
+$('ul > li')      // 選擇 ul 的直接子元素中的 li
+$('.menu > a')    // 選擇 class 為 menu 的元素的直接子元素中的 a
+
+// 與後代選擇器的區別
+$('div p')        // 選擇 div 內所有 p（包括孫輩）
+$('div > p')      // 只選擇 div 的直接子元素 p</code></pre>
+              </div>
+
+              <h3 class="lang-zh">相鄰兄弟選擇器</h3>
+              <h3 class="lang-en hidden">Adjacent Sibling Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 相鄰兄弟選擇器（+ 分隔）
+$('h2 + p')      // 選擇緊接在 h2 後面的第一個 p 元素
+$('label + input') // 選擇緊接在 label 後面的第一個 input
+$('.title + .content') // 選擇緊接在 title 後面的 content
+
+// 只選擇直接相鄰的下一個元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">一般兄弟選擇器</h3>
+              <h3 class="lang-en hidden">General Sibling Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 一般兄弟選擇器（~ 分隔）
+$('h2 ~ p')      // 選擇 h2 後面所有同級的 p 元素
+$('label ~ input') // 選擇 label 後面所有同級的 input
+$('.title ~ .item') // 選擇 title 後面所有同級的 item
+
+// 選擇所有符合條件的兄弟元素，不僅僅是相鄰的</code></pre>
+              </div>
+
+              <h3 class="lang-zh">層級選擇器範例</h3>
+              <h3 class="lang-en hidden">Hierarchy Selector Examples</h3>
+
+              <div class="mockup-code">
+                <pre><code>// HTML 結構範例
+&lt;div class="container"&gt;
+  &lt;h2&gt;標題&lt;/h2&gt;
+  &lt;p&gt;第一段&lt;/p&gt;
+  &lt;div class="content"&gt;
+    &lt;p&gt;內容段落&lt;/p&gt;
+    &lt;span&gt;內容&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;p&gt;第二段&lt;/p&gt;
+&lt;/div&gt;
+
+// 不同選擇器的結果
+$('.container p')     // 選擇 3 個 p 元素（包括 .content 內的）
+$('.container > p')   // 選擇 2 個 p 元素（不包括 .content 內的）
+$('h2 + p')          // 選擇 1 個 p 元素（第一段）
+$('h2 ~ p')          // 選擇 2 個 p 元素（第一段和第二段）</code></pre>
+              </div>
+            </section>
+
+            <!-- 過濾選擇器 -->
+            <section id="filter-selectors">
+              <h2 class="lang-zh">過濾選擇器</h2>
+              <h2 class="lang-en hidden">Filter Selectors</h2>
+
+              <p class="lang-zh">過濾選擇器用於進一步細化選擇結果：</p>
+              <p class="lang-en hidden">
+                Filter selectors are used to further refine selection results:
+              </p>
+
+              <h3 class="lang-zh">位置過濾器</h3>
+              <h3 class="lang-en hidden">Position Filters</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基本位置過濾器
+$('li:first')         // 選擇第一個 li 元素
+$('li:last')          // 選擇最後一個 li 元素
+$('li:eq(2)')         // 選擇第三個 li 元素（索引從 0 開始）
+$('li:gt(1)')         // 選擇索引大於 1 的 li 元素
+$('li:lt(3)')         // 選擇索引小於 3 的 li 元素
+
+// nth-child 過濾器
+$('li:nth-child(2)')     // 選擇每個父元素的第二個 li 子元素
+$('li:nth-child(odd)')   // 選擇奇數位置的 li 元素
+$('li:nth-child(even)')  // 選擇偶數位置的 li 元素
+$('li:nth-child(3n)')    // 選擇每第三個 li 元素
+
+// first-child 和 last-child
+$('p:first-child')    // 選擇作為第一個子元素的 p
+$('p:last-child')     // 選擇作為最後一個子元素的 p
+$('p:only-child')     // 選擇作為唯一子元素的 p</code></pre>
+              </div>
+
+              <h3 class="lang-zh">內容過濾器</h3>
+              <h3 class="lang-en hidden">Content Filters</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 內容相關過濾器
+$(':contains("jQuery")')    // 選擇包含文字 "jQuery" 的元素
+$(':empty')                 // 選擇空元素（沒有子元素和文字）
+$(':parent')                // 選擇有子元素或文字的元素
+
+// 範例
+$('p:contains("重要")')     // 選擇包含 "重要" 文字的 p 元素
+$('div:empty')              // 選擇空的 div 元素
+$('td:parent')              // 選擇有內容的 td 元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">可見性過濾器</h3>
+              <h3 class="lang-en hidden">Visibility Filters</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 可見性過濾器
+$(':visible')           // 選擇可見的元素
+$(':hidden')            // 選擇隱藏的元素
+
+// 範例
+$('div:visible')        // 選擇可見的 div 元素
+$('p:hidden')           // 選擇隱藏的 p 元素
+
+// 注意：hidden 包括 display:none、visibility:hidden、height/width 為 0 等情況</code></pre>
+              </div>
+
+              <h3 class="lang-zh">自定義過濾器</h3>
+              <h3 class="lang-en hidden">Custom Filters</h3>
+
+              <div class="mockup-code">
+                <pre><code>// jQuery 特有的過濾器
+$(':header')            // 選擇所有標題元素（h1-h6）
+$(':animated')          // 選擇正在執行動畫的元素
+$(':focus')             // 選擇當前獲得焦點的元素
+
+// 範例
+$(':header:contains("jQuery")')  // 選擇包含 "jQuery" 的標題元素
+$('div:animated')                // 選擇正在動畫的 div 元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">過濾器統整表</h3>
+              <h3 class="lang-en hidden">Filter Summary Table</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">類別</th>
+                      <th class="lang-en hidden">Category</th>
+                      <th class="lang-zh">過濾器</th>
+                      <th class="lang-en hidden">Filter</th>
+                      <th class="lang-zh">說明</th>
+                      <th class="lang-en hidden">Description</th>
+                      <th class="lang-zh">範例</th>
+                      <th class="lang-en hidden">Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="5" class="lang-zh">位置</td>
+                      <td rowspan="5" class="lang-en hidden">Position</td>
+                      <td><code>:first</code></td>
+                      <td class="lang-zh">第一個元素</td>
+                      <td class="lang-en hidden">First element</td>
+                      <td><code>$('li:first')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:last</code></td>
+                      <td class="lang-zh">最後一個元素</td>
+                      <td class="lang-en hidden">Last element</td>
+                      <td><code>$('li:last')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:eq(n)</code></td>
+                      <td class="lang-zh">索引為 n 的元素</td>
+                      <td class="lang-en hidden">Element at index n</td>
+                      <td><code>$('li:eq(2)')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:gt(n)</code></td>
+                      <td class="lang-zh">索引大於 n 的元素</td>
+                      <td class="lang-en hidden">Elements with index > n</td>
+                      <td><code>$('li:gt(1)')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:lt(n)</code></td>
+                      <td class="lang-zh">索引小於 n 的元素</td>
+                      <td class="lang-en hidden">Elements with index < n</td>
+                      <td><code>$('li:lt(3)')</code></td>
+                    </tr>
+                    <tr>
+                      <td rowspan="3" class="lang-zh">內容</td>
+                      <td rowspan="3" class="lang-en hidden">Content</td>
+                      <td><code>:contains(text)</code></td>
+                      <td class="lang-zh">包含指定文字</td>
+                      <td class="lang-en hidden">Contains specified text</td>
+                      <td><code>$(':contains("hello")')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:empty</code></td>
+                      <td class="lang-zh">空元素</td>
+                      <td class="lang-en hidden">Empty elements</td>
+                      <td><code>$('div:empty')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:parent</code></td>
+                      <td class="lang-zh">有子元素的元素</td>
+                      <td class="lang-en hidden">Elements with children</td>
+                      <td><code>$('td:parent')</code></td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2" class="lang-zh">可見性</td>
+                      <td rowspan="2" class="lang-en hidden">Visibility</td>
+                      <td><code>:visible</code></td>
+                      <td class="lang-zh">可見元素</td>
+                      <td class="lang-en hidden">Visible elements</td>
+                      <td><code>$('div:visible')</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>:hidden</code></td>
+                      <td class="lang-zh">隱藏元素</td>
+                      <td class="lang-en hidden">Hidden elements</td>
+                      <td><code>$('p:hidden')</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 屬性選擇器 -->
+            <section id="attribute-selectors">
+              <h2 class="lang-zh">屬性選擇器</h2>
+              <h2 class="lang-en hidden">Attribute Selectors</h2>
+
+              <p class="lang-zh">屬性選擇器根據元素的屬性來選擇元素：</p>
+              <p class="lang-en hidden">
+                Attribute selectors select elements based on their attributes:
+              </p>
+
+              <h3 class="lang-zh">基本屬性選擇器</h3>
+              <h3 class="lang-en hidden">Basic Attribute Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 有屬性的元素
+$('[title]')              // 選擇有 title 屬性的元素
+$('[href]')               // 選擇有 href 屬性的元素
+$('[data-id]')            // 選擇有 data-id 屬性的元素
+
+// 屬性值完全匹配
+$('[title="hello"]')      // 選擇 title 屬性值為 "hello" 的元素
+$('[type="text"]')        // 選擇 type 屬性值為 "text" 的元素
+$('[class="btn"]')        // 選擇 class 屬性值為 "btn" 的元素
+
+// 屬性值不等於
+$('[title!="hello"]')     // 選擇 title 屬性值不為 "hello" 的元素
+$('[type!="hidden"]')     // 選擇 type 屬性值不為 "hidden" 的元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">模糊匹配屬性選擇器</h3>
+              <h3 class="lang-en hidden">Pattern Matching Attribute Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 屬性值包含指定字串
+$('[title*="hello"]')     // 選擇 title 屬性值包含 "hello" 的元素
+$('[class*="btn"]')       // 選擇 class 屬性值包含 "btn" 的元素
+
+// 屬性值以指定字串開始
+$('[title^="hello"]')     // 選擇 title 屬性值以 "hello" 開始的元素
+$('[href^="http"]')       // 選擇 href 屬性值以 "http" 開始的元素
+$('[href^="mailto"]')     // 選擇 href 屬性值以 "mailto" 開始的元素
+
+// 屬性值以指定字串結束
+$('[title$="world"]')     // 選擇 title 屬性值以 "world" 結束的元素
+$('[href$=".pdf"]')       // 選擇 href 屬性值以 ".pdf" 結束的元素
+$('[src$=".jpg"]')        // 選擇 src 屬性值以 ".jpg" 結束的元素
+
+// 屬性值包含指定單詞（以空格分隔）
+$('[title~="important"]') // 選擇 title 屬性值包含單詞 "important" 的元素
+$('[class~="active"]')    // 選擇 class 屬性值包含單詞 "active" 的元素
+
+// 屬性值等於指定值或以指定值開頭後跟連字符
+$('[lang|="en"]')         // 選擇 lang 屬性值為 "en" 或 "en-*" 的元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">多屬性選擇器</h3>
+              <h3 class="lang-en hidden">Multiple Attribute Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 同時匹配多個屬性
+$('[type="text"][name="username"]')  // 選擇 type 為 text 且 name 為 username 的元素
+$('[class="btn"][disabled]')         // 選擇 class 為 btn 且有 disabled 屬性的元素
+$('[href^="http"][target="_blank"]') // 選擇外部連結且在新視窗開啟的元素
+
+// 結合元素選擇器
+$('input[type="text"]')              // 選擇 type 為 text 的 input 元素
+$('a[href^="http"]')                 // 選擇外部連結的 a 元素
+$('img[alt*="photo"]')               // 選擇 alt 屬性包含 "photo" 的 img 元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">實用的屬性選擇器範例</h3>
+              <h3 class="lang-en hidden">Practical Attribute Selector Examples</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 選擇所有外部連結
+$('a[href^="http"]')
+
+// 選擇所有 PDF 連結
+$('a[href$=".pdf"]')
+
+// 選擇所有電子郵件連結
+$('a[href^="mailto"]')
+
+// 選擇所有必填欄位
+$('input[required]')
+
+// 選擇所有禁用的按鈕
+$('button[disabled]')
+
+// 選擇所有有 placeholder 的輸入框
+$('input[placeholder]')
+
+// 選擇所有 data 屬性
+$('[data-toggle]')           // 有 data-toggle 屬性的元素
+$('[data-role="button"]')    // data-role 為 button 的元素
+
+// 選擇特定 ID 模式的元素
+$('[id^="user-"]')           // ID 以 "user-" 開頭的元素
+$('[id$="-form"]')           // ID 以 "-form" 結尾的元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">屬性選擇器統整表</h3>
+              <h3 class="lang-en hidden">Attribute Selector Summary Table</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">選擇器</th>
+                      <th class="lang-en hidden">Selector</th>
+                      <th class="lang-zh">匹配條件</th>
+                      <th class="lang-en hidden">Match Condition</th>
+                      <th class="lang-zh">範例</th>
+                      <th class="lang-en hidden">Example</th>
+                      <th class="lang-zh">說明</th>
+                      <th class="lang-en hidden">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>[attr]</code></td>
+                      <td class="lang-zh">有指定屬性</td>
+                      <td class="lang-en hidden">Has attribute</td>
+                      <td><code>$('[title]')</code></td>
+                      <td class="lang-zh">選擇有 title 屬性的元素</td>
+                      <td class="lang-en hidden">Select elements with title attribute</td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr=value]</code></td>
+                      <td class="lang-zh">屬性值完全匹配</td>
+                      <td class="lang-en hidden">Attribute value equals</td>
+                      <td><code>$('[type="text"]')</code></td>
+                      <td class="lang-zh">選擇 type 為 text 的元素</td>
+                      <td class="lang-en hidden">Select elements with type="text"</td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr!=value]</code></td>
+                      <td class="lang-zh">屬性值不等於</td>
+                      <td class="lang-en hidden">Attribute value not equal</td>
+                      <td><code>$('[type!="hidden"]')</code></td>
+                      <td class="lang-zh">選擇 type 不為 hidden 的元素</td>
+                      <td class="lang-en hidden">Select elements with type not hidden</td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr*=value]</code></td>
+                      <td class="lang-zh">屬性值包含</td>
+                      <td class="lang-en hidden">Attribute value contains</td>
+                      <td><code>$('[title*="hello"]')</code></td>
+                      <td class="lang-zh">選擇 title 包含 hello 的元素</td>
+                      <td class="lang-en hidden">Select elements with title containing hello</td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr^=value]</code></td>
+                      <td class="lang-zh">屬性值開始於</td>
+                      <td class="lang-en hidden">Attribute value starts with</td>
+                      <td><code>$('[href^="http"]')</code></td>
+                      <td class="lang-zh">選擇 href 以 http 開始的元素</td>
+                      <td class="lang-en hidden">Select elements with href starting with http</td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr$=value]</code></td>
+                      <td class="lang-zh">屬性值結束於</td>
+                      <td class="lang-en hidden">Attribute value ends with</td>
+                      <td><code>$('[href$=".pdf"]')</code></td>
+                      <td class="lang-zh">選擇 href 以 .pdf 結束的元素</td>
+                      <td class="lang-en hidden">Select elements with href ending with .pdf</td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr~=value]</code></td>
+                      <td class="lang-zh">屬性值包含單詞</td>
+                      <td class="lang-en hidden">Attribute contains word</td>
+                      <td><code>$('[class~="active"]')</code></td>
+                      <td class="lang-zh">選擇 class 包含 active 單詞的元素</td>
+                      <td class="lang-en hidden">
+                        Select elements with class containing word active
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>[attr|=value]</code></td>
+                      <td class="lang-zh">屬性值等於或開頭加連字符</td>
+                      <td class="lang-en hidden">Attribute equals or starts with hyphen</td>
+                      <td><code>$('[lang|="en"]')</code></td>
+                      <td class="lang-zh">選擇 lang 為 en 或 en-* 的元素</td>
+                      <td class="lang-en hidden">Select elements with lang=en or en-*</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 表單選擇器 -->
+            <section id="form-selectors">
+              <h2 class="lang-zh">表單選擇器</h2>
+              <h2 class="lang-en hidden">Form Selectors</h2>
+
+              <p class="lang-zh">jQuery 提供了專門用於表單元素的選擇器：</p>
+              <p class="lang-en hidden">jQuery provides specialized selectors for form elements:</p>
+
+              <h3 class="lang-zh">表單元素選擇器</h3>
+              <h3 class="lang-en hidden">Form Element Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 基本表單元素選擇器
+$(':input')         // 選擇所有表單輸入元素（input, textarea, select, button）
+$(':text')          // 選擇所有文字輸入框
+$(':password')      // 選擇所有密碼輸入框
+$(':radio')         // 選擇所有單選按鈕
+$(':checkbox')      // 選擇所有複選框
+$(':submit')        // 選擇所有提交按鈕
+$(':reset')         // 選擇所有重設按鈕
+$(':button')        // 選擇所有按鈕元素
+$(':image')         // 選擇所有圖片按鈕
+$(':file')          // 選擇所有檔案上傳元素
+$(':hidden')        // 選擇所有隱藏輸入框</code></pre>
+              </div>
+
+              <h3 class="lang-zh">表單狀態選擇器</h3>
+              <h3 class="lang-en hidden">Form State Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 表單元素狀態選擇器
+$(':enabled')       // 選擇所有啟用的表單元素
+$(':disabled')      // 選擇所有禁用的表單元素
+$(':checked')       // 選擇所有選中的複選框和單選按鈕
+$(':selected')      // 選擇所有選中的 option 元素
+$(':focus')         // 選擇當前獲得焦點的元素
+
+// 結合使用
+$('input:enabled')     // 選擇所有啟用的 input 元素
+$('input:disabled')    // 選擇所有禁用的 input 元素
+$('input:checked')     // 選擇所有選中的 input 元素
+$('option:selected')   // 選擇所有選中的 option 元素</code></pre>
+              </div>
+
+              <h3 class="lang-zh">實用的表單選擇器組合</h3>
+              <h3 class="lang-en hidden">Practical Form Selector Combinations</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 選擇特定類型的表單元素
+$('input[type="text"]')      // 選擇文字輸入框
+$('input[type="email"]')     // 選擇電子郵件輸入框
+$('input[type="number"]')    // 選擇數字輸入框
+$('input[type="tel"]')       // 選擇電話輸入框
+$('input[type="url"]')       // 選擇網址輸入框
+$('input[type="date"]')      // 選擇日期輸入框
+
+// 選擇必填欄位
+$('input[required]')         // 選擇所有必填的 input
+$('textarea[required]')      // 選擇所有必填的 textarea
+$('select[required]')        // 選擇所有必填的 select
+
+// 選擇有 placeholder 的欄位
+$('input[placeholder]')      // 選擇有 placeholder 的 input
+$('textarea[placeholder]')   // 選擇有 placeholder 的 textarea
+
+// 選擇空的表單欄位
+$('input[value=""]')         // 選擇值為空的 input
+$('textarea:empty')          // 選擇空的 textarea
+
+// 選擇有值的表單欄位
+$('input[value!=""]')        // 選擇有值的 input
+$('textarea:parent')         // 選擇有內容的 textarea</code></pre>
+              </div>
+
+              <h3 class="lang-zh">表單驗證相關選擇器</h3>
+              <h3 class="lang-en hidden">Form Validation Related Selectors</h3>
+
+              <div class="mockup-code">
+                <pre><code>// HTML5 表單驗證狀態（需要瀏覽器支援）
+$('input:valid')       // 選擇驗證通過的 input
+$('input:invalid')     // 選擇驗證失敗的 input
+$('input:required')    // 選擇必填的 input
+$('input:optional')    // 選擇非必填的 input
+
+// 自定義驗證狀態選擇器
+$('input.error')       // 選擇有錯誤樣式的 input
+$('input.success')     // 選擇驗證成功的 input
+$('.form-group.has-error input')  // 選擇錯誤組中的 input
+
+// 表單提交相關
+$('form input[type="submit"]')     // 選擇表單中的提交按鈕
+$('form button[type="submit"]')    // 選擇表單中的提交按鈕
+$('form input[type="reset"]')      // 選擇表單中的重設按鈕</code></pre>
+              </div>
+
+              <h3 class="lang-zh">表單選擇器實際應用</h3>
+              <h3 class="lang-en hidden">Practical Form Selector Applications</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 表單驗證
+function validateForm() {
+    // 檢查所有必填欄位
+    var emptyFields = $('input[required]').filter(function() {
+        return $(this).val() === '';
+    });
+    
+    if (emptyFields.length > 0) {
+        emptyFields.addClass('error');
+        return false;
+    }
+    
+    // 檢查電子郵件格式
+    var emailFields = $('input[type="email"]');
+    var invalidEmails = emailFields.filter(function() {
+        var email = $(this).val();
+        return email && !isValidEmail(email);
+    });
+    
+    if (invalidEmails.length > 0) {
+        invalidEmails.addClass('error');
+        return false;
+    }
+    
+    return true;
+}
+
+// 重設表單
+function resetForm() {
+    $('input[type="text"], input[type="email"], textarea').val('');
+    $('input[type="checkbox"], input[type="radio"]').prop('checked', false);
+    $('select').prop('selectedIndex', 0);
+    $('.error').removeClass('error');
+}
+
+// 禁用/啟用表單
+function toggleForm(disabled) {
+    $('input, textarea, select, button').prop('disabled', disabled);
+}
+
+// 收集表單數據
+function getFormData() {
+    var data = {};
+    
+    // 文字輸入框
+    $('input[type="text"], input[type="email"], textarea').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+    });
+    
+    // 複選框
+    $('input[type="checkbox"]:checked').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+    });
+    
+    // 單選按鈕
+    $('input[type="radio"]:checked').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+    });
+    
+    // 下拉選單
+    $('select').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+    });
+    
+    return data;
+}</code></pre>
+              </div>
+            </section>
+
+            <!-- 性能優化技巧 -->
+            <section id="performance-tips">
+              <h2 class="lang-zh">性能優化技巧</h2>
+              <h2 class="lang-en hidden">Performance Optimization Tips</h2>
+
+              <p class="lang-zh">選擇器的性能對於 jQuery 應用的整體性能至關重要：</p>
+              <p class="lang-en hidden">
+                Selector performance is crucial for overall jQuery application performance:
+              </p>
+
+              <h3 class="lang-zh">選擇器性能排序</h3>
+              <h3 class="lang-en hidden">Selector Performance Ranking</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 性能從高到低排序
+
+// 1. ID 選擇器（最快）
+$('#myId')
+
+// 2. 元素選擇器
+$('div')
+
+// 3. Class 選擇器
+$('.myClass')
+
+// 4. 屬性選擇器
+$('[name="username"]')
+
+// 5. 偽類選擇器
+$('div:first')
+
+// 6. 複雜選擇器（最慢）
+$('div.container > ul li:first-child a[href*="example"]')</code></pre>
+              </div>
+
+              <h3 class="lang-zh">最佳實踐</h3>
+              <h3 class="lang-en hidden">Best Practices</h3>
+
+              <div class="mockup-code">
+                <pre><code>// ✅ 好的做法
+
+// 1. 使用 ID 選擇器當可能時
+$('#header')  // 快
+
+// 2. 限制搜索範圍
+$('#container').find('.item')  // 快
+$('#container .item')          // 較慢
+
+// 3. 快取選擇器結果
+var $items = $('.item');
+$items.addClass('active');
+$items.show();
+
+// 4. 使用具體的選擇器
+$('input[type="text"]')  // 好
+$(':text')               // 較慢（jQuery 特有選擇器）
+
+// 5. 避免過度具體的選擇器
+$('.container .item')    // 好
+$('body .container .nav .item')  // 過度具體
+
+// ❌ 不好的做法
+
+// 1. 重複查詢
+$('.item').addClass('active');
+$('.item').show();  // 重複查詢
+
+// 2. 使用低效的選擇器
+$('*')              // 選擇所有元素，非常慢
+$(':visible')       // 需要檢查每個元素的可見性
+$('[class*="btn"]') // 模糊匹配，較慢
+
+// 3. 過度複雜的選擇器
+$('div.container > ul li:nth-child(odd) a[href^="http"]')</code></pre>
+              </div>
+
+              <h3 class="lang-zh">性能測試和優化</h3>
+              <h3 class="lang-en hidden">Performance Testing and Optimization</h3>
+
+              <div class="mockup-code">
+                <pre><code>// 性能測試範例
+function testSelectorPerformance() {
+    var iterations = 1000;
+    var start, end;
+    
+    // 測試 ID 選擇器
+    start = Date.now();
+    for (var i = 0; i < iterations; i++) {
+        $('#myId');
+    }
+    end = Date.now();
+    console.log('ID 選擇器:', end - start, 'ms');
+    
+    // 測試 Class 選擇器
+    start = Date.now();
+    for (var i = 0; i < iterations; i++) {
+        $('.myClass');
+    }
+    end = Date.now();
+    console.log('Class 選擇器:', end - start, 'ms');
+    
+    // 測試複雜選擇器
+    start = Date.now();
+    for (var i = 0; i < iterations; i++) {
+        $('div.container > ul li:first');
+    }
+    end = Date.now();
+    console.log('複雜選擇器:', end - start, 'ms');
+}
+
+// 優化建議
+// 1. 使用現代瀏覽器的原生方法
+if (document.getElementById) {
+    // 使用原生方法更快
+    var element = document.getElementById('myId');
+} else {
+    // 回退到 jQuery
+    var $element = $('#myId');
+}
+
+// 2. 批次處理 DOM 操作
+var $items = $('.item');
+// 批次添加 class
+$items.addClass('processed');
+// 批次設置屬性
+$items.attr('data-processed', 'true');</code></pre>
+              </div>
+
+              <h3 class="lang-zh">選擇器優化統整表</h3>
+              <h3 class="lang-en hidden">Selector Optimization Summary</h3>
+
+              <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th class="lang-zh">優化技巧</th>
+                      <th class="lang-en hidden">Optimization Tip</th>
+                      <th class="lang-zh">好的做法</th>
+                      <th class="lang-en hidden">Good Practice</th>
+                      <th class="lang-zh">避免的做法</th>
+                      <th class="lang-en hidden">Avoid</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="lang-zh">使用高效選擇器</td>
+                      <td class="lang-en hidden">Use efficient selectors</td>
+                      <td><code>$('#id'), $('tag'), $('.class')</code></td>
+                      <td><code>$('*'), $(':visible')</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">限制搜索範圍</td>
+                      <td class="lang-en hidden">Limit search scope</td>
+                      <td><code>$('#container').find('.item')</code></td>
+                      <td>
+                        <code>$('.item')</code>
+                        (無限制)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">快取選擇器結果</td>
+                      <td class="lang-en hidden">Cache selector results</td>
+                      <td><code>var $el = $('.item'); $el.show();</code></td>
+                      <td><code>$('.item').show(); $('.item').hide();</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">使用具體選擇器</td>
+                      <td class="lang-en hidden">Use specific selectors</td>
+                      <td><code>$('input[type="text"]')</code></td>
+                      <td><code>$(':text')</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">避免過度具體</td>
+                      <td class="lang-en hidden">Avoid over-specification</td>
+                      <td><code>$('.container .item')</code></td>
+                      <td><code>$('body .main .container .nav .item')</code></td>
+                    </tr>
+                    <tr>
+                      <td class="lang-zh">合併操作</td>
+                      <td class="lang-en hidden">Combine operations</td>
+                      <td><code>$('.item').addClass('a').show()</code></td>
+                      <td><code>$('.item').addClass('a'); $('.item').show()</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- 總結 -->
+            <section id="summary">
+              <h2 class="lang-zh">總結</h2>
+              <h2 class="lang-en hidden">Summary</h2>
+
+              <p class="lang-zh">
+                jQuery 選擇器是 jQuery
+                的核心功能，掌握各種選擇器的使用方法對於高效開發至關重要。通過本指南，您應該已經了解了：
+              </p>
+              <p class="lang-en hidden">
+                jQuery selectors are jQuery's core functionality. Mastering various selector usage
+                methods is crucial for efficient development. Through this guide, you should
+                understand:
+              </p>
+
+              <ul>
+                <li class="lang-zh">基本選擇器的語法和使用場景</li>
+                <li class="lang-en hidden">Basic selector syntax and use cases</li>
+
+                <li class="lang-zh">層級選擇器的層次關係</li>
+                <li class="lang-en hidden">Hierarchical relationships in hierarchy selectors</li>
+
+                <li class="lang-zh">過濾選擇器的精確定位能力</li>
+                <li class="lang-en hidden">Precise targeting capabilities of filter selectors</li>
+
+                <li class="lang-zh">屬性選擇器的模式匹配功能</li>
+                <li class="lang-en hidden">
+                  Pattern matching functionality of attribute selectors
+                </li>
+
+                <li class="lang-zh">表單選擇器的專業應用</li>
+                <li class="lang-en hidden">Professional applications of form selectors</li>
+
+                <li class="lang-zh">性能優化的最佳實踐</li>
+                <li class="lang-en hidden">Best practices for performance optimization</li>
+              </ul>
+
+              <div class="alert bg-base-200 my-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <div>
+                  <span class="lang-zh">
+                    記住，選擇正確的選擇器不僅能提高代碼的可讀性，還能顯著提升應用的性能。在實際開發中，要根據具體需求選擇最適合的選擇器。
+                  </span>
+                  <span class="lang-en hidden">
+                    Remember, choosing the right selector not only improves code readability but
+                    also significantly enhances application performance. In actual development,
+                    choose the most suitable selector based on specific requirements.
+                  </span>
+                </div>
+              </div>
+
+              <p class="lang-zh">
+                熟練掌握 jQuery 選擇器後，您就能夠精確地定位和操作頁面元素，為後續的 DOM
+                操作、事件處理和動畫效果打下堅實的基礎。
+              </p>
+              <p class="lang-en hidden">
+                After mastering jQuery selectors, you'll be able to precisely locate and manipulate
+                page elements, laying a solid foundation for subsequent DOM operations, event
+                handling, and animation effects.
+              </p>
+            </section>
+          </article>
+
+          <!-- 相關文章 -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">
+              <span class="lang-zh">相關文章</span>
+              <span class="lang-en hidden">Related Articles</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="basics.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">jQuery 基礎操作</span>
+                    <span class="lang-en hidden">jQuery Basic Operations</span>
+                  </h4>
+                  <p class="lang-zh">學習 jQuery 的基本語法和 DOM 操作方法</p>
+                  <p class="lang-en hidden">
+                    Learn jQuery basic syntax and DOM manipulation methods
+                  </p>
+                </div>
+              </a>
+              <a
+                href="events.html"
+                class="card bg-base-100 shadow hover:shadow-md transition-shadow"
+              >
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <span class="lang-zh">jQuery 事件處理</span>
+                    <span class="lang-en hidden">jQuery Event Handling</span>
+                  </h4>
+                  <p class="lang-zh">深入了解 jQuery 的事件綁定和處理機制</p>
+                  <p class="lang-en hidden">
+                    Deep dive into jQuery event binding and handling mechanisms
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content">
+      <div>
+        <p class="lang-zh">© 2025 - 使用 Tailwind CSS 與 DaisyUI 構建</p>
+        <p class="lang-en hidden">© 2025 - Built with Tailwind CSS and DaisyUI</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript 切換功能 -->
+    <script>
+      // 主題切換
+      const themeToggle = document.getElementById("themeToggle");
+      const htmlElement = document.documentElement;
+      const themeLightIcon = document.querySelector(".theme-light");
+      const themeDarkIcon = document.querySelector(".theme-dark");
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+
+        if (newTheme === "dark") {
+          themeLightIcon.classList.add("hidden");
+          themeDarkIcon.classList.remove("hidden");
+        } else {
+          themeLightIcon.classList.remove("hidden");
+          themeDarkIcon.classList.add("hidden");
+        }
+
+        // 儲存主題偏好到本地存儲
+        localStorage.setItem("theme", newTheme);
+      });
+
+      // 語言切換
+      const langToggle = document.getElementById("langToggle");
+      const langDisplay = document.getElementById("langDisplay");
+      const zhElements = document.querySelectorAll(".lang-zh");
+      const enElements = document.querySelectorAll(".lang-en");
+
+      // 定義當前語言（默認中文）
+      let currentLang = localStorage.getItem("language") || "zh";
+
+      // 設置初始語言顯示
+      updateLanguageDisplay();
+
+      langToggle.addEventListener("click", () => {
+        // 切換語言
+        currentLang = currentLang === "zh" ? "en" : "zh";
+
+        // 更新元素顯示
+        updateLanguageState();
+
+        // 儲存語言偏好到本地存儲
+        localStorage.setItem("language", currentLang);
+      });
+
+      // 更新語言狀態的函數
+      function updateLanguageState() {
+        if (currentLang === "zh") {
+          zhElements.forEach((el) => el.classList.remove("hidden"));
+          enElements.forEach((el) => el.classList.add("hidden"));
+          langDisplay.textContent = "中/EN";
+        } else {
+          zhElements.forEach((el) => el.classList.add("hidden"));
+          enElements.forEach((el) => el.classList.remove("hidden"));
+          langDisplay.textContent = "EN/中";
+        }
+      }
+
+      // 更新語言顯示
+      function updateLanguageDisplay() {
+        langDisplay.textContent = currentLang === "zh" ? "中/EN" : "EN/中";
+        updateLanguageState();
+      }
+
+      // 頁面加載時讀取使用者偏好
+      document.addEventListener("DOMContentLoaded", () => {
+        // 載入主題偏好
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          if (savedTheme === "dark") {
+            themeLightIcon.classList.add("hidden");
+            themeDarkIcon.classList.remove("hidden");
+          }
+        }
+
+        // 載入語言偏好
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+          currentLang = savedLanguage;
+          updateLanguageState();
+        }
+      });
+    </script>
+  </body>
+</html>
